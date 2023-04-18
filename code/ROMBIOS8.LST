@@ -1,0 +1,95 @@
+Turbo Assembler  Version 1.0        07/08/98 14:25:36         Page 1
+ROMBIOS8.ASM
+
+      1 0000                         .MODEL SMALL
+      2
+      3 0000                         DATOS SEGMENT AT 0000 'Data'
+      4 0000  4C                        Var1 DB 'L'
+      5 0001  56                        Var2 DB 'V'
+      6 0002                         DATOS ENDS
+      7
+      8 0000                         CODIGO SEGMENT 'Code'
+      9                                 ASSUME CS:CODIGO, DS:DATOS, ES:NOTHING, SS:NOTHING
+     10
+     11                                 ORG 0F0100h
+     12
+     13 0100                         PROG PROC NEAR
+     14 0100  33 C0                     XOR AX,AX
+     15 0102  33 DB                     XOR BX,BX
+     16 0104  8E D8                     MOV DS,AX
+     17
+     18
+     19 0106  BA 03C7                   MOV DX,3C7h    ; Direccion del pto. de control del 8255 (A0=A1=1)
+     20 0109  B0 8A                     MOV AL,8Ah     ; Modo 0, Pto. A = Salida, Pto. B = Entrada, PC03 = Salida, PC47 = Entrada
+     21 010B  EE                        OUT DX,AL      ; Programar 8255
+     22
+     23                               CICLO:
+     24 010C  BA 03C5                   MOV DX,3C5h    ; Port B -> Data Bus
+     25
+     26                               LEE1:
+     27 010F  EC                        IN  AL,DX
+     28 0110  3C 54                     CMP AL,'T'
+     29 0112  75 FB                     JNE LEE1
+     30
+     31 0114  B0 52                     MOV AL,'R'
+     32 0116  BA 03C4                   MOV DX,3C4h
+     33 0119  EE                        OUT DX,AL
+     34
+     35 011A  BA 03C5                   MOV DX,3C5h
+     36
+     37                               LEE2:
+     38 011D  EC                        IN  AL,DX
+     39 011E  3C 54                     CMP AL,'T'
+     40 0120  74 FB                     JE LEE2
+     41
+     42 0122  A2 0000r                  MOV Var1,AL
+     43
+     44 0125  BA 03C4                   MOV DX,3C4h
+     45 0128  A0 0000r                  MOV AL,Var1
+     46 012B  EE                        OUT DX,AL
+     47
+     48 012C  EB DE                     JMP CICLO
+     49
+     50                                 ORG 0FFFF0h
+     51
+     52                               START:
+     53 FFF0  B8 F000                   MOV AX,0F000h
+     54 FFF3  8E C8                     MOV CS,AX
+     55 FFF5  E9 0108                   JMP PROG
+     56 FFF8                         PROG ENDP
+     57 FFF8                         CODIGO ENDS
+     58                                 END PROG
+Turbo Assembler  Version 1.0        07/08/98 14:25:36         Page 2
+Symbol Table
+
+
+Symbol Name             Type   Value                       Cref  defined at #
+
+??date                  Text   "07/08/98"
+??filename              Text   "ROMBIOS8"
+??time                  Text   "14:25:36"
+??version               Number 0100
+@CodeSize               Text   0                           #1
+@Cpu                    Text   0101H
+@DataSize               Text   0                           #1
+@FileName               Text   ROMBIOS8
+@WordSize               Text   2                           #3  #8
+@code                   Text   _TEXT                       #1
+@curseg                 Text   CODIGO                      #3  #8
+@data                   Text   DGROUP                      #1
+CICLO                   Near   CODIGO:010C                 #23  48
+LEE1                    Near   CODIGO:010F                 #26  29
+LEE2                    Near   CODIGO:011D                 #37  40
+PROG                    Near   CODIGO:0100                 #13  55  58
+START                   Near   CODIGO:FFF0                 #52
+Var1                    Byte   DATOS:0000                  #4  42  45
+Var2                    Byte   DATOS:0001                  #5
+
+Groups & Segments       Bit Size Align  Combine Class      Cref  defined at #
+
+CODIGO                  16  FFF8 Para   none    Code       #8  9
+DATOS                   16  0002  AT 0000                  #3  9
+DGROUP                  Group                              #1  1
+  _DATA                 16  0000 Word   Public  DATA       #1
+_TEXT                   16  0000 Word   Public  CODE       #1  1
+

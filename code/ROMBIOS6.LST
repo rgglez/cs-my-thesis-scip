@@ -1,0 +1,83 @@
+Turbo Assembler  Version 1.0        06/08/98 14:12:48         Page 1
+ROMBIOS6.ASM
+
+      1 0000                         .MODEL SMALL
+      2
+      3 0000                         CODIGO SEGMENT 'Code'
+      4                                 ASSUME CS:CODIGO, DS:CODIGO, ES:NOTHING, SS:NOTHING
+      5
+      6                                 ORG 0F0100h
+      7
+      8 0100                         PROG PROC NEAR
+      9 0100  33 C0                     XOR AX,AX
+     10 0102  33 DB                     XOR BX,BX
+     11
+     12 0104  BA 03C7                   MOV DX,3C7h    ; Direccion del pto. de control del 8255 (A0=A1=1)
+     13 0107  B0 8A                     MOV AL,8Ah     ; Modo 0, Pto. A = Salida, Pto. B = Entrada, PC03 = Salida, PC47 = Entrada
+     14 0109  EE                        OUT DX,AL      ; Programar 8255
+     15
+     16 010A  BA 03C5                   MOV DX,3C5h    ; Port B -> Data Bus
+     17
+     18                               LEE1:
+     19 010D  EC                        IN  AL,DX
+     20 010E  3C 54                     CMP AL,'T'
+     21 0110  75 FB                     JNE LEE1
+     22
+     23 0112  B0 52                     MOV AL,'R'
+     24 0114  BA 03C4                   MOV DX,3C4h
+     25 0117  EE                        OUT DX,AL
+     26
+     27 0118  BA 03C5                   MOV DX,3C5h
+     28
+     29                               LEE2:
+     30 011B  EC                        IN  AL,DX
+     31 011C  3C 54                     CMP AL,'T'
+     32 011E  74 FB                     JE LEE2
+     33
+     34 0120  BA 03C4                   MOV DX,3C4h
+     35 0123  EE                        OUT DX,AL
+     36
+     37                               NONE:
+     38 0124  90                        NOP
+     39 0125  EB FD                     JMP NONE
+     40
+     41                                 ORG 0FFFF0h
+     42
+     43                               START:
+     44 FFF0  B8 F000                   MOV AX,0F000h
+     45 FFF3  8E C8                     MOV CS,AX
+     46 FFF5  E9 0108                   JMP PROG
+     47 FFF8                         PROG ENDP
+     48 FFF8                         CODIGO ENDS
+     49                                 END PROG
+Turbo Assembler  Version 1.0        06/08/98 14:12:48         Page 2
+Symbol Table
+
+
+Symbol Name             Type   Value                       Cref  defined at #
+
+??date                  Text   "06/08/98"
+??filename              Text   "ROMBIOS6"
+??time                  Text   "14:12:48"
+??version               Number 0100
+@CodeSize               Text   0                           #1
+@Cpu                    Text   0101H
+@DataSize               Text   0                           #1
+@FileName               Text   ROMBIOS6
+@WordSize               Text   2                           #3
+@code                   Text   _TEXT                       #1
+@curseg                 Text   CODIGO                      #3
+@data                   Text   DGROUP                      #1
+LEE1                    Near   CODIGO:010D                 #18  21
+LEE2                    Near   CODIGO:011B                 #29  32
+NONE                    Near   CODIGO:0124                 #37  39
+PROG                    Near   CODIGO:0100                 #8  46  49
+START                   Near   CODIGO:FFF0                 #43
+
+Groups & Segments       Bit Size Align  Combine Class      Cref  defined at #
+
+CODIGO                  16  FFF8 Para   none    Code       #3  4  4
+DGROUP                  Group                              #1  1
+  _DATA                 16  0000 Word   Public  DATA       #1
+_TEXT                   16  0000 Word   Public  CODE       #1  1
+

@@ -1,0 +1,62 @@
+Turbo Assembler  Version 1.0        05/08/98 14:37:17         Page 1
+ROMBIOS4.ASM
+
+      1 0000                         .MODEL SMALL
+      2
+      3 0000                         CODIGO SEGMENT 'Code'
+      4                                 ASSUME CS:CODIGO, DS:CODIGO, ES:NOTHING, SS:NOTHING
+      5
+      6                                 ORG 0F0100h
+      7
+      8 0100                         PROG PROC NEAR
+      9 0100  33 C0                     XOR AX,AX
+     10 0102  BA 03C7                   MOV DX,3C7h    ; Direccion del pto. de control del 8255 (A0=A1=1)
+     11                              ;   MOV AL,0C2h    ; Grupo B = Modo 0, Puerto B = Input, PC2,0 = Salida
+     12 0105  B0 80                     MOV AL,80h     ; Prueba...
+     13 0107  EE                        OUT DX,AL      ; Programar 8255
+     14
+     15 0108  BA 03C4                   MOV DX,3C4h    ; Data Bus -> Port A
+     16 010B  B0 55                     MOV AL,55h
+     17
+     18                               WRITE:
+     19 010D  EE                        OUT DX,AL
+     20 010E  EB F0                     JMP PROG
+     21
+     22                                 ORG 0FFFF0h
+     23
+     24                               START:
+     25 FFF0  B8 F000                   MOV AX,0F000h
+     26 FFF3  8E C8                     MOV CS,AX
+     27 FFF5  E9 0108                   JMP PROG
+     28 FFF8                         PROG ENDP
+     29 FFF8                         CODIGO ENDS
+     30                                 END PROG
+Turbo Assembler  Version 1.0        05/08/98 14:37:17         Page 2
+Symbol Table
+
+
+Symbol Name             Type   Value                       Cref  defined at #
+
+??date                  Text   "05/08/98"
+??filename              Text   "ROMBIOS4"
+??time                  Text   "14:37:15"
+??version               Number 0100
+@CodeSize               Text   0                           #1
+@Cpu                    Text   0101H
+@DataSize               Text   0                           #1
+@FileName               Text   ROMBIOS4
+@WordSize               Text   2                           #3
+@code                   Text   _TEXT                       #1
+@curseg                 Text   CODIGO                      #3
+@data                   Text   DGROUP                      #1
+PROG                    Near   CODIGO:0100                 #8  20  27  30
+START                   Near   CODIGO:FFF0                 #24
+WRITE                   Near   CODIGO:010D                 #18
+
+Groups & Segments       Bit Size Align  Combine Class      Cref  defined at #
+
+CODIGO                  16  FFF8 Para   none    Code       #3  4  4
+DGROUP                  Group                              #1  1
+  _DATA                 16  0000 Word   Public  DATA       #1
+_TEXT                   16  0000 Word   Public  CODE       #1  1
+
