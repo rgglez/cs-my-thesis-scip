@@ -1,3 +1,5 @@
+[![CC BY-NC-ND 4.0][cc-by-nc-nd-shield]][cc-by-nc-nd]
+
 # SCIP
 
 My Computer Science Bachelor's Degree Thesis. A general-pourpose programable co-processor card for PC, based on the Intel 8088.
@@ -13,8 +15,6 @@ González González, R., [rgglez]. (1998). SCIP: Sistema de Coprocesamiento de I
 ## License
 
 Copyright 1998, Rodolfo González González.
-
-Shield: [![CC BY-NC-ND 4.0][cc-by-nc-nd-shield]][cc-by-nc-nd]
 
 This work is licensed under a
 [Creative Commons Attribution-NonCommercial-NoDerivs 4.0 International License][cc-by-nc-nd].
