@@ -1,6 +1,6 @@
-[![CC BY-NC-ND 4.0][cc-by-nc-nd-shield]][cc-by-nc-nd]
-
 # SCIP
+
+[![CC BY-NC-ND 4.0][cc-by-nc-nd-shield]][cc-by-nc-nd]
 
 My Computer Science Bachelor's Degree Thesis. A general-pourpose programable co-processor card for PC, based on the Intel 8088.
 
