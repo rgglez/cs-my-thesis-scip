@@ -1,0 +1,29 @@
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {1.1}{\ignorespaces Algunos microprocesadores.}}{12}{}%
+\contentsline {table}{\numberline {1.2}{\ignorespaces Algunos microprocesadores ({\it continuaci\'on\/}).}}{13}{}%
+\contentsline {table}{\numberline {1.3}{\ignorespaces Arquitecturas.}}{14}{}%
+\contentsline {table}{\numberline {1.4}{\ignorespaces Microprocesadores y Coprocesadores en el caso de computadoras basadas en Intel 8088/80x86.}}{15}{}%
+\contentsline {table}{\numberline {1.5}{\ignorespaces Funciones de las banderas del registro de banderas del Intel 8088.}}{20}{}%
+\contentsline {table}{\numberline {1.6}{\ignorespaces Terminales del Intel 8088.}}{23}{}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {2.1}{\ignorespaces Bits de estado $\overline {\mbox {S0}}$-$\overline {S_{2}}$ en modo m\'aximo.}}{30}{}%
+\contentsline {table}{\numberline {2.2}{\ignorespaces Bits de estado $S_{3}$ y $S_{4}$.}}{30}{}%
+\contentsline {table}{\numberline {2.3}{\ignorespaces Aumento de velocidad usando un 8087.}}{41}{}%
+\contentsline {table}{\numberline {2.4}{\ignorespaces Comparaci\'on entre 8086/8087 (izq.) y 8086 emulando a 8087 (der.).}}{41}{}%
+\contentsline {table}{\numberline {2.5}{\ignorespaces Tipos de datos del 8087.}}{42}{}%
+\contentsline {table}{\numberline {2.6}{\ignorespaces L\'{\i }neas de estado que determinan el tipo de ciclo de bus.}}{46}{}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {3.1}{\ignorespaces Rangos de direcciones de los bloques de memoria de SCIP.}}{55}{}%
+\contentsline {table}{\numberline {3.2}{\ignorespaces Entradas del 74LS139 para la selecci\'on de las memorias RAM}}{56}{}%
+\contentsline {table}{\numberline {3.3}{\ignorespaces Entradas del 74LS139 para la selecci\'on de las memorias EPROM}}{56}{}%
+\contentsline {table}{\numberline {3.4}{\ignorespaces Direcciones de los puertos para los dispositivos PIC y PPI.}}{57}{}%
+\contentsline {table}{\numberline {3.5}{\ignorespaces Modo B\'asico de Operaci\'on del 8255.}}{63}{}%
+\contentsline {table}{\numberline {3.6}{\ignorespaces Comandos b\'asicos para el SCIP.}}{64}{}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {B.1}{\ignorespaces Rangos M\'aximos Absolutos.}}{88}{}%
+\contentsline {table}{\numberline {B.2}{\ignorespaces Rangos M\'aximos Absolutos.}}{90}{}%
+\contentsline {table}{\numberline {B.3}{\ignorespaces Comandos del 8288.}}{91}{}%
+\contentsline {table}{\numberline {B.4}{\ignorespaces Rangos M\'aximos Absolutos.}}{91}{}%
+\addvspace {10\p@ }

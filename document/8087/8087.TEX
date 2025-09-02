@@ -1,0 +1,212 @@
+\documentstyle[12pt]{rgg-rep}
+
+\setcounter{chapter}{1}
+
+\setlength{\parskip}{12pt}
+
+%----------------------------------------------------------------------------
+
+\title{Coprocesador matem\'atico Intel 8087.}
+\author{Rodolfo Gonz\'alez Gonz\'alez.}
+\date{\today}
+
+%----------------------------------------------------------------------------
+
+\begin{document}
+
+%----------------------------------------------------------------------------
+
+\maketitle
+
+%----------------------------------------------------------------------------
+
+\section{Ventajas.}
+
+El coprocesador num\'erico Intel 8087 provee un aumento en la velocidad para la realizaci\'on de operaciones num\'ericas. El manual de Intel (\cite{Intel:Micro}) se\~nala que dicho aumento es del orden de 100 veces. Godfrey (\cite{Godfrey}) presenta la siguiente tabla comparativa (Tabla~\ref{8087:speed}) que ilustra el aumento de velocidad relativa al 8086 de varias operaciones usando el 8087:
+
+\begin{center}
+\begin{table}[htb]
+\begin{tabular}{l c} \hline
+Tipo de instrucci\'on & \parbox{5cm}{Aumento relativo de velocidad respecto al 8086} \\ \hline
+
+Multiplicaci\'on de simple precisi\'on & 84 \\
+
+Multiplicaci\'on de doble precisi\'on & 78 \\
+
+Suma & 94 \\
+
+Divisi\'on de simple precisi\'on & 82 \\
+
+Comparaci\'on & 144 \\
+
+Carga de simple precisi\'on & 189 \\
+
+Almacenamiento de simple precisi\'on & 67 \\
+
+Ra\'{\i}z cuadrada\footnote{con datos simulados} & 544 \\
+
+Tangente\footnote{con datos simulados} & 144 \\
+
+Exponenciaci\'on\footnote{con datos simulados} & 171 \\ \hline
+
+\end{tabular}
+\caption{Aumento de velocidad usando un 8087.}
+\label{8087:speed}
+\end{table}
+\end{center}
+
+La Tabla~\ref{8087:time} (\cite{Intel:Micro}) presenta los tiempos de ejecuci\'on de diversas instrucciones num\'ericas. Se comparan los tiempos de un par 8086/8087 y un 8086 con emulaci\'on de 8087 por software. Los tiempos de ejecuci\'on se presentan en microsegundos y son aproximados.
+
+\begin{center}
+\begin{table}[htb]
+\begin{tabular}{l | c | c} \hline
+Instrucci\'on de punto flotante & 8086/8087 (8Mhz) & Emulaci\'on con 8086 \\ \hline
+Sumar/Restar & 10.6 & 1000 \\ 
+Multiplicar (Precisi\'on sencilla) & 11.9 & 1000 \\ 
+Multiplicar (Precisi\'on extendida) & 16.9 & 1312 \\
+Dividir & 24.4 & 2000 \\
+Comparar & -5.6 & 812 \\
+Carga (Doble precisi\'on) & -6.3 & 1062 \\
+Almacenar (Doble precisi\'on) & 13.1 & 750 \\
+Ra\'{\i}z cuadrada & 22.5 & 12250 \\
+Tangente & 56.3 & 8125 \\
+Exponenciaci\'on & 62.5 & 10687 \\ \hline
+\end{tabular}
+\caption{Comparaci\'on entre 8086/8087 (izq.) y 8086 emulando a 8087 (der.).}
+\label{8087:time}
+\end{table}
+\end{center}
+
+Adem\'as de representar un beneficio en cuanto a velocidad, el uso del 8087, y de coprocesadores num\'ericos en general, tambi\'en representa un beneficio en capacidad. En el caso del 8087, su rango din\'amico interno es de $10^{4932}$, gracias a sus registros internos de 80 bits. El 8087 proporciona los siguientes tipos de datos:
+
+\begin{table}[htb]
+\centering
+\begin{tabular}{|l|c|c|} \hline
+Formatos de Datos & Rango & Precisi\'on \\ \hline
+Palabra entera & $10^{4}$ & 16 bits \\
+Entero corto & $10^{9}$ & 32 bits \\
+Entero largo & $10^{18}$ & 64 bits \\
+BCD empaquetado & $10^{18}$ & 18 d\'{\i}gitos \\
+Real corto & $10^{\pm 38}$ & 24 bits \\
+Real largo & $10^{\pm 308}$ & 53 bits \\
+Real temporal & $10^{\pm 4932}$ & 64 bits \\ \hline
+\end{tabular}
+\caption{Tipos de datos del 8087.}
+\label{tabla:tipodatos}
+\end{table}
+
+%----------------------------------------------------------------------------
+
+\section{Arquitectura Interna.}
+
+El 8087 tiene 8 registros internos (ST0 - ST7) de 80 bits de capacidad, adem\'as de 1 registro de palabra de estado, un registro de palabra de control, un registro para etiquetar y cierto espacio para apuntadores a excepciones.
+
+El 8087 esta internamente compuesto por dos unidades: de Control (CU) y de Ejecuci\'on Num\'erica (NEU). La primera (CU) mantiene la sincronizaci\'on entre el 8087 y el 8088/8086 anfitri\'on. La Unidad de Control ``monitorea'' la se\~nal de estado ($\overline{S0}$ - $\overline{S2}$, S6) del 8088 para determinar si una instrucci\'on del 8087 es cargada por la CPU. La CU del 8087 mantiene una cola de instrucciones identica a la cola ubicada en la CPU anfitriona. La longitud de la cola es determinada autom\'aticamente por la CU del 8087 despu\'es del {\it reset\/}, por medio de un chequeo en la l\'{\i}nea $\overline{\mbox{BHE}}$/S7. La sincronizaci\'on en la carga y decodificaci\'on de instrucciones la realiza la CU monitoreando las lineas de estado de la cola (QS0, QS1). 
+
+\begin{figure}[htb]
+\vskip 5mm
+\special{center                 
+           8087a.gif,            
+           \the\hsize 78mm}     
+\vskip 100mm                     
+\caption{Diagrama funcional de bloques del 80x87.}
+\label{8087:bloques}
+\end{figure}
+
+La NEU tiene una ``ruta de datos'' de 84 bits de longitud, divididos de la siguiente forma: 68 bits fraccionarios, 15 bits de exponente y un bit de signo. Cuando la NEU comienza la ejecuci\'on de la instrucci\'on, se activa la se\~nal de BUSY del 8087, la cual puede ser usada junto con la instrucci\'on WAIT de la CPU para hacer una resincronizaci\'on de la CPU anfitriona y el 8087 al completar este la ejecuci\'on de esta instrucci\'on (ver Secci\'on \ref{confop}).
+
+%----------------------------------------------------------------------------
+
+\section{Manejo de Excepciones.}
+
+Se le llama {\it excepci\'on\/} a una condici\'on de error que se produce al momento de ser ejecutada una instrucci\'on en el coprocesador 8087.
+
+Las excepciones detectadas por el 8087 son 6 y se clasifican seg\'un su causa en:
+
+\begin{enumerate}
+\item Operaci\'on inv\'alida - incluye: desbordamiento de pila, {\it stack underflow\/}, forma num\'erica indeterminada, o NAN (es decir, un valor que no representa a un n\'umero).
+\item {\it Overflow\/} - ocasionado por un n\'umero de m\'as bits que el tama\~no del formato especificado.
+\item Divisor cero.
+\item {\it Underflow\/} - ocasionado cuando el resultado de una operaci\'on no es cero, pero es demasiado peque\~no para caber en el tama\~no especificado.
+\item Operando denormalizado - esta excepci\'on ocurre cuando al menos uno de los operandos esta {\it denormalizado\/}, es decir, que el operando tiene un exponente peque\~no pero no es cero.
+\item Resultado inexacto - se ocasiona cuando el resultado no se puede representar exactamente en el formato especificado, lo que resulta en el redondeo  del resultado seg\'un el modo de redondeo, y en la colocaci\'on de la bandera para esta excepci\'on.
+\end{enumerate}
+
+Las excepciones causan una interrupci\'on en caso de que las interrupciones esten habilitadas, y el bit de la correspondiente excepci\'on en la palabra de control esta desenmascarado. Si no lo estan, el 8087 continua la ejecuci\'on sin importar si la CPU anfitriona limpia la exepci\'on. Se puede enmascarar una excepci\'on en particular, en cuyo caso el 8087 coloca la excepci\'on en el registro de estado y procede a ejecutar una funci\'on de manejo de interrupciones interno, con lo que se puede continuar el procesamiento.
+
+%----------------------------------------------------------------------------
+
+\section{Configuraci\'on y operaci\'on.}
+\label{confop}
+
+Debe se\~nalarse que el 8087 ejecuta instrucciones como coprocesador de una CPU en modo m\'aximo, conect\'andose en paralelo a la CPU~\cite{Intel:Micro}, como se ilustra en la Figura~\ref{fig:conexion}.
+
+\begin{figure}[htb]
+\vskip 5mm
+\special{center
+         7.pcx,
+         \the\hsize 78mm}
+\vskip 150mm
+\caption{Configuraci\'on de un sistema 8088/8087 u 8086/8087.}
+\label{fig:conexion}
+\end{figure}
+
+Las l\'{\i}neas de estado $S_{0}$-$S_{2}$ y $QS_{0}$-$QS_{1}$ habilitan al 8087 para que mo\-ni\-to\-ree y decodifique instrucciones en sincronizaci\'on con el 8088. Una vez iniciado, el 8087 puede procesar en paralelo e independientemente de la CPU anfitriona. La se\~nal BUSY del 8087 sirve para sincronizar la CPU y el coprocesador, inform\'andole a aquel que el 8087 est\'a ejecutando una instrucci\'on. La terminal WAIT del 8088 verifica aquella se\~nal para asegurase de que el 8087 est\'a listo para ejecutar instrucciones subsecuentes. El 8087 puede interrumpir a la CPU cuando detecta una excepci\'on. La l\'{\i}nea de petici\'on de interrupci\'on del 8087 se rutea al 8088/8086 mediante un PIC 8259 (``Controlador de Interrupciones Programable''). El coprocesador utiliza las l\'{\i}neas $\overline{\mbox{RQ}}/\overline{\mbox{GT0}}$ del 8088 para obtener el control del bus local para transferencia de datos~\cite{Intel:Micro}.
+
+La estructura, operaci\'on y temporizado del bus edl 8087 son identicos a las de los procesadores 8086/8088 en modo m\'aximo. Las direcciones son multiplexadas con los datos en las l\'{\i}neas AD0-AD15, mientras que las lineas A16-A19 son multiplezadas con lsa lineas de estado S3-S6. De estas l\'{\i}neas de estado, S3, S4 y S6 esta siempre en ALTO y la l\'{\i}nea S5 esta siempre en BAJO durante los ciclos donde el 8087 maneja el bus. S6 es monitoreada cuando el 8087 se encuentra monitoreando los ciclos de bus de la CPU (modo pasivo), con el objeto de diferenciar la actividad del 8088 de la de entrada/salida local del coprocesador, o de cualquier otro amo del bus local. Y S7 tiene siempre el mismo valor que $\overline{\mbox{BHE}}$.
+
+El tipo de ciclo de bus es determinado por el controlador de bus 8288 usando las lineas $\overline{\mbox{S0}}$-$\overline{\mbox{S2}}$ seg\'un la Tabla \ref{lineas} (\cite{Intel:Micro}).
+
+\begin{table}[htb]
+\centering
+\begin{tabular}{|c|c|c|l|} \hline
+$\overline{\mbox{S2}}$ & $\overline{\mbox{S1}}$ & $\overline{\mbox{S0}}$ &  \\ \hline
+
+0 & $\times$ & $\times$ & No usado \\
+1 & 0 & 0 & No usado \\
+1 & 0 & 1 & Lectura de datos de memoria \\
+1 & 1 & 0 & Escritura de datos a memoria \\
+1 & 1 & 1 & Pasivo (no hay ciclo de bus) \\ \hline
+
+\end{tabular}
+\caption{Lineas de estado que determinan el  tipo de ciclo de bus.}
+\label{lineas}
+\end{table}
+
+Las instrucciones del 8087 aparecen como instrucciones ESCAPE a la CPU. Dichas instrucciones son decodificadas y ejecutadas por la CPU y el 8087 al mismo tiempo. Si la instrucci\'on leida no es una del 8087, este actua como si hubiera sido una instrucci\'on NOP. La ejecuci\'on de una instruccion del conjunto de instrucciones del 8087 se realiza cuando la CPU anfitriona ejecuta la instrucci\'on ESCAPE. Cabe se\~nalar que toda instrucci\'on del 8087 tiene el c\'odigo 11011 en los bits mas significativos de su primer byte de c\'odigo. 
+
+Intel se\~nala que la instrucci\'on puede o no identificar a un operando de memoria, pero que la CPU ``distingue'' entre instrucciones de ESCAPE que hacen referencia a memoria e instrucciones que no hacen tal cosa. Si la instrucci\'on se refiere a un operando de memoria, la CPU calc\'ula la direcci\'on del operando usando alg\'uno de los modos de direccionamiento y luego realiza una simulaci\'on de lectura de la palabra en tal localidad, mediante un ciclo de lectura normal, salvo que la CPU ignora los datos, los cuales son leidos del bus de datos por el 8087; y si la instrucci\'on ESCAPE no tiene una referencia a memoria, la CPU procede a cargar la siguiente instrucci\'on.
+
+Los modos de referencia de memoria del 8087 son tres:
+
+\begin{enumerate}
+\item No hay referencia a memoria.
+\item Carga de operando de memoria al 8087.
+\item Almacenamiento de operando del 8087 a memoria
+\end{enumerate}
+
+En caso de que el 8087 necesite leer o escribir de/a memoria un dato de 80 bits, el 8088 envia la direcci\'on de la primera palabra de datos en el bus de direcciones, y la se\~nal de control adecuada. El 8087 lee el dato del bus de datos o escribe un dato a memoria, y toma la direcci\'on f\'{\i}sica de 20 bits que envi\'o el 8088, con el fin de tomar el control del bus para realizar la transferencia del resto de las palabras de/a memoria. Esto lo hace poniendo la terminal $\overline{\mbox{RQ}}/\overline{\mbox{GT0}}$ del 8088 en BAJO, con lo que el 8088 envia otro pulso BAJO a la terminal $\overline{\mbox{RQ}}/\overline{\mbox{GT0}}$ del 8087 y pone sus buses a ``flotar''. El 8087 incrementa entonces la direcci\'on de 20 bits que tomo durante la primera transferencia, y la coloca en el bus de direcciones, posibilitando la lectura/escritura de la suiguiente palabra. Este proceso es continuado hasta que el 8087 termina de leer/escribir las palabras de datos. Una vez concluida esta operaci\'on, el 8087 envia un pulso bajo a la terminal $\overline{\mbox{RQ}}/\overline{\mbox{GT0}}$ del 8088 para que este pueda tomar el control de los buses de nuevo \cite{Hall}.
+
+El 8087 debe asegurarse de que el 8088 no ejecute la siguiente instrucci\'on antes de haber acabado el mismo de ejecutar la instrucci\'on en curso. Esto se puede presentar (A) cuando el 8088 necesita datos producidos por el 8087 para ejecutar la siguiente instrucci\'on, o (B) cuando se ejecutan varias ins\-truc\-cio\-nes del 8087 en secuencia. 
+
+En el primer caso, lo que se hace es conectar la terminal de salida BUSY del 8087 a la terminal $\overline{\mbox{TEST}}$ del 8088 y colocar una instrucci\'on WAIT en el programa. Esta ocasiona que el 8088 verifique la terminal $\overline{\mbox{TEST}}$ y entre en un ciclo (``loop'') interno en el que se verifica repetidamente $\overline{\mbox{TEST}}$ hasta que esta se hace ALTO, lo que indica que el 8087 ha completado la ejecuci\'on de la instrucci\'on. 
+
+En el segundo caso, el 8087 solo puede ejecutar una instrucci§'on a la vez, as\'{\i} que se debe asegurar que el 8087 a completado la ejecuci\'on de una instrucci\'on antes de leer la siguiente de memoria. Esto se realiza utilizando las terminales BUSY del 8087 y $\overline{\mbox{TEST}}$ del 8088 y la instrucci\'on FWAIT (WAIT) del 8088, que se coloca despues de cada instrucci\'on del 8087 para asegurar que el 8088 quede en un ciclo interno verificando $\overline{\mbox{TEST}}$ una vez que esta ha sido puesta en BAJO por la terminal BUSY del 8087 (al igual que en el primer caso). 
+
+%----------------------------------------------------------------------------
+
+\begin{thebibliography}{150}
+
+\bibitem[Int1989]{Intel:Micro} Intel Incorporated, {\em Microprocessor Handbook\/}, Intel Inc., 1989.
+
+\bibitem[HaD1986]{Hall} Hall, Douglas V., {\em Microprocessors and Interfacing. Programming and Hardware\/}, McGraw-Hill Book Co, 198
+
+\bibitem[GoJ1991]{Godfrey} Godfrey, J. Terry, {\em Lenguaje Ensamblador para Microcomputadoras IBM\/}, Primera Edici\'on, Prentice Hall Hispanoamericana, 1991.
+
+\end{thebibliography}
+
+%----------------------------------------------------------------------------
+
+\end{document}
+
+%----------------------------------------------------------------------------

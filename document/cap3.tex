@@ -1,0 +1,928 @@
+\chapter[Dise\~no y Descripci\'on del Sistema.]{Dise\~no y Descripci\'on del Sistema.}
+\label{Capitulo:diseno}
+
+%----------------------------------------------------------------------------
+
+\fancyhead[RE]{\slshape SCIP - Cap. \thechapter~ - Dise\~no y Descripci\'on del %%@
+Sistema.}
+\fancyhead[LO]{\slshape Rodolfo Gonz\'alez Gonz\'alez.}
+\fancyhead[LE,RO]{\thepage}
+
+%----------------------------------------------------------------------------
+
+\section{Introducci\'on.}
+\label{Seccion:IntroCap3}
+
+Este cap\'{\i}tulo presenta la descripci\'on del dise\~no de la tarjeta SCIP. La tarjeta SCIP %%@
+fue ensamblada usando bases para alambramiento\footnote{Estas bases para alambramiento o wire-%%@
+wrap proporcionan la ventaja de que no es necesario soldar postes extra (como ser\'{\i}a el %%@
+caso si se usaran sockets para C.I.'s), ahorran espacio y son f\'aciles de alambrar o %%@
+desalambrar los circuitos ensamblados con ellas. Sin embargo elevan el costo del dise\~no, ya %%@
+que son de 3 a 5 veces mas caras que un socket normal para integrados.} sobre una tarjeta para %%@
+prototipos de 16 bits JDR-PR10 de JDR Microdevices, la cual se monta, para prop\'ositos de %%@
+prueba y mediciones, sobre una tarjeta de extensi\'on EXT-80286. La tarjeta JDR-PR10 tiene %%@
+integrado un dise\~no para la decodificaci\'on y generaci\'on de las l\'{\i}neas de %%@
+selecci\'on de la tarjeta, y ``buffers'' para los buses de direcci\'on, datos y otras %%@
+l\'{\i}neas provenientes de conectores de expansi\'on de la PC. Sin embargo, dado que el %%@
+dise\~no de JDR utiliza PAL's (Arreglos L\'ogicos Programables) en la l\'ogica de %%@
+decodificaci\'on, los cuales no se pudieron obtener, se realiz\'o dicha l\'ogica %%@
+independientemente.
+
+El dise\~no se divide en 3 m\'odulos principales:
+
+\begin{enumerate}
+\item M\'odulo de procesamiento.
+\item M\'odulo de memoria.
+\item M\'odulo de comunicaci\'on entre la tarjeta SCIP y la computadora.
+\end{enumerate}
+
+El diagrama por bloques se presenta en la Figura \ref{Figura:SCIPbloques}.
+
+\begin{figure}[!htb]\centering
+%TexCad Options
+%\grade{\off}
+%\emlines{\off}
+%\beziermacro{\on}
+%\reduce{\on}
+%\snapping{\off}
+%\quality{2.00}
+%\graddiff{0.01}
+%\snapasp{1}
+%\zoom{1.00}
+\unitlength 1mm
+\linethickness{0.4pt}
+\begin{picture}(150.33,70.00)
+\put(4.67,10.00){\framebox(145.67,60.00)[cc]{ }}
+\put(96.33,3.00){\framebox(52.67,7.00)[cc]{ }}
+\put(71.67,3.00){\framebox(21.00,7.00)[cc]{ }}
+\put(70.67,12.00){\framebox(73.33,25.33)[cc]{1}}
+\put(7.33,42.00){\framebox(40.00,25.67)[cc]{2}}
+\put(50.00,42.00){\framebox(22.33,25.67)[cc]{3}}
+\put(7.33,12.00){\framebox(12.00,26.67)[cc]{4}}
+\put(22.00,12.00){\framebox(25.33,26.67)[cc]{5}}
+\put(50.00,12.00){\framebox(18.67,26.33)[cc]{6}}
+\put(75.67,42.00){\framebox(12.33,25.67)[cc]{ROM1}}
+\put(90.67,42.00){\framebox(13.00,25.67)[cc]{ROM2}}
+\put(106.33,42.00){\framebox(37.67,25.67)[cc]{7}}
+\end{picture}
+\caption{Diagrama en bloques de SCIP: (1) Secci\'on preconstruida de decodificaci\'on, (2) %%@
+M\'odulo de Procesamiento y Control de BUS, (3) M\'o\-du\-lo de de\-co\-di\-fi\-ca\-ci\-%%@
+\'on in\-ter\-na y bu\-ffers, (4) M\'odulo de temporizaci\'on, (5) M\'odulo de %%@
+comunicaci\'on, (6) M\'odulo de l\'ogica de selecci\'on, (7) M\'odulo de memorias RAM, (ROM1) %%@
+Memoria EPROM 1, (ROM2) Memoria EPROM 2.} 
+\label{Figura:SCIPbloques}
+\end{figure}
+
+En \'este cap\'{\i}tulo se hace referencia a las hojas de diagramas presentadas en el %%@
+Ap\'endice \ref{Apendice:diagramas}.
+
+%----------------------------------------------------------------------------
+
+\section{M\'odulo de procesamiento.}
+\label{Section:modproc}
+
+La funci\'on del m\'odulo de procesamiento es la de ejecutar el programa de usuario que reside %%@
+en una memoria EPROM dentro de la tarjeta SCIP. 
+
+Este m\'odulo consta de las siguientes partes principales:
+
+\begin{itemize}
+\item Un microprocesador Intel 8088.
+\item Un coprocesador matem\'atico Intel 8087.
+\item Un temporizador Intel 8284.
+\item Un controlador de interrupciones programable 8259.
+\item Un controlador de bus 8288.
+\item Latches para las l\'{\i}neas de datos/direcciones.
+\item Circuito para generar el RESET de este m\'odulo.
+\end{itemize}
+
+Esta parte del dise\~no se puede ver en las hojas de diagrama n\'umeros 4 (``M\'odulo de %%@
+generaci\'on de l\'{\i}neas de control/IRQ's'') y 1 (``M\'odulo de Procesamiento'')  del %%@
+Ap\'endice \ref{Apendice:diagramas}.
+
+Como se ve en la hoja 1, el microprocesador Intel 8088 esta conectado en modo m\'aximo (el cual %%@
+se define en la Subsubsecci\'on \ref{Subsubseccion:modomaximo}, la Subsecci\'on %%@
+\ref{Subseccion:arquitectura} y la Subsecci\'on \ref{Subseccion:terminales}), para poder %%@
+soportar la utilizaci\'on del coprocesador matem\'atico Intel 8087. La conexi\'on de los buses %%@
+de datos y direcciones de ambos se realiza en paralelo (ver Subsecci\'on %%@
+\ref{Subsection:confop8087}). As\'{\i} mismo la conexi\'on de las l\'{\i}neas de estado S1-%%@
+S3 de ambos circuitos se realiza en paralelo, para poder decodificar el estado del bus en un %%@
+momento dado. Estas l\'{\i}neas de estado se conectan a las entradas correspondientes del 8288 %%@
+(terminales 3, 18 y 19), el cu\'al se encarga de la generaci\'on de las l\'{\i}neas de control %%@
+del bus ($\overline{\mbox{MRD}}$, $\overline{\mbox{MWT}}$, %%@
+$\overline{\mbox{AWM}}$, $\overline{\mbox{IOR}}$, $\overline{\mbox{IOW}}$, %%@
+$\overline{\mbox{AIOW}}$, DT/$\overline{R}$,  DEN, MC/$\overline{\mbox{PD}}$, y %%@
+ALE). Las l\'{\i}neas de control que son usadas en SCIP son ALE, DT/$\overline{R}$,  %%@
+$\overline{\mbox{MRD}}$, y $\overline{\mbox{MWT}}$ para la selecci\'on de memoria %%@
+local, y $\overline{\mbox{IOR}}$ y $\overline{\mbox{IOW}}$ para la selecci\'on de %%@
+puertos. As\'{\i} mismo, se utilizan para controlar el latch 74LS373 y los transceivers 74LS245 %%@
+(U4 y U5/U6 respectivamente, en la hoja 1 del circuito), para mantener el tr\'afico en el bus de %%@
+datos y de direcciones de acuerdo a las especificaciones dadas anteriormente (ver %%@
+Secci\'on~\ref{Seccion:bus}).
+
+La temporizaci\'on del sistema se realiza mediante un generador de reloj 8284 (U1 en la hoja 4), %%@
+con un cristal de 14.31818 Mhz, frecuencia que es dividida por 3 para la adecuada operaci\'on %%@
+del 8088 , 8087 y del 8288, la cu\'al es de 4.74 $\approx$ 5 Mhz. Este mismo circuito %%@
+integrado sirve para generar la se\~nal de RESET para el microprocesador 8088 (ver Subsecci\'on %%@
+\ref{Subsection:inicreset}). El circuito utilizado para la generaci\'on de la se\~nal de RESET %%@
+consta de una resistencia de 640 K$\Omega$, un capacitor de 360 $\mu$F y un interruptor de %%@
+bot\'on. Al presionarse el bot\'on se pone en BAJO la terminal RES del 8284, con lo que \'este %%@
+genera el pulso de RESET para el 8088 (y en consecuencia para el 8087, 8255 y el 8288). Cabe %%@
+se\~nalar que la duraci\'on de la se\~nal de RESET es de importancia, debido a que debe de %%@
+estar presente al menos durante 4 ciclos de reloj para que el procesador pueda iniciar su %%@
+operaci\'on normalmente \cite{Intel:Micro}. 
+
+En el dise\~no realizado es necesario el uso de las l\'{\i}neas AEN2-AEN1 y RDY2-RDY1 ya que %%@
+estas se necesitan para configuraciones con m\'utiples maestros de bus; debido a esto, AEN1-AEN2 %%@
+se colocan en BAJO y RDY1-RDY2 se colocan en ALTO. La terminal F/$\overline{\mbox{C}}$ se %%@
+coloca a BAJO para habilitar la generaci\'on de la se\~nal del reloj por medio del cristal.
+
+La terminal $\overline{\mbox{TEST}}$ del 8088 se conecta a la terminal BUSY del 8087, para %%@
+hacer posible la sincronizaci\'on de ambos dispositivos, como se se\~nala en la Subsecci\'on %%@
+\ref{Subsection:confop8087}. Con el mismo prop\'osito de sincronizaci\'on se conecta la %%@
+terminal RQ/$\overline{\mbox{GT1}}$ (no. 30) del 8088 con la terminal %%@
+RQ/$\overline{\mbox{GT0}}$ (no. 31) del 8087; en este caso, estas l\'{\i}neas controlan %%@
+las peticiones o concesiones del bus, para que en caso de que el 8087 necesite tomar el control %%@
+del bus, se coordine con el 8088.
+
+Como se menciona arriba, el control del bus del sistema interno de la tarjeta, al estar el 8088 %%@
+conectado en modo m\'aximo, se lleva a cabo con un Controlador de Bus 8288. Las l\'{\i}neas de %%@
+estado del 8088 (S0-S2) indican el modo de operaci\'on del bus (ver Subsecci\'on %%@
+\ref{Subseccion:terminales}). Estas l\'{\i}neas se conectan a las l\'{\i}neas S0-S2 del %%@
+8288, el cual, a trav\'es de sus l\'{\i}neas de control determina la operaci\'on actualmente %%@
+llevada a cabo por el bus.
+
+El manejo de las excepciones que puedan ocurrir en el 8087 (ver Subsecci\'on %%@
+\ref{Subsection:excep8087}) se lleva a cabo mediante un PIC (Controlador de Interrupciones %%@
+Programable) 8259 (U2 en la hoja 4 del diagrama). La terminal INT del 8087 se conecta a la %%@
+terminal IR0 del 8259. Esto se hace con el fin de generar una petici\'on de interrupci\'on. %%@
+Esta se mantiene activa hasta que el 8288 genera una se\~nal de aceptaci\'on de interrupci\'on %%@
+($\overline{\mbox{INTA}}$). La terminal INTR del 8088 se conecta al 8259 para para en caso %%@
+de producirse una petici\'on v\'alida de interrupci\'on, el 8259 interrumpa a la CPU 8088. Las %%@
+l\'{\i}neas del bus de datos de la tarjeta (D0-D7) se conectan a las terminales del bus de %%@
+datos del 8259 (D0-D7), las cuales son de tres estados, para que por ellas se transmita la %%@
+informaci\'on de control, estado y vector de interrupci\'on. Este bus es bidireccional, y %%@
+proviene del transceiver 74LS245 (U5 en la hoja 1 del diagrama). En el caso de SCIP, el 8259 %%@
+trabaja como \'unico PIC del sistema, por lo que las l\'{\i}neas CAS0-CAS1 se mantienen %%@
+desconectadas, y la terminal 16 (SP/$\overline{\mbox{EN}}$) se pone a un nivel ALTO. 
+
+Durante la inicializaci\'on del sistema, el software del BIOS de SCIP realiza la programaci\'on %%@
+del 8259, mediante el c\'odigo que se presenta a continuaci\'on:
+
+\vspace{12pt}
+
+\begin{verbatim}
+MOV  DX,3C0h       ; Primer puerto  (ICW 1)
+MOV  AL,17h        ; Modo de disparo por borde, intervalo de 4, 
+                   ; sencillo, se requiere IC4 
+OUT  DX,AL         ; 00010111
+
+MOV  DX,3C1h       ; Segundo puerto (ICW 2)
+MOV  AL,0h         ; Inicio del vector de interrupciones
+OUT  DX,AL         ; 00000000
+
+MOV  DX,3C1h       ; Segundo puerto (ICW 3)
+MOV  AL,0h         ; Esta palabra es ignorada, ya que 
+                   ; solo hay un PIC
+OUT  DX,AL         ; 00000000
+
+MOV  DX,3C1h       ; Segundo puerto (ICW 4)
+MOV  AL,5h         ; Modo no especial completamente anidado
+                   ; modo sin buffers, EOI normal, 
+                   ; modo para 8086/8088 
+OUT  DX,AL         ; 00000101
+\end{verbatim}
+
+\vspace{12pt}
+
+El programa escribe a los puertos 3C0h y 3C1h en donde se encuentra el 8259 (ver Subsecci\'on %%@
+\ref{Subseccion:internalports}), y mediante cuatro Palabras de Control para Inicializaci\'on %%@
+(ICW1-ICW4) lo programa:
+
+\begin{enumerate}
+\item La primera palabra programa el modo de disparo por borde, un intervalo de 4 bytes entre %%@
+los vectores de interrupci\'on, \'unico PIC del sistema, y palabra de control 4 necesaria.
+\item La segunda palabra de control indica al 8259 que el vector de interrupciones inicia en la %%@
+direcci\'on 0 absoluta.
+\item La tercera palabra de control es ignorada, puesto que el 8259 es el \'unico PIC del %%@
+sistema.
+\item La cuarta palabra indica al PIC que trabaje en modo no especial completamente anidado, en %%@
+modo ``sin buffers'', con EOI (Fin De In\-te\-rrup\-ci\-\'on) normal, y en modo 8088/8086.
+\end{enumerate}
+
+%----------------------------------------------------------------------------
+
+\section{M\'odulo de memoria, puertos y decodificaci\'on interna.}
+\label{Section:modmem}
+
+%----------------------------------------------------------------------------
+
+\subsection{Memoria interna de SCIP.}
+\label{Subseccion:memo}
+
+La funci\'on del m\'odulo de memoria es el almacenar las rutinas de inicializaci\'on de la %%@
+tarjeta, el programa de usuario que residir\'a en la tarjeta, y proporcionar un \'area de %%@
+trabajo en RAM para tal programa.
+
+Este m\'odulo se presenta en las hojas de diagrama 5 y 6 del Ap\'endice %%@
+\ref{Apendice:diagramas}, y consta de:
+
+\begin{itemize}
+\item Dos EPROM\footnote{Memoria de Solo Lectura El\'ectricamente Programables y Borrables} %%@
+NEC 27512 de 64Kb $\times$ 8 bits cada una.
+\item Cuatro RAM\footnote{Memoria de Acceso Aleatorio} est\'aticas\footnote{La raz\'on de %%@
+la utilizaci\'on de memorias RAM est\'aticas en lugar de usar memorias din\'amicas o es que %%@
+para estas no se requiere l\'ogica adicional para el refresco de las memorias, y dado que el %%@
+espacio en la tarjeta para prototipos JDR-PR10 usada es reducido, se prefiri\'o utilizar %%@
+memorias est\'aticas. Sin embargo, el costo de estas elev\'o el costo global del sistema.} NEC %%@
+PD43256A de 32Kb $\times$ 8 bits cada una.
+\item Decodificadores/demultiplexores 2 a 4 74LS139.
+\item Compuertas OR 74LS32.
+\item Decodificadores 1 de 8 74LS138.
+\item Compuertas AND 74LS08.
+\item Compuerta AND 74LS10.
+\item Compuerta NOT 74LS04.
+\end{itemize}
+
+En la tarjeta SCIP se tienen 128 Kb de memoria ROM y 128 Kb de memoria RAM. 64 Kb de memoria ROM %%@
+son destinados a las rutinas de inicializaci\'on de la tarjeta, y el circuito integrado que las %%@
+contiene permanece en ella siempre (bloque 6, ver Tabla \ref{Tabla:decodifmem}). Los otros 64 %%@
+Kb de ROM estan destinados al programa de aplicaci\'on espec\'{\i}fico del usuario que reside %%@
+en la tarjeta, y el circuito integrado puede ser intercambiado para colocar otro programa %%@
+dependiendo de las necesidades del usuario (bloque 5, ver Tabla \ref{Tabla:decodifmem}). El %%@
+circuito integrado de memoria EPROM que permanece en la tarjeta ocupa el rango de direcciones %%@
+m\'as alto (F0000-FFFFF hexadecimal, es decir, el bloque de memoria 6, ver Tabla %%@
+\ref{Tabla:decodifmem}) ya que dadas la caracter\'{\i}stica del reset e inicializaci\'on del %%@
+8088, este salta a la direcci\'on FFFF0 hexadecimal (ver Subsecci\'on %%@
+\ref{Subsection:inicreset}). Por tanto, el bloque 5 (ver Tabla \ref{Tabla:decodifmem}) de %%@
+memoria es la EPROM intercambiable que contendr\'a el programa del usuario.
+
+El mapa de la memoria interna de SCIP se presenta en la Figura \ref{Fig:mapamem}.
+
+\begin{figure}[!htb]
+\vskip 5mm
+\special{center
+         mapamem.gif,
+         \the\hsize 78mm}
+\vskip 78mm
+\caption{Mapa de memoria de la tarjeta SCIP.}
+\label{Fig:mapamem}
+\end{figure}
+
+La Tabla \ref{Tabla:decodifmem} presenta los rangos de direcciones utilizados para la memoria %%@
+de la tarjeta SCIP y la respectiva direcci\'on de 20 bits como se presenta en el bus de %%@
+direcciones del sistema. En binario se presenta solo la direcci\'on de inicio de cada bloque de %%@
+memoria.
+
+\vspace{12pt}
+
+\begin{table}[!htb]
+\centering
+\begin{tabular}{|c|c|c|c|c|c|c|c|} \hline
+{\tiny $A_{19} - A_{16}$} & {\tiny $A_{15} - A_{12}$} & {\tiny $A_{11} - A_{8}$} & %%@
+{\tiny $A_{7} - A_{4}$} & {\tiny $A_{3} - A_{0}$} & {\tiny Inicio} & {\tiny Fin} & %%@
+{\tiny Bloque} \\ \hline \hline
+{\footnotesize 0000} & {\footnotesize 0000} & {\footnotesize 0000} & %%@
+{\footnotesize 0000} & {\footnotesize 0000} & {\footnotesize 00000} & %%@
+{\footnotesize 07FFF} & {\footnotesize 1} \\ \hline
+{\footnotesize 0000} & {\footnotesize 1000} & {\footnotesize 0000} & %%@
+{\footnotesize 0000} & {\footnotesize 0000} & {\footnotesize 08000} & %%@
+{\footnotesize 0FFFF} & {\footnotesize 2} \\ \hline
+{\footnotesize 0001} & {\footnotesize 0000} & {\footnotesize 0000} & %%@
+{\footnotesize 0000} & {\footnotesize 0000} & {\footnotesize 10000} & %%@
+{\footnotesize 17FFF} & {\footnotesize 3} \\ \hline
+{\footnotesize 0001} & {\footnotesize 1000} & {\footnotesize 0000} & %%@
+{\footnotesize 0000} & {\footnotesize  0000} & {\footnotesize 18000} & %%@
+{\footnotesize 1FFFF} & {\footnotesize 4} \\ \hline
+{\footnotesize 1110} & {\footnotesize 0000} & {\footnotesize 0000} & %%@
+{\footnotesize 0000} & {\footnotesize 0000} & {\footnotesize E0000} & %%@
+{\footnotesize EFFFF} & {\footnotesize 5} \\ \hline
+{\footnotesize 1111} & {\footnotesize 0000} & {\footnotesize 0000} & %%@
+{\footnotesize 0000} & {\footnotesize 0000} & {\footnotesize F0000} & %%@
+{\footnotesize FFFFF} & {\footnotesize 6} \\ \hline
+\end{tabular}
+\caption{Rangos de direcciones de los bloques de memoria de SCIP.}
+\label{Tabla:decodifmem}
+\end{table}
+
+\vspace{12pt}
+
+La decodificaci\'on de las direcciones para la selecci\'on de los circuitos integrados de %%@
+memoria se lleva a cabo usando decodificadores 74LS139\footnote{El 74LS139 es un %%@
+decodificador/demultiplexor dual 1 de 4.}. 
+
+Para la selecci\'on de los circuitos de memoria RAM se conectan las l\'{\i}neas A15 y A16 del %%@
+bus de direcciones de SCIP a las entradas A0 y A1, respectivamente, de un 74LS139, como se %%@
+muestra en la Tabla \ref{Tabla:decodif1}. La entrada de habilitaci\'on %%@
+($\overline{\mbox{E}}$ de dicho 74LS139 se conecta a la l\'{\i}nea A19, ya que en el rango %%@
+de direcciones de memoria que ocupa la memoria RAM la l\'{\i}nea A19 del bus de direcciones de %%@
+SCIP siempre esta en BAJO (ver Tabla \ref{Tabla:decodifmem}).
+
+\begin{table}[!htb]
+\centering
+\begin{tabular}{|c|c|c|} \hline
+A15 $\rightarrow$ A0 & A16 $\rightarrow$ A1 & L\'{\i}nea habilitada en el 74LS139 \\ %%@
+\hline
+0 & 0 & $\overline{\mbox{O0}}$ \\
+1 & 0 & $\overline{\mbox{O1}}$ \\
+0 & 1 & $\overline{\mbox{O2}}$ \\
+1 & 1 & $\overline{\mbox{O3}}$ \\ \hline
+\end{tabular}
+\caption{Entradas del 74LS139 para la selecci\'on de las memorias RAM}
+\label{Tabla:decodif1}
+\end{table}
+
+Para seleccionar los circuitos de memoria EPROM se utilizan las l\'{\i}neas A15 y A16 del bus %%@
+de direcciones de SCIP como entrada para A0 y A1 respectivamente en un 74LS139, como se muestra %%@
+en la Tabla \ref{Tabla:decodif2}. La entrada de habilitaci\'on del 74LS139 se conecta a la %%@
+salida de una compuerta 74LS04 la cual invierte la l\'{\i}nea A19 del bus de SCIP ya que esta %%@
+siempre esta en ALTO en el rango de direcciones que comprende las dos memorias EPROM (ver Tabla %%@
+\ref{Tabla:decodifmem}).
+
+\begin{table}[!htb]
+\centering
+\begin{tabular}{|c|c|c|} \hline
+A15 $\rightarrow$ A0 & A16 $\rightarrow$ A1 & L\'{\i}nea habilitada en el 74LS139 \\ %%@
+\hline
+0 & 0 & $\overline{\mbox{O0}}$ \\
+0 & 1 & $\overline{\mbox{O2}}$  \\ \hline
+\end{tabular}
+\caption{Entradas del 74LS139 para la selecci\'on de las memorias EPROM}
+\label{Tabla:decodif2}
+\end{table}
+
+%----------------------------------------------------------------------------
+
+\subsection{Puertos internos.}
+\label{Subseccion:internalports}
+
+La l\'ogica de decodificaci\'on presentada en la hoja de diagramas n\'umero 5 permite %%@
+seleccionar hasta 8 puertos dentro del sistema SCIP\footnote{Este n\'umero se podr\'{\i}a %%@
+aumentar con l\'ogica adicional, usando A3=1 y otro 74LS138, por ejemplo.}. Para esta parte del %%@
+circuito se utilizan los decodificadores U5 y U6 (ambos 74LS138). En U5 se genera la se\~nal Y7 %%@
+en caso de que la direcci\'on presente en las l\'{\i}neas A4 - A9 del bus de direcciones %%@
+interno sea 3C{\it x\/}. Y7 entonces habilita al decodificador U6 el cu\'al decodifica las %%@
+l\'{\i}neas A0, A1 y A2 para la selecci\'on de puertos (A3=0).
+
+Los puertos internos de SCIP decodificados por U6 son 2 para el 8259 y 4 para el 8255, como se %%@
+muestra en la Tabla \ref{Tabla:puertointernos}.
+
+% Table created by WinTeX 95: 3 Columns x 7 Rows.
+\begin{table}[!htb]\centering
+\begin{tabular}{|l|l|l|}
+%Row: 1
+\cline{1-3}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to13.20ex{\hfil A9 - A0\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to13.20ex{\hfil Hex.\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to12.80ex{\hfil Disp.\hfil}\vfil} \\
+
+%Row: 2
+\cline{1-3}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to13.20ex{\hfil 1111000000\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to13.20ex{\hfil 3C0\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to12.80ex{\hfil 8259\hfil}\vfil} \\
+
+%Row: 3
+\cline{1-3}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to13.20ex{\hfil 1111000001\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to13.20ex{\hfil 3C1\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to12.80ex{\hfil 8259\hfil}\vfil} \\
+
+%Row: 4
+\cline{1-3}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to13.20ex{\hfil 1111000100\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to13.20ex{\hfil 3C4\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to12.80ex{\hfil 8255\hfil}\vfil} \\
+
+%Row: 5
+\cline{1-3}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to13.20ex{\hfil 1111000101\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to13.20ex{\hfil 3C5\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to12.80ex{\hfil 8255\hfil}\vfil} \\
+
+%Row: 6
+\cline{1-3}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to13.20ex{\hfil 1111000110\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to13.20ex{\hfil 3C6\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to12.80ex{\hfil 8255\hfil}\vfil} \\
+
+%Row: 7
+\cline{1-3}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to13.20ex{\hfil 1111000111\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to13.20ex{\hfil 3C7\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to12.80ex{\hfil 8255\hfil}\vfil} \\
+
+\cline{1-3}
+\end{tabular}
+\caption{Direcciones de los puertos para los dispositivos PIC y PPI.}
+\label{Tabla:puertointernos}
+\end{table}
+
+Estos puertos se utilizan para programar y acceder tanto al PIC 8259 como al PPI 8255. Es %%@
+necesario contar con tantos puertos debido a que ambos dispositivos lo requieren as\'{\i} (ver %%@
+Ap\'endice \ref{Apendice:chips}).
+
+%----------------------------------------------------------------------------
+
+\section{M\'odulo de comunicaci\'on.}
+\label{Section:decodifbus}
+
+La funci\'on de este m\'odulo es realizar la comunicaci\'on entre la tarjeta SCIP y la %%@
+computadora en ambos sentidos.
+
+Este m\'odulo se divide en dos partes:
+
+\begin{enumerate}
+\item Decodificaci\'on de l\'{\i}neas de direcci\'on para selecci\'on de la tarjeta.
+\item Puertos de comunicaci\'on PC $\Longleftrightarrow$ SCIP.
+\end{enumerate}
+
+%----------------------------------------------------------------------------
+
+\subsection{T\'ecnicas de decodificaci\'on para selecci\'on de dispositivos.}
+\label{Subsection:tecnicas}
+
+Para la decodificaci\'on y sensado de muchos dispositivos perif\'ericos y de entrada y salida %%@
+en la PC se utilizan los puertos (ver Secci\'on \ref{Section:puertos}). Para habilitar un %%@
+dispositivo colocado en una ranura de expansi\'on se necesita decodificar de alguna manera las %%@
+l\'{\i}neas de direccion del bus de la PC. Esto se puede llenar a cabo de las siguientes %%@
+formas:
+
+\begin{enumerate}
+\item Mapeo de memoria.
+\item Puertos de entrada/salida.
+\end{enumerate}
+
+El primer m\'etodo consiste en ver cada perif\'erico como una direcci\'on \'unica en la %%@
+memoria de la computadora, siendo posible con esto el uso de todas las instrucciones que sirven %%@
+para accesar a memoria.
+
+El segundo m\'etodo consiste en ver al perif\'erico como un dispositivo de entrada/salida, %%@
+independiente de la memoria. Con esto se limita el acceso al dispositivo a las instrucciones IN %%@
+y OUT.
+
+Las formas para seleccionar un dispositivo son:
+
+\begin{enumerate}
+\item L\'ogica aleatoria.
+\item Decodificadores.
+\item Comparadores.
+\item Memorias ROM programables (PROM's) de mapeo.
+\end{enumerate}
+
+El m\'etodo de decodificaci\'on consiste en utilizar un circuito integrado decodificador tal %%@
+como el 74LS138\footnote{Decodificador/demultiplexor 1 de 8.} para demultiplexar ciertas %%@
+l\'{\i}neas de direcci\'on del bus y as\'{\i} generar la se\~nal de habilitaci\'on de la %%@
+tarjeta o dispositivo colocado en la ranura de expansi\'on. Esto tiene la desventaja de que la %%@
+direcci\'on de la tarjeta se fija desde su dise\~no y podr\'{\i}a entrar en conflicto con otro %%@
+dispositivo.
+
+El m\'etodo de comparadores utiliza circuitos integrados de comparaci\'on, tales como el %%@
+74LS85\footnote{Comparador de magnitud de 4 bits.} para comparar una direcci\'on fija (que %%@
+puede ser modificada mediante interruptores\footnote{Del tipo {\it dip switch\/}.} o {\it %%@
+jumpers\/} en la tarjeta) contra ciertas l\'{\i}neas del bus de direcciones. De esta manera, %%@
+si la direcci\'on presente en el bus es igual a la fijada en la tarjeta, se genera la se\~nal %%@
+de habilitaci\'on de la \'esta. Esto da la ventaja de que no se restringe la habilitaci\'on de %%@
+la tarjeta a una direcci\'on permanente, sino que se puede modificar, en caso de que existiera %%@
+conflicto con alg\'un otro dispositivo.
+
+Los m\'etodos primero (l\'ogica aleatoria) y \'ultimo (memorias PROM de mapeo) no se %%@
+consideraron en el dise\~no, ya que complican un tanto la l\'ogica de decodificaci\'on, al %%@
+requerir muchos circuitos integrados. Sin embargo, cabe se\~nalar que la t\'ecnica de mapeo por %%@
+memorias PROM tiene la ventaja de que un dispositivo puede ser accesado en cualquier %%@
+direcci\'on, ya que dicha selecci\'on se lleva a cabo utilizando direcciones almacenadas en la %%@
+PROM para mapear direcciones secuenciales dentro de localidades de memoria diferentes. Estas %%@
+direcciones se pueden cambiar con solo cambiar la memoria PROM \cite{SADYR}.
+
+%----------------------------------------------------------------------------
+
+\subsection{Des\-crip\-ci\-\'on del cir\-cui\-to de de\-co\-di\-fi\-ca\-ci\-\'on\\ de %%@
+SCIP.}
+\label{Subsection:decodif}
+
+Esta parte del circuito (la secci\'on de decodificaci\'on) se presenta en la hoja 2 de %%@
+diagramas del Ap\'endice \ref{Apendice:diagramas}.
+
+Se utiliza un dip switch de 8 bits (U5) para fijar la direcci\'on base de la tarjeta (300h), y %%@
+mediante un comparador\footnote{La ventaja de usar el comparador es que la direcci\'on base %%@
+de la tarjeta puede ser cambiada f\'acilmente.} 74LS684 (U2) se efectua la comparaci\'on entre %%@
+la direcci\'on fijada por el dip switch y los bits presentes en las l\'{\i}neas A4 - A5 del %%@
+bus de direcciones de la PC. Si ambos valores son iguales, la se\~nal %%@
+$\overline{\mbox{PORTSEL}}$ es activada y usa como parte de la habilitaci\'on de un %%@
+decodificador 74LS138 (U3). Si al mismo tiempo no est\'a presente la se\~nal AEN del bus de la %%@
+PC\footnote{Esta se\~nal es activa en ALTO cuando hay acceso directo a memoria.}, el estado %%@
+de las l\'{\i}neas $\overline{\mbox{IOR}}$ e $\overline{\mbox{IOW}}$ sirven para %%@
+generar la se\~nal de selecci\'on de la tarjeta $\overline{\mbox{BOARDSEL}}$, la cual se %%@
+activa si Y5 o Y6 de U3 est\'an en BAJO (es decir, si hay acceso a un puerto por parte de la CPU %%@
+de la PC). Esto se logra mediante un AND en U4A (74LS08).
+
+La se\-\~nal de $\overline{\mbox{BOARDSEL}}$ ha\-bi\-li\-ta en\-ton\-ces el de\-co\-%%@
+di\-fi\-ca\-dor U1 (74LS138), el cu\-\'al sirve para generar, en conjunci\'on con las %%@
+l\'{\i}neas de direcci\'on A0, A1 y A2 del bus de la PC, hasta 8 se\~nales para direccionar %%@
+puertos en la tarjeta SCIP. Las salidas Y0 y Y1 ($\overline{\mbox{DATAREAD}}$ y %%@
+$\overline{\mbox{WRITEDATA}}$ respectivamente, correspondientes a los puertos 300h y 301h %%@
+de la computadora anfitriona) proporcionan las se\~nales para habilitar la lectura o escritura %%@
+de datos. Dado que A3 se usa igualmente como habilitador de U1 (cuando A3=0), se puede colocar %%@
+otro 74LS138 para tener hasta 16 puertos dentro de SCIP directamente (se podria usar l\'ogica %%@
+adicional para direccionar m\'as puertos).
+
+Para mantener la sincronizaci\'on entre SCIP y la PC se usa un circuito compuesto por los flip-%%@
+flops 74LS74 U8A, U7A y U9A, los cuales, mediante las se\~nales de RESETDRV y CLOCK provenientes %%@
+del bus de la PC, por cada selecci\'on de la tarjeta generan un pulso en la se\~nal %%@
+$\overline{\mbox{IOCHRDY}}$ con duraci\'on de dos ciclos de reloj, lo cual genera un %%@
+retardo en del bus de la PC anfitriona (Ver Secci\'on \ref{Section:ranuras}).
+
+%----------------------------------------------------------------------------
+
+\subsection{Des\-crip\-ci\-\'on del cir\-cui\-to de comunicaci\'on\\de SCIP.}
+\label{Subsection:comunicacion}
+
+La parte del circuito de SCIP que realiza la comunicaci\'on entre la PC y la tarjeta se muestra %%@
+en la hoja de diagramas n\'umero 3 del  Ap\'endice \ref{Apendice:diagramas}.
+
+El circuito integrado que es el encargado principal de la comunicaci\'on es el controlador %%@
+programable de perif\'ericos 8255 (ver Ap\'endice \ref{Apendice:chips} y Figura %%@
+\ref{Figura:8255}). Este es un dispositivo muy vers\'atil ya que puede ser programado en tres %%@
+modos principales de operaci\'on (Modos 0, 1 y 2), los cuales a su vez pueden ser combinados. %%@
+Cualquiera de estos modos pueden ser seleccionados mediante software en cualquier momento. %%@
+Cuenta con 3 puertos de 8 bits cada uno (A, B y C), los cuales se seleccionan mediante las %%@
+l\'{\i}neas A0 y A1 del bus interno de direcciones. El Puerto A junto con la parte superior del %%@
+Puerto C (C7 - C4) conforman el Grupo A, mientras que el Grupo B esta compuesto por el Puerto B %%@
+y la parte inferior del Puerto C (C3 - C0)
+
+\vspace{12pt}
+
+\begin{figure}[!htb]
+\vskip 5mm
+\special{center
+         8255.gif,                
+         \the\hsize 78mm}
+\vskip 80mm
+\caption{Controlador Programable de Perif\'ericos 8255.} 
+\label{Figura:8255}
+\end{figure}
+
+\vspace{12pt}
+
+La parte del dise\~no a continuaci\'on descrita se puede apreciar en la hoja de diagramas %%@
+n\'umero 5. En dicho diagrama, U6 (un 74LS138) mediante un AND de las l\'{\i}neas Y4, Y5, Y6 y %%@
+Y7 genera la se\~nal $\overline{\mbox{PPISEL}}$  la cual se conecta a la terminal %%@
+$\overline{\mbox{CS}}$ del 8255 para habilitarlo. Las se\~nales generadas por el 8288 para %%@
+el control de entrada y salida ($\overline{\mbox{IOR}}$ y $\overline{\mbox{IOW}}$) son %%@
+utilizadas para controlar la entrada y salida del 8255. Las l\'{\i}neas del bus  de datos %%@
+interno de SCIP est\'an conectadas a las terminales 27 a 34 (D7 - D0) del 8255, mientras que las %%@
+terminales correspondientes al Puerto A del PPI estan conectadas a un transceiver 74LS245 (U4) %%@
+el cual es usado para comunicarse con el bus del sistema anfitri\'on. La direcci\'on de este %%@
+transceiver es controlada con la l\'{\i}nea $\overline{\mbox{DATAREAD}}$ generada por la %%@
+l\'ogica de decodificaci\'on presentada en la hoja 2 de diagramas, y que corresponde al puerto %%@
+de lectura (puerto 300h de la PC), mientras que la habilitaci\'on de dicho transceiver se lleva %%@
+a cabo con la l\'{\i}nea $\overline{\mbox{BOARDSEL}}$ tambi\'en generada internamente %%@
+(vease Secci\'on \ref{Section:decodifbus}). Esto posibilita la lectura de datos de 8 bits %%@
+desde la computadora anfitriona.
+
+Para el caso de escritura de un byte a SCIP, se conect\'o al puerto B del 8255 (terminales 18 a %%@
+25) un 74LS373\footnote{Latch transparente de 8 bits con salidas de 3 estados.} cuyas entradas %%@
+estan conectadas al bus de datos de la computadora anfitriona. La terminal de habilitaci\'on de %%@
+este latch esta conectada a la l\'{\i}nea $\overline{\mbox{WRITEDATA}}$ correspondiente al %%@
+puerto 301h de la PC (ver Subsecci\'on \ref{Subsection:decodif}) y la terminal de %%@
+habilitaci\'on de salidas esta a tierra. Esto posibilita la escritura de un byte a SCIP por %%@
+parte de la PC anfitriona.
+
+Se usa la se\~nal de $\overline{\mbox{MASTERESET}}$ generada por el 8284 para reinicializar %%@
+al 8255.  Cuando el 8255 recibe dicha se\~nal (es decir, cuando la terminal 35 es puesta en %%@
+ALTO), todos los puertos son colocados en el modo de entrada (todas las l\'{\i}neas estaran en %%@
+estado de alta impedancia) \cite{Intel:Perif}. Este dispositivo puede permanecer en tal estado %%@
+si no se programa.
+
+\begin{figure}[!htb]\centering
+%TexCad Options 
+%\grade{\off} 
+%\emlines{\off} 
+%\beziermacro{\on} 
+%\reduce{\on} 
+%\snapping{\off} 
+%\quality{2.00} 
+%\graddiff{0.01} 
+%\snapasp{1} 
+%\zoom{1.00} 
+\unitlength 1mm 
+\linethickness{0.4pt} 
+\begin{picture}(48.33,65.00) 
+\put(14.33,5.00){\framebox(18.00,39.33)[cc]{8255A }} 
+\put(30.00,40.33){\makebox(0,0)[cc]{A}} 
+\put(30.00,7.67){\makebox(0,0)[cc]{B}} 
+\put(27.00,20.33){\makebox(0,0)[cc]{C}} 
+\put(29.00,25.00){\line(1,2){2.17}} 
+\put(29.00,25.00){\line(1,-2){2.17}} 
+\put(8.33,25.00){\vector(1,0){6.00}} 
+\put(10.00,25.00){\vector(-1,0){3.67}} 
+\put(4.00,27.67){\makebox(0,0)[lc]{D0-D7}} 
+\put(32.33,40.67){\vector(1,0){13.33}} 
+\put(46.00,8.00){\vector(-1,0){13.67}} 
+\put(45.67,29.33){\vector(-1,0){13.00}} 
+\put(32.33,20.67){\vector(1,0){13.33}} 
+\put(37.33,39.00){\line(4,3){4.00}} 
+\put(37.67,27.67){\line(6,5){3.00}} 
+\put(37.67,18.67){\line(6,5){4.00}} 
+\put(38.00,6.33){\line(4,3){4.33}} 
+\put(42.67,42.33){\makebox(0,0)[cc]{8}} 
+\put(42.33,31.00){\makebox(0,0)[cc]{4}}  
+\put(42.33,22.33){\makebox(0,0)[cc]{4}} 
+\put(43.00,9.67){\makebox(0,0)[cc]{8}} 
+\put(48.33,40.67){\makebox(0,0)[lc]{PA7-PA0}} 
+\put(48.00,29.33){\makebox(0,0)[lc]{PC7-PC4}} 
+\put(48.00,20.67){\makebox(0,0)[lc]{PC3-PC0}} 
+\put(48.00,8.00){\makebox(0,0)[lc]{PB7-PB0}} 
+\put(5.00,60.00){\framebox(5.00,5.00)[cc]{1}} 
+\put(10.00,60.00){\framebox(5.00,5.00)[cc]{0} } 
+\put(15.00,60.00){\framebox(5.00,5.00)[cc]{0}} 
+\put(20.00,59.67){\framebox(5.00,5.33)[cc]{0}} 
+\put(25.00,60.00){\framebox(5.00,5.00)[cc]{1}} 
+\put(30.00,60.00){\framebox(5.00,5.00)[cc]{0}} 
+\put(35.00,60.00){\framebox(5.00,5.00)[cc]{1}} 
+\put(40.00,60.00){\framebox(5.00,5.00)[cc]{0}} 
+\put(7.00,55.00){\makebox(0,0)[cc]{D7}} 
+\put(12.67,55.00){\makebox(0,0)[cc]{D6}} 
+\put(17.33,55.00){\makebox(0,0)[cc]{D5}}  
+\put(22.33,55.00){\makebox(0,0)[cc]{D4}} 
+\put(27.33,54.67){\makebox(0,0)[cc]{D3}} 
+\put(32.33,55.00){\makebox(0,0)[cc]{D2}} 
+\put(37.67,55.00){\makebox(0,0)[cc]{D1}} 
+\put(42.33,55.00){\makebox(0,0)[cc]{D0}} 
+\end{picture}
+\caption{Controlador Programable de Perif\'ericos 8255 en configuraci\'on de Modo 0, con la %%@
+palabra de palabra de control 6, programando el Puerto A como salida y el Puerto B como %%@
+entrada.}
+\label{Figure:8255modo0}
+\end{figure}
+
+El 8255, para los prop\'ositos de este trabajo, se program\'o en Modo 0. Este modo brinda %%@
+operaciones de entrada y salida simples, para cada uno de los tres puertos del 8255. No existen %%@
+se\~nales de {\it ``handshaking''\/}, sino que los datos son simplemente leidos o escritos %%@
+mediante puertos. Este modo consiste en lo siguiente:
+
+\begin{itemize}
+\item Dos puertos de 8 bits y dos de 4 bits.
+\item Cualquier puerto puede ser entrada o salida.
+\item Las entradas no tienen latches.
+\item Las salidas tienen latches.
+\item Existen 16 posibles combinaciones de entrada/salida en este modo.
+\end{itemize}
+
+En la Tabla \ref{Tabla:program8255} se muestra la operaci\'on b\'asica del 8255 %%@
+\cite{Intel:Perif}.
+
+\vspace{12pt} 
+ 
+% Table created by WinTeX 95: 6 Columns x 13 Rows. 
+\begin{table}[!htb]\centering 
+\begin{tabular}{|l|l|l|l|l|l|} 
+%Row: 1 
+\cline{1-6} 
+\vbox to1.50ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil A1\hfil}\vfil} &  
+\vbox to1.50ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil A0\hfil}\vfil} &  
+\vbox to1.50ex{\vspace{1pt}\vfil\hbox to4.60ex{\hfil RD\hfil}\vfil} &  
+\vbox to1.50ex{\vspace{1pt}\vfil\hbox to5.00ex{\hfil WR\hfil}\vfil} &  
+\vbox to1.50ex{\vspace{1pt}\vfil\hbox to4.00ex{\hfil CS\hfil}\vfil} &  
+\vbox to1.50ex{\vspace{1pt}\vfil\hbox to31.20ex{\hfil Op. de Entrada %%@
+(Lectura)\hfil}\vfil} \\ 
+ 
+%Row: 2 
+\cline{1-6} 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil 0\hfil}\vfil} &  
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil 0\hfil}\vfil} &  
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.60ex{\hfil 0\hfil}\vfil} &  
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to5.00ex{\hfil 1\hfil}\vfil} &  
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.00ex{\hfil 0\hfil}\vfil} &  
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to31.20ex{\hfil Puerto A $\Longrightarrow$ Bus %%@
+de Datos\hfil}\vfil} \\ 
+ 
+%Row: 3 
+\cline{1-6} 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil 0\hfil}\vfil} &  
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil 1\hfil}\vfil} &  
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.60ex{\hfil 0\hfil}\vfil} &  
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to5.00ex{\hfil 1\hfil}\vfil} &  
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.00ex{\hfil 0\hfil}\vfil} &  
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to31.20ex{\hfil Puerto B $\Longrightarrow$ Bus %%@
+de Datos\hfil}\vfil} \\ 
+ 
+%Row: 
+\cline{1-6}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil 1\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil 0\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.60ex{\hfil 0\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to5.00ex{\hfil 1\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.00ex{\hfil 0\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to31.20ex{\hfil Puerto C $\Longrightarrow$ Bus %%@
+de Datos\hfil}\vfil} \\
+
+%Row: 5
+\cline{1-6}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil \hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil \hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.60ex{\hfil \hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to5.00ex{\hfil \hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.00ex{\hfil \hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to31.20ex{\hfil Op. de Salida %%@
+(Escritura)\hfil}\vfil} \\
+
+%Row: 6
+\cline{1-6}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil 0\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil 0\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.60ex{\hfil 1\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to5.00ex{\hfil 0\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.00ex{\hfil 0\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to31.20ex{\hfil Bus de Datos $\Longrightarrow$ %%@
+Puerto A\hfil}\vfil} \\
+
+%Row: 7
+\cline{1-6}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil 0\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil 1\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.60ex{\hfil 1\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to5.00ex{\hfil 0\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.00ex{\hfil 0\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to31.20ex{\hfil Bus de Datos $\Longrightarrow$ %%@
+Puerto B\hfil}\vfil} \\
+
+%Row: 8
+\cline{1-6}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil 1\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil 0\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.60ex{\hfil 1\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to5.00ex{\hfil 0\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.00ex{\hfil 0\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to31.20ex{\hfil Bus de Datos $\Longrightarrow$ %%@
+Puerto C\hfil}\vfil} \\
+
+%Row: 9
+\cline{1-6}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil 1\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil 1\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.60ex{\hfil 1\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to5.00ex{\hfil 0\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.00ex{\hfil 0\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to31.20ex{\hfil Bus de Datos $\Longrightarrow$ %%@
+Control\hfil}\vfil} \\
+
+%Row: 10
+\cline{1-6}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil \hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil \hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.60ex{\hfil \hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to5.00ex{\hfil \hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.00ex{\hfil \hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to31.20ex{\hfil Deshabilitaci\'on\hfil}\vfil} %%@
+\\
+
+%Row: 11
+\cline{1-6}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil X\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil X\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.60ex{\hfil X\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to5.00ex{\hfil X\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.00ex{\hfil 1\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to31.20ex{\hfil Bus de Datos $\Longrightarrow$ %%@
+3er. Estado\hfil}\vfil} \\
+
+%Row: 12
+\cline{1-6}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil 1\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil 1\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.60ex{\hfil 0\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to5.00ex{\hfil 1\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.00ex{\hfil 0\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to31.20ex{\hfil Condici\'on Ilegal\hfil}\vfil} %%@
+\\
+
+%Row: 13
+\cline{1-6}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil X\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil X\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.60ex{\hfil 1\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to5.00ex{\hfil 1\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.00ex{\hfil 0\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to31.20ex{\hfil Bus de Datos $\Longrightarrow$ %%@
+3er. Estado\hfil}\vfil} \\
+
+\cline{1-6}
+\end{tabular}
+\caption{Modo B\'asico de Operaci\'on del 8255.}
+\label{Tabla:program8255}
+\end{table}
+
+Cuando se escribe un dato al 8255 a trav\'es del bus de datos, y $A1 = A0 = 1$, entonces se %%@
+transfiere una palabra de control al 8255, program\'andolo (ver Tabla %%@
+\ref{Tabla:program8255}).
+
+En las pruebas realizadas se program\'o al 8255 utilizando la palabra de control 6 (ver %%@
+Ap\'endice \ref{Apendice:chips}), de tal forma que el Puerto A trabaja como salida y el Puerto %%@
+B como entrada, ademas de que el Puerto C se divide en 2 partes: PC7-PC4 funcionando como %%@
+entrada y PC3-PC0 como salida. El c\'odigo que realiza esta programaci\'on es el siguiente:
+
+\begin{verbatim}
+   MOV DX,3C7h    ; Direccion del pto. de control del 8255    
+                  ; (A0=A1=1)
+   MOV AL,8Ah     ; Modo 0, Pto. A = Salida, Pto. B = Entrada, 
+                  ; PC03 = Salida, PC47 = Entrada
+   OUT DX,AL      ; Programar el 8255
+\end{verbatim}
+
+De esta forma el 8255 sirve para comunicar a la tarjeta con la computadora, viendo a esta como a %%@
+un perif\'erico de SCIP.
+
+%----------------------------------------------------------------------------
+
+\section{Protocolo de comunicaci\'on entre la \\tarjeta SCIP y la computadora anfitriona}
+\label{Seccion:protocolocomunicacion}
+
+Dado que la tarjeta SCIP es una tarjeta coprocesadora de prop\'osito general, a cuyo dise\~no %%@
+b\'asico se le pueden agregar otros componenetes, el protocolo de comandos de comunicaci\'on %%@
+entre la tarjeta y la PC puede variar dependiendo de la funci\'on de SCIP. Un protocolo %%@
+b\'asico propuesto para llevar a cabo la comunicaci\'on se presenta a continuaci\'on.
+
+\begin{table}[!htb]\centering
+\begin{tabular}{|c|c|l|}\hline
+Dec. & Binario & Prop\'osito \\ \hline
+1 & 00000001 & \parbox{8cm}{\vspace{3pt}Iniciar programa de usuario ubicado en la EPROM de %%@
+SCIP.\vspace{3pt}} \\ \hline
+2 & 00000010 & \parbox{8cm}{\vspace{3pt}Iniciar transferencia de datos de la PC a SCIP (los %%@
+siguientes 2 bytes en el Puerto B indican cuantos bytes ser\'an transferidos).\vspace{3pt}} %%@
+\\ \hline
+3 & 00000011 & \parbox{8cm}{\vspace{3pt}En espera de transferencia de datos de SCIP a la PC %%@
+anfitriona.\vspace{3pt}} \\ \hline
+4 & 00000100 & \parbox{8cm}{\vspace{3pt}PC anfitriona lista para transferencia de datos de %%@
+la tarjeta a la PC (los primeros 2 bytes en el Puerto A le indican a la PC cuantos bytes se %%@
+transferiran).\vspace{3pt}} \\ \hline
+\end{tabular}
+\caption{Comandos b\'asicos para el SCIP.}
+\label{Tabla:SCIPcomandos}
+\end{table}
+
+Dado que el Puerto B del PPI 8255 se programa en Modo 0 (ver Subsecci\'on %%@
+\ref{Subsection:comunicacion}), este es usado por la computadora anfitriona para escribir %%@
+comandos a la tarjeta, mientras que el Puerto A es utilizado para transferencia de comandos y %%@
+datos hacia aquella. Los comandos b\'asicos de comunicaci\'on para SCIP se presentan en la %%@
+Tabla \ref{Tabla:SCIPcomandos}.
+
+Este conjunto de comandos b\'asicos se puede ampliar dependiendo de la aplicaci\'on y de los %%@
+programas que la tarjeta ejecute.
+
+A su vez, la tarjeta SCIP puede indicar su estado ya sea a trav\'es del Puerto A o de PC0-PC2, o %%@
+bien mediante el uso de las se\~nales de {\it handshaking\/} del 8255, en caso de que se %%@
+programe en Modo 1 o Modo 2.
+
+%----------------------------------------------------------------------------
+
+\section{Consideraciones importantes sobre la programaci\'on.}
+\label{Section:consideraciones}
+
+Para la realizaci\'on de los programas que se colocan en SCIP es preciso se\~nalar los %%@
+siguientes aspectos, poniendo como ejemplo el siguiente fragmento que inicializa un programa en %%@
+SCIP:
+
+\begin{listing}{1}
+   ORG 0FFFF0h
+
+ START:
+   MOV AX,0F000h
+   MOV CS,AX
+   JMP PROG
+\end{listing} 
+
+\begin{itemize}
+
+\item Localizaci\'on del programa en memoria: El programa inicial de SCIP siempre debe comenzar %%@
+en la direcci\'on FFFF0h absoluta, es decir, en el segmento y desplazamiento F000:FFF0 hex., ya %%@
+que el procesador salta a esa direcci\'on al inicializarse. Esto se realiza con la pseu\-do\-%%@
+ins\-truc\-ci\'on {\bf ORG} de ensamblador, como se ve en la l\'{\i}nea 1 del c\'odigo %%@
+arriba mostrado.
+
+\item Inicializacion del segmento de c\'odigo: En las l\'{\i}neas 4 y 5 del c\'odigo arriba %%@
+presentado se puede ver la manera en como inicializar el segmento de c\'odigo del programa de %%@
+inicio de SCIP. Se tiene que poner un F000h en el registro CS ya que de otra forma el programa %%@
+se ``pierde'' al realizar el salto al cuerpo del programa de inicializaci\'on (l\'{\i}nea 6 %%@
+del listado).
+\end{itemize}
+
+As\'{\i} mismo el cuerpo del programa de inicializaci\'on debe ir de preferencia en la %%@
+direcci\'on 100h del segmento F000, realizando esto como se muestra en la l\'{\i}nea 4 del %%@
+siguiente listado parcial:
+
+\begin{listing}{1}
+CODIGO SEGMENT 'Code'
+   ASSUME CS:CODIGO, DS:CODIGO, ES:NOTHING, SS:NOTHING
+
+   ORG 0F0100h
+
+PROG PROC NEAR  
+; el cuerpo principal se coloca aqui...
+\end{listing}
+
+Esto es porque generalmente el ensamblador rechaza direcciones de inicio de un programa ubicadas %%@
+en un desplazamiento menor que 100h.
+
+%----------------------------------------------------------------------------
+

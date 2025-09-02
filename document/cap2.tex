@@ -1,0 +1,1023 @@
+\chapter[Arquitectura basada en 8088.]{Arquitectura basada en el Intel 8088.}
+\label{Capitulo:descripcionfuncional}
+
+%----------------------------------------------------------------------------
+
+\fancyhead[RE]{\slshape SCIP - Cap. \thechapter~ - Arquitectura basada en el Intel %%@
+8088.}
+\fancyhead[LO]{\slshape Rodolfo Gonz\'alez Gonz\'alez.}
+\fancyhead[LE,RO]{\thepage}
+
+%----------------------------------------------------------------------------
+
+\section{Introducci\'on.}
+\label{Seccion:IntroCap2}
+
+En este cap\'{\i}tulo se describen: la operaci\'on del microprocesador Intel 8088, las %%@
+interrupciones, los puertos, y la operaci\'on del coprocesador num\'erico Intel 8087.
+
+%----------------------------------------------------------------------------
+
+\section{Or\-ga\-ni\-za\-ci\'on de la Me\-mo\-ria pa\-ra\\el 8088/8086.}
+\label{Seccion:orgamem}
+
+El procesador 8088 provee direcciones de memoria de 20 bits, divididas en dos componentes, el %%@
+{\em segmento} y el {\em desplazamiento}. La memoria est\'a organizada como un arreglo lineal %%@
+de hasta 1 Mb. ($2^{20}$), direccionados de 00000h hasta FFFFFh. La memoria est\'a dividida %%@
+l\'ogicamente en segmentos de 64Kb. La direcci\'on de inicio de un segmento define su %%@
+localizaci\'on. La direcci\'on de un segmento puede estar contenida en uno de los cuatro %%@
+registros de segmento que tiene el 8088 (ver Subsecci\'on \ref{Subseccion:arquitectura}). Se %%@
+utilizan palabras de 16 bits para definir la localizaci\'on de los segmentos, y para accesar a %%@
+las localidades de memoria dentro de un segmento, se utiliza otro par\'ametro, llamado {\em %%@
+desplazamiento}. La direcci\'on completa en el espacio de memoria de 1 Mb. se obtiene combinando %%@
+las direcciones del segmento y del desplazamiento. La combinaci\'on se realiza primero haciendo %%@
+un corrimiento de 4 bits a la izquierda de la direcci\'on contenida en el registro de segmento, %%@
+introduciendo ceros por la derecha en los bits menos significativos, y luego se suma al %%@
+resultado la direcci\'on del desplazamiento, obteni\'endose la direcci\'on de 20 bits.
+
+Todas las referencias a memoria son hechas relativas a las direcciones base contenidas en los %%@
+registros de segmento. Toda la informaci\'on en un segmento comparte los mismos atributos %%@
+l\'ogicos. 
+
+Se pueden colocar operandos de 16 bits en direcciones pares o nones. La BIU autom\'aticamente %%@
+ejecuta dos ciclos de lectura o escritura para operandos de 16 bits.
+
+Las localidades de memoria de la direcci\'on FFFF0h a la FFFFFh es\-t\'an reservadas para %%@
+diversas operaciones, como el salto a la rutina de inicializaci\'on del sistema. Despu\'es de %%@
+un RESET, el CPU comenzar\'a la ejecuci\'on en la localidad FFFF0h, donde debe estar dicho %%@
+salto. Las localidades de 00000h a 003FFh estan reservadas para el vector de interrupciones (ver %%@
+Secci\'on~\ref{Section:interrupciones}). En dichas localidades se colocan apuntadores de 4 %%@
+bytes que contienen la direcci\'on del segmento y del desplazamiento de 256 posibles rutinas de %%@
+servicio de interrupciones. Los apuntadores deben ser colocados en aquellas localidades antes de %%@
+que se ejecute una in\-te\-rrup\-ci\-\'on. Esto normalmente se hace durante el arranque de la %%@
+computadora~\cite{Godfrey}.
+
+%----------------------------------------------------------------------------
+
+\section{Operaci\'on del bus.}
+\label{Seccion:bus}
+
+El diagrama de tiempo de la operaci\'on b\'asica del bus se presenta en la %%@
+Figura~\ref{diagtiempobasico}. 
+
+\begin{figure}[!hbt]
+\vskip 5mm
+\special{center
+         2-1.gif,                
+         \the\hsize 78mm}
+\vskip 78mm
+\caption{Diagrama de tiempo del sistema b\'asico.} 
+\label{diagtiempobasico}
+\end{figure}
+
+Cada ciclo del bus del procesador consiste de por lo menos cuatro ciclos del reloj (CLK), en la %%@
+parte superior de la Figura~\ref{diagtiempobasico}. Estos son llamados $T_{1}$, $T_{2}$, %%@
+$T_{3}$ y $T_{4}$. La direcci\'on es mandada al bus de direcciones por el procesador durante %%@
+$T_{1}$ y la transferencia de datos se realiza durante $T_{3}$ y $T_{4}$, mientras que %%@
+$T_{2}$ es usado para cambiar la direcci\'on del bus durante las operaciones de lectura %%@
+\cite{Intel:Micro}. Al tiempo que tarda el procesador en cargar y ejecutar una instrucci\'on %%@
+se le denomina {\em ciclo de instrucci\'on\/}. Al tiempo que tarda una operaci\'on del bus se %%@
+le llama {\em ciclo de m\'aquina}, y este est\'a compuesto de grupos de {\em estados}, los %%@
+cu\'ales son ciclos de reloj de la se\~nal generada por el 8284. Dichos estados se miden del %%@
+borde de bajada de un pulso de reloj al borde de bajada del siguiente~\cite{Hall}, o bien, del %%@
+borde de subida de un pulso de reloj al borde de subida del otro.
+
+En caso de que se produzca una indicaci\'on de ``NOT READY'' por parte del dispositivo al que se %%@
+est\'a direccionando, se insertan estados de espera llamados $T_{w}$ entre $T_{3}$ y $T_{4}$. %%@
+Estos estados de espera tienen la duraci\'on de un ciclo de CLK cada uno. Tambi\'en se puede %%@
+dar el caso de que ocurran periodos de inactividad (estados ``{\em idle\/}'') de CLK entre %%@
+ciclos del bus local~\cite{Intel:Micro}.
+
+%----------------------------------------------------------------------------
+
+\subsection{Ciclo de lectura.}
+\label{Subsection:ciclolectura}
+
+Durante $T_{1}$ de un ciclo de m\'aquina de lectura el microprocesador coloca la se\~nal de %%@
+$\mbox{IO}/\overline{\mbox{M}}$ al nivel l\'ogico que corresponda a la operaci\'on %%@
+realizada: ALTO para una operaci\'on de entrada/salida de un puerto, o BAJA en caso de lectura %%@
+de memoria \cite{Hall}. En $T_{1}$ de cualquier ciclo de bus, la se\~nal de ALE ({\em %%@
+Address Latch Enable\/}) es emitida, ya sea por el microprocesador o por el controlador de bus %%@
+8288, dependiendo del modo en que est\'e trabajando el 8088 (modo m\'{\i}nimo o m\'aximo). La %%@
+se\~nal ALE es conectada a la entrada de habilitaci\'on (STB) de los {\em latches\/}, como se %%@
+muestra en la Figura~\ref{modomin}. Esto se hace ya que en ese momento el bus en sus %%@
+l\'{\i}neas AD0-AD7 contiene una parte de la direcci\'on, la cual debe estar en los {\it %%@
+latches} para que pueda ser mantenida por el dispositivo direccionado, mientras se coloca el %%@
+dato en las antes citadas l\'{\i}neas. Las entradas de datos de los {\em latches} est\'an %%@
+conectadas a las l\'{\i}neas AD0-AD7, A8-A19 y $\overline{\mbox{BHE}}$, que es la terminal %%@
+de habilitaci\'on del bus alto ({\em bus high enable}, ver Ap\'endice~\ref{Apendice:chips}).
+
+\begin{table}[!htb]
+\centering
+\begin{tabular}{|l|c|c|l|} \hline
+$\overline{S_{2}}$ & $\overline{S_{1}}$ & $\overline{\mbox{S0}}$ & %%@
+Caracter\'{\i}sticas. \\ \hline
+0(BAJO) & 0 & 0 & Reconocimiento de Interrupci\'on. \\
+0       & 0 & 1 & Lectura de puerto. \\
+0       & 1 & 0 & Escritura a puerto. \\
+0       & 1 & 1 & Alto ({\em Halt}). \\
+1(Alto) & 0 & 0 & Cargado de instrucci\'on. \\
+1       & 0 & 1 & Lectura de datos de memoria. \\
+1       & 1 & 0 & Escritura de datos a memoria. \\
+1       & 1 & 1 & Pasivo (no hay actividad en el bus). \\ \hline
+\end{tabular}
+\caption{Bits de estado $\overline{\mbox{S0}}$-$\overline{S_{2}}$ en modo m\'aximo.}
+\label{statusbits1}
+\end{table}
+
+En modo m\'aximo, los bits de estado $\overline{\mbox{S0}}$, $\overline{S_{1}}$ y %%@
+$\overline{S_{2}}$ son usados por el controlador de bus 8288 para identificar el tipo de %%@
+operaci\'on de bus a realizar (ver Tabla~\ref{statusbits1}).
+
+Los bits de estado $S_{3}$-$S_{6}$ son multiplexados con los bits de direcci\'on m\'as altos %%@
+y permanecen v\'alidos de $T_{2}$ a $T_{4}$. $S_{3}$ y $S_{4}$ indican cu\'al registro de %%@
+segmento fue usado para este ciclo de bus para formar la direcci\'on~(Ver %%@
+Tabla~\ref{statusbits2}).
+
+\begin{table}[!htb]
+\centering
+\begin{tabular}{|l|c|l|} \hline
+$S_{4}$ & $S_{3}$ & Caracter\'{\i}sticas. \\ \hline
+0(BAJO) & 0 & Segmento extra. \\
+0       & 1 & Pila. \\
+1 (ALTO) & 0 & C\'odigo o ninguno. \\
+1       & 1 & Datos. \\ \hline
+\end{tabular}
+\caption{Bits de estado $S_{3}$ y $S_{4}$.}
+\label{statusbits2}
+\end{table}
+
+Una vez que la direcci\'on esta en los {\em latches}, las l\'{\i}neas AD0-AD7 pueden ser %%@
+usadas para transferencia de datos de memoria o de un puerto. Al mismo tiempo el microprocesador %%@
+activa la se\~nal $\overline{\mbox{BHE}}$ y la informaci\'on de A8-A19 y env\'{\i}a %%@
+informaci\'on de estado en esas l\'{\i}neas.
+
+En este punto se llega a $T_{2}$ y se puede llevar a cabo una operaci\'on de lectura, por lo %%@
+que $\overline{\mbox{RD}}$ es colocado en bajo, habilitando la salida del dispositivo de %%@
+memoria o el puerto direccionado, coloc\'andose los datos en el bus (16 u 8 bits).
+
+%----------------------------------------------------------------------------
+
+\subsection{Ciclo de escritura.}
+\label{Subsection:cicloescritura}
+
+El ciclo de escritura, como ambos ciclos del bus, consiste de cuatro ciclos de reloj (CLK) %%@
+$T_{1}$, $T_{2}$, $T_{3}$ y $T_{4}$. Durante $T_{1}$ en un ciclo de m\'aquina de escritura %%@
+$M/\overline{IO}$ se coloca a un nivel l\'ogico BAJO si la escritura se va a realizar a un %%@
+puerto, o a ALTO si la escritura se realizar\'a a memoria. La l\'{\i}nea {\em address latch %%@
+enable\/} (ALE) se coloca en alto para habilitar los {\em latches} de direcciones (en caso de %%@
+que el 8088 est\'e operando en modo m\'{\i}nimo). Las l\'{\i}neas AD0-A19 tienen en ese %%@
+momento la direcci\'on a donde se escribir\'a, y tambi\'en es habilitado el %%@
+$\overline{\mbox{BHE}}$ en BAJO. 
+
+Cabe se\~nalar que en el caso de una lectura o escritura a puerto, las l\'{\i}neas A16-A19 %%@
+estar\'an siempre en un niv\'el l\'ogico BAJO; esto se debe a que las direcciones de puerto %%@
+solo constan de 16 bits \cite{Hall}.
+
+Los {\em latches\/}, adem\'as de retener las direcciones, sirven como un {\em buffer\/} para %%@
+las l\'{\i}neas de direcci\'on. Una vez que la direcci\'on esta en los {\em latches\/}, el %%@
+microprocesador coloca el dato deseado en el bus, activando la se\~nal %%@
+$\overline{\mbox{WR}}$ en BAJO, habilitando la memoria o el puerto a donde se escribir\'a %%@
+el dato presente en el bus. Antes de esto se desactiva la se\~nal ALE.
+
+La entrada READY (listo) le indica al microprocesador cuando un dispositivo de hardware externo %%@
+esta disponible para cierta operaci\'on (de lectura o escritura). En este caso, si \'esta %%@
+entrada esta en BAJO, antes o durante $T_{2}$, el microprocesador debe insertar un estado de %%@
+espera (WAIT) antes de $T_{3}$. Si READY va a ALTO antes de que finalize el estado WAIT, pasa a %%@
+$T_{4}$ cuando aquel acabe. En caso contrario, si READY es BAJO antes de que termine el estado %%@
+WAIT, se inserta otro estado WAIT. El proceso se repite hasta que READY es puesto en ALTO %%@
+\cite{Hall}. Esta funci\'on es \'util, ya que si un puerto o un dispositivo de memoria a donde %%@
+se quiera escribir es muy lento, la inserci\'on de estados WAIT permite a dicho puerto o memoria %%@
+darle el tiempo suficiente para retener o presentar el dato.
+
+%----------------------------------------------------------------------------
+
+\section{Interrupciones.}
+\label{Section:interrupciones}
+
+Una {\em in\-te\-rrup\-ci\-\'on\/} es una condici\'on que detiene la ejecuci\'on de un %%@
+programa y coloca el apuntador de instrucciones (IP) apuntando a una localidad de memoria %%@
+espec\'{\i}fica en donde se reanudar\'a el procesamiento~\cite{Godfrey} (en el caso del %%@
+8088/8086).
+
+Una tabla de 256 elementos contiene apuntadores a las direcciones de los {\em programas de %%@
+servicio de in\-te\-rrup\-ci\-\'on\/}. Esta tabla se ubica de la direcci\'on 0 a la 3FFh, en %%@
+un \'area reservada~\cite{Intel:Micro}. Cada apuntador tiene 4 bytes de longitud, 16 bits para %%@
+el segmento y 16 para el desplazamiento de la direcci\'on de la rutina de servicio de in\-te\-%%@
+rrup\-ci\-\'on. Un dispositivo (o programa) que o\-ri\-gi\-na una in\-te\-rrup\-ci\-\'on %%@
+proporciona un n\'umero de 8 bits indicando el tipo de \'esta, con el cu\'al se obtiene la %%@
+direcci\'on del vector correspondiente. Esto se hace multiplicando el n\'umero de in\-te\-%%@
+rrup\-ci\-\'on por 4, para obtener el desplazamiento del vector de in\-te\-rrup\-ci\-\'on.
+
+En el caso del microprocesador Intel 8088 u 8086, las interrupciones pueden deberse a tres %%@
+or\'{\i}genes:
+
+\begin{enumerate}
+\item Una se\~nal externa aplicada a la terminal NMI ({\em NonMaskable Interrupt\/}) o a la %%@
+terminal INTR ({\em interrupt\/}) del microprocesador. En ambos casos se les llama {\em %%@
+interrupciones de hardware\/} (ver Subsecci\'on \ref{Subsection:hardint}) Esta in\-te\-%%@
+rrup\-ci\-\'on es la n\'umero 2.
+
+\item La ejecuci\'on de una instrucci\'on de in\-te\-rrup\-ci\-\'on INT por parte de un %%@
+programa. A esto se le llama {\em in\-te\-rrup\-ci\-\'on de software\/}.
+
+\item Alguna condici\'on producida en el microprocesador debida a la e\-je\-cu\-ci\-\'on de %%@
+una ins\-truc\-ci\-\'on, co\-mo por e\-jem\-plo, u\-na di\-vi\-si\-\'on en\-tre ce\-%%@
+ro~\cite{Hall}. A este tipo de {\em interrupciones condicionales\/} se les considera %%@
+interrupciones por software. El n\'umero de esta in\-te\-rrup\-ci\-\'on es el 0.
+\end{enumerate} 
+
+%----------------------------------------------------------------------------
+
+\subsection{Interrupciones por hardware.}
+\label{Subsection:hardint}
+
+Las interrupciones por hardware se dividen en {\em enmascarables\/} y {\em no %%@
+enmascarables\/}.
+
+%----------------------------------------------------------------------------
+
+\subsubsection{Interrupciones no enmascarables.}
+\label{Subsubsection:NMI}
+
+El microprocesador 8088 tiene una terminal para in\-te\-rrup\-ci\-\'on no enmascarable, la %%@
+cu\'al tiene prioridad m\'as alta que la terminal de petici\'on de in\-te\-rrup\-ci\-\'on %%@
+(INTR). Se usa com\'unmente para activar una rutina para casos de falla de poder. La terminal %%@
+NMI es activada en la transici\'on de BAJO a ALTO~\cite{Intel:Micro}.
+
+%----------------------------------------------------------------------------
+
+\subsubsection{Interrupci\'on enmascarable.}
+\label{Subsubsection:INTR}
+
+El 8088 tiene una sola terminal de entrada de petici\'on de in\-te\-rrup\-ci\-\'on (INTR) que %%@
+puede ser enmascarada por software internamente, limpiando el bit de bandera de in\-te\-rrup\-%%@
+ci\-\'on (IF). Esta se\~nal es disparada en nivel. Es sincronizada internamente durante cada %%@
+ciclo de reloj, en el borde de subida de la se\~nal CLK. Para poder responder a ella, INTR debe %%@
+estar en un nivel l\'ogico ALTO durante el periodo de reloj que precede al final de la %%@
+instrucci\'on actual o el final de un movimiento, en el caso  de una instrucci\'on de tipo %%@
+bloque. Durante la secuencia de respuesta a la in\-te\-rrup\-ci\-\'on, las interrupciones son %%@
+deshabilitadas. 
+
+\begin{figure}[!htb]
+\vskip 5mm
+\special{center
+         intacksq.gif,                
+         \the\hsize 78mm}
+\vskip 78mm
+\caption{Secuencia de reconocimiento de interrupci\'on.} 
+\label{Figura:SecuenciaDeInterrupcion}
+\end{figure}
+
+Durante la secuencia de respuesta (ver Figura \ref{Figura:SecuenciaDeInterrupcion}), el %%@
+microprocesador ejecuta dos ciclos de reconocimiento de in\-te\-rrup\-ci\-\'on sucesivos. El %%@
+8088 emite la se\~nal de LOCK (solo en modo m\'aximo) de $T_{2}$ del primer ciclo de bus, %%@
+hasta $T_{2}$ del segundo. una petici\'on de contenci\'on o toma ({\it hold\/}) del bus local %%@
+no ser\'a atendida sino hasta el final del segundo ciclo de bus. En el segundo ciclo de bus se %%@
+toma un byte del sistema de in\-te\-rrup\-ci\-\'on externo (por ejemplo, del controlador de %%@
+interrupciones 8259) el cu\'al identifica el tipo de la in\-te\-rrup\-ci\-\'on. Este byte es %%@
+multiplicado por cuatro y usado como un apuntador al vector de in\-te\-rrup\-ci\-\'on, como se %%@
+mencion\'o anteriormente.
+
+%----------------------------------------------------------------------------
+
+\subsection{Respuesta ante una interrupci\'on.}
+\label{Subsection:respuesta-a-int}
+
+Al final de cada ciclo de instrucci\'on el microprocesador revisa si hay peticiones de %%@
+interrupci\'on. Si es as\'{\i}, el microprocesador realiza las siguientes acciones:
+
+\begin{enumerate}
+\item Disminuye el apuntador de la pila en dos y pone el contenido del registro de banderas en %%@
+el {\it stack} (pila).
+\item Deshabilita la entrada INTR colocando en 0 la bandera de interrupci\'on del registro de %%@
+banderas.
+\item Limpia la bandera de {\em trap\/} en el registro de banderas (ver Secci\'on %%@
+\ref{Subseccion:arquitectura}).
+\item Disminuye el apuntador de la pila en dos y guarda en la pila el contenido del registro de %%@
+segmento de c\'odigo.
+\item Disminuye el apuntador de la pila en dos y guarda en la pila el IP (apuntador a %%@
+instrucci\'on) actual.
+\item Rea\-li\-za un sal\-to le\-ja\-no in\-di\-rec\-to al i\-ni\-cio de la ru\-ti\-na de %%@
+in\-te\-rrup\-ci\'on~\cite{Hall}, to\-man\-do la di\-rec\-ci\-\'on del vec\-tor de in\-%%@
+te\-rrup\-ci\'on co\-rres\-pon\-dien\-te al n\'u\-me\-ro de in\-te\-rrup\-ci\'on so\-%%@
+li\-ci\-ta\-da.
+\end{enumerate}
+
+%----------------------------------------------------------------------------
+
+\section{Puertos de Entrada/Salida.}
+\label{Section:puertos}
+
+\begin{figure}[!htb]
+\vskip 5mm
+\special{center
+         ptosio.gif,
+         \the\hsize 78mm}
+\vskip 70mm
+\caption{Espacio de direcciones de puertos de entrada/salida} 
+\label{Figura:puertosIO}
+\end{figure}
+
+Las operaciones de entrada y salida permiten a la computadora obtener y enviar datos.
+
+En el 8088 las operaciones de entrada y salida pueden direccionar hasta un m\'aximo de 64k en %%@
+registros. Las direcciones de entrada y salida aparecen en el formato de direcciones de memoria %%@
+en las l\'{\i}neas del bus de direcciones $A_{0}$-$A_{15}$. Las l\'{\i}neas restantes %%@
+($A_{19}$-$A_{16}$) est\'an a un nivel l\'ogico BAJO en operaciones de E/S (I/O). Esto define %%@
+un espacio de direcciones tal como se muestra en la Figura~\ref{Figura:puertosIO}.
+
+\begin{figure}[!hbt]
+\vskip 5mm
+\special{center
+         bloque1.gif,
+         \the\hsize 78mm}
+\vskip 80mm
+\caption{Espacio de direcciones de puertos de entrada/salida en la tarjeta madre}
+\label{Figura:bloque1}
+\end{figure}
+
+Las instrucciones de entrada y salida variables usan el registro DX del pro\-ce\-sa\-dor co\-%%@
+mo a\-pun\-ta\-dor, te\-nien\-do una ca\-pa\-ci\-dad de di\-rec\-cio\-na\-mien\-to com\-%%@
+ple\-ta, mien\-tras que las instrucciones de entrada y salida directas direccionan uno o dos de %%@
+las 256 localidades de bytes de E/S en la p\'agina 0 del espacio de direccionamiento de E/S. Los %%@
+puertos de E/S son direccionados de la misma forma que las localidades de %%@
+memoria~\cite{Intel:Micro}.
+
+\begin{figure}[!htb]
+\vskip 20mm
+\special{center
+         bloque2.gif,
+         \the\hsize 78mm}
+\vskip 120mm
+\caption{Espacio de direcciones de puertos de entrada/salida para las ranuras de expansi\'on} 
+\label{Figura:bloque2}
+\end{figure}
+
+En la arquitectura basada en el Intel 8088 solo se utilizan 10 bits para direccionar puertos o %%@
+dispositivos de entrada y salida. Estas l\'{\i}neas son A0-A9. 
+
+Como se menciona arriba, la Figura~\ref{Figura:puertosIO} presenta la distribuci\'on del %%@
+espacio de direcciones de puertos de entrada y salida (E/S). El bloque 1, que comprende el rango %%@
+0000H-01FFH reside en la tarjeta madre y se utiliza para direccionar los dispositivos de soporte %%@
+de la CPU (ver Figura \ref{Figura:bloque1}). El bloque 2, que comprende el rango 0200H-03FFH se %%@
+utiliza para direccionar los puertos de entrada y salida, decodificanto las l\'{\i}neas del bus %%@
+de la PC. Este rango es utilizado para direccionar las tarjetas de expansi\'on que residen en %%@
+las ranuras de expansi\'on de la tarjeta madre (ver Figura \ref{Figura:bloque2}). El bloque 3 %%@
+(0400H-FFFFH) no es utilizado.
+
+Las formas de selecci\'on de dispositivos se discuten en la Subsecci\'on %%@
+\ref{Subsection:tecnicas}.
+
+%----------------------------------------------------------------------------
+
+\section{Bus del Sistema de la IBM PC.}
+\label{Section:ranuras}
+
+El bus del sistema de la IBM PC y compatibles es una extensi\'on del bus del microprocesador %%@
+8088/8086. El bus del sistema es demultiplexado y proporciona se\~nales adicionales para soporte %%@
+de Acceso Directo a Memoria (DMA), interrupciones, etc. Todas las se\~nales tienen nivel TTL y %%@
+hay terminales de GND (tierra) y voltaje. La Figura~\ref{Figura:rearPC} presenta la %%@
+configuraci\'on de las ranuras de expansi\'on de la PC AT, el cual tiene 62 terminales, las %%@
+cuales son descritas a continuaci\'on \cite{Bus}:
+
+\begin{figure}[!htb]\centering
+%TexCad Options 
+%\grade{\off} 
+%\emlines{\off} 
+%\beziermacro{\off} 
+%\reduce{\on} 
+%\snapping{\off} 
+%\quality{2.00} 
+%\graddiff{0.01} 
+%\snapasp{1} 
+%\zoom{1.00} 
+\unitlength 1.00mm 
+\linethickness{0.4pt} 
+\begin{picture}(62.33,155.00) 
+\put(30.00,147.67){\line(1,0){5.00}} 
+%\end 
+%\emline(30.00,143.00)(34.67,143.00) 
+\put(30.00,143.00){\line(1,0){4.67}} 
+%\end 
+%\emline(30.00,137.67)(35.00,137.67) 
+\put(30.00,137.67){\line(1,0){5.00}} 
+%\end 
+%\emline(30.33,132.67)(35.00,132.67) 
+\put(30.33,132.67){\line(1,0){4.67}} 
+%\end 
+%\emline(30.00,127.67)(34.67,127.67) 
+\put(30.00,127.67){\line(1,0){4.67}} 
+%\end 
+%\emline(30.00,123.00)(35.00,123.00) 
+\put(30.00,123.00){\line(1,0){5.00}} 
+%\end 
+%\emline(30.00,117.67)(35.00,117.67) 
+\put(30.00,117.67){\line(1,0){5.00}} 
+%\end 
+%\emline(30.00,112.67)(35.00,112.67) 
+\put(30.00,112.67){\line(1,0){5.00}} 
+%\end 
+%\emline(30.00,107.67)(35.00,107.67) 
+\put(30.00,107.67){\line(1,0){5.00}} 
+%\end 
+%\emline(30.00,103.00)(35.00,103.00) 
+\put(30.00,103.00){\line(1,0){5.00}} 
+%\end 
+%\emline(30.00,97.33)(35.00,97.33) 
+\put(30.00,97.33){\line(1,0){5.00}} 
+%\end 
+%\emline(30.00,92.33)(35.00,92.33) 
+\put(30.00,92.33){\line(1,0){5.00}} 
+%\end 
+%\emline(30.00,87.33)(35.00,87.33) 
+\put(30.00,87.33){\line(1,0){5.00}} 
+%\end 
+%\emline(30.00,82.00)(35.00,82.00) 
+\put(30.00,82.00){\line(1,0){5.00}} 
+%\end 
+%\emline(30.00,77.00)(35.00,77.00) 
+\put(30.00,77.00){\line(1,0){5.00}} 
+%\end 
+%\emline(30.00,72.00)(35.00,72.00) 
+\put(30.00,72.00){\line(1,0){5.00}} 
+%\end 
+%\emline(30.00,67.33)(35.00,67.33) 
+\put(30.00,67.33){\line(1,0){5.00}} 
+%\end 
+%\emline(30.00,62.00)(35.33,62.00) 
+\put(30.00,62.00){\line(1,0){5.33}} 
+%\end 
+%\emline(30.00,57.00)(35.00,57.00) 
+\put(30.00,57.00){\line(1,0){5.00}} 
+%\end 
+%\emline(30.00,52.00)(35.00,52.00) 
+\put(30.00,52.00){\line(1,0){5.00}} 
+%\end 
+%\emline(30.00,47.33)(35.00,47.33) 
+\put(30.00,47.33){\line(1,0){5.00}} 
+%\end 
+%\emline(30.00,42.00)(35.00,42.00) 
+\put(30.00,42.00){\line(1,0){5.00}} 
+%\end 
+%\emline(30.00,37.00)(35.00,37.00) 
+\put(30.00,37.00){\line(1,0){5.00}} 
+%\end 
+%\emline(30.00,32.33)(35.00,32.33) 
+\put(30.00,32.33){\line(1,0){5.00}} 
+%\end 
+%\emline(30.00,27.67)(35.00,27.67) 
+\put(30.00,27.67){\line(1,0){5.00}} 
+%\end 
+%\emline(30.00,22.33)(35.00,22.33) 
+\put(30.00,22.33){\line(1,0){5.00}} 
+%\end 
+%\emline(30.00,17.33)(35.00,17.33) 
+\put(30.00,17.33){\line(1,0){5.00}} 
+%\end 
+%\emline(30.00,12.67)(35.00,12.67) 
+\put(30.00,12.67){\line(1,0){5.00}} 
+%\end 
+%\emline(30.00,7.33)(35.00,7.33) 
+\put(30.00,7.33){\line(1,0){5.00}} 
+%\end 
+\put(15.00,0.00){\framebox(15.00,155.00)[cc]{ }} 
+%\emline(30.00,152.67)(35.00,152.67) 
+\put(30.00,152.67){\line(1,0){5.00}} 
+%\end 
+%\emline(30.00,2.33)(35.00,2.33) 
+\put(30.00,2.33){\line(1,0){5.00}} 
+%\end 
+\put(36.33,152.67){\makebox(0,0)[lc]{-I/O CH CK}} 
+\put(36.33,147.00){\makebox(0,0)[lc]{D7}} 
+\put(36.67,143.00){\makebox(0,0)[lc]{D6}} 
+\put(36.67,137.67){\makebox(0,0)[lc]{D5}} 
+\put(36.67,132.67){\makebox(0,0)[lc]{D4}} 
+\put(36.33,127.67){\makebox(0,0)[lc]{D3}} 
+\put(36.33,123.00){\makebox(0,0)[lc]{D2}} 
+\put(36.33,117.67){\makebox(0,0)[lc]{D1}} 
+\put(36.33,112.67){\makebox(0,0)[lc]{D0}} 
+\put(36.33,107.67){\makebox(0,0)[lc]{I/O CH RDY}} 
+\put(36.33,103.00){\makebox(0,0)[lc]{AEN}} 
+\put(36.33,97.33){\makebox(0,0)[lc]{A19}} 
+\put(36.33,92.33){\makebox(0,0)[lc]{A18}} 
+\put(36.33,87.33){\makebox(0,0)[lc]{A17}} 
+\put(36.67,82.00){\makebox(0,0)[lc]{A16}} 
+\put(36.67,77.00){\makebox(0,0)[lc]{A15}} 
+\put(36.67,72.00){\makebox(0,0)[lc]{A14}} 
+\put(36.67,67.67){\makebox(0,0)[lc]{A13}} 
+\put(36.67,62.00){\makebox(0,0)[lc]{A12}} 
+\put(36.67,57.00){\makebox(0,0)[lc]{A11}} 
+\put(36.67,52.00){\makebox(0,0)[lc]{A10}} 
+\put(36.67,47.00){\makebox(0,0)[lc]{A9}} 
+\put(36.67,42.00){\makebox(0,0)[lc]{A8}} 
+\put(36.67,37.00){\makebox(0,0)[lc]{A7}} 
+\put(36.67,2.00){\makebox(0,0)[lc]{A0}} 
+\put(36.67,7.33){\makebox(0,0)[lc]{A1}} 
+\put(36.33,12.67){\makebox(0,0)[lc]{A2}} 
+\put(37.00,17.33){\makebox(0,0)[lc]{A3}} 
+\put(36.67,22.33){\makebox(0,0)[lc]{A4}} 
+\put(36.67,27.67){\makebox(0,0)[lc]{A5}} 
+\put(36.67,32.33){\makebox(0,0)[lc]{A6}} 
+%\emline(9.67,148.00)(14.67,148.00) 
+\put(9.67,148.00){\line(1,0){5.00}} 
+%\end 
+%\emline(9.67,143.33)(14.33,143.33) 
+\put(9.67,143.33){\line(1,0){4.66}} 
+%\end 
+%\emline(9.67,138.00)(14.67,138.00) 
+\put(9.67,138.00){\line(1,0){5.00}} 
+%\end 
+%\emline(10.00,133.00)(14.67,133.00) 
+\put(10.00,133.00){\line(1,0){4.67}} 
+%\end 
+%\emline(9.67,128.00)(14.33,128.00) 
+\put(9.67,128.00){\line(1,0){4.66}} 
+%\end 
+%\emline(9.67,123.33)(14.67,123.33)
+\put(9.67,123.33){\line(1,0){5.00}}
+%\end 
+%\emline(9.67,118.00)(14.67,118.00) 
+\put(9.67,118.00){\line(1,0){5.00}} 
+%\end 
+%\emline(9.67,113.00)(14.67,113.00) 
+\put(9.67,113.00){\line(1,0){5.00}} 
+%\end 
+%\emline(9.67,108.00)(14.67,108.00) 
+\put(9.67,108.00){\line(1,0){5.00}} 
+%\end 
+%\emline(9.67,103.33)(14.67,103.33) 
+\put(9.67,103.33){\line(1,0){5.00}} 
+%\end 
+%\emline(9.67,97.67)(14.67,97.67) 
+\put(9.67,97.67){\line(1,0){5.00}} 
+%\end 
+%\emline(9.67,92.67)(14.67,92.67) 
+\put(9.67,92.67){\line(1,0){5.00}} 
+%\end 
+%\emline(9.67,87.67)(14.67,87.67) 
+\put(9.67,87.67){\line(1,0){5.00}} 
+%\end 
+%\emline(9.67,82.33)(14.67,82.33) 
+\put(9.67,82.33){\line(1,0){5.00}} 
+%\end 
+%\emline(9.67,77.33)(14.67,77.33) 
+\put(9.67,77.33){\line(1,0){5.00}}  
+%\end 
+%\emline(9.67,72.33)(14.67,72.33) 
+\put(9.67,72.33){\line(1,0){5.00}} 
+%\end 
+%\emline(9.67,67.67)(14.67,67.67) 
+\put(9.67,67.67){\line(1,0){5.00}} 
+%\end 
+%\emline(9.67,62.33)(15.00,62.33) 
+\put(9.67,62.33){\line(1,0){5.33}} 
+%\end 
+%\emline(9.67,57.33)(14.67,57.33) 
+\put(9.67,57.33){\line(1,0){5.00}} 
+%\end 
+%\emline(9.67,52.33)(14.67,52.33) 
+\put(9.67,52.33){\line(1,0){5.00}} 
+%\end 
+%\emline(9.67,47.67)(14.67,47.67) 
+\put(9.67,47.67){\line(1,0){5.00}} 
+%\end 
+%\emline(9.67,42.33)(14.67,42.33) 
+\put(9.67,42.33){\line(1,0){5.00}} 
+%\end 
+%\emline(9.67,37.33)(14.67,37.33) 
+\put(9.67,37.33){\line(1,0){5.00}} 
+%\end 
+%\emline(9.67,32.67)(14.67,32.67) 
+\put(9.67,32.67){\line(1,0){5.00}} 
+%\end 
+%\emline(9.67,28.00)(14.67,28.00) 
+\put(9.67,28.00){\line(1,0){5.00}} 
+%\end 
+%\emline(9.67,22.67)(14.67,22.67) 
+\put(9.67,22.67){\line(1,0){5.00}} 
+%\end 
+%\emline(9.67,17.67)(14.67,17.67) 
+\put(9.67,17.67){\line(1,0){5.00}} 
+%\end 
+%\emline(9.67,13.00)(14.67,13.00) 
+\put(9.67,13.00){\line(1,0){5.00}} 
+%\end 
+%\emline(9.67,7.67)(14.67,7.67) 
+\put(9.67,7.67){\line(1,0){5.00}} 
+%\end 
+%\emline(9.67,153.00)(14.67,153.00) 
+\put(9.67,153.00){\line(1,0){5.00}} 
+%\end 
+%\emline(9.67,2.67)(14.67,2.67) 
+\put(9.67,2.67){\line(1,0){5.00}} 
+%\end 
+\put(8.33,153.00){\makebox(0,0)[rc]{GND}} 
+\put(7.67,148.00){\makebox(0,0)[rc]{RESET DRV}} 
+\put(7.33,143.33){\makebox(0,0)[rc]{+5 VDC}} 
+\put(7.33,138.00){\makebox(0,0)[rc]{IRQ2}} 
+\put(7.33,133.00){\makebox(0,0)[rc]{-5 VDC}} 
+\put(7.67,128.00){\makebox(0,0)[rc]{DRQ2}} 
+\put(7.67,123.00){\makebox(0,0)[rc]{-12 VDC}} 
+\put(7.33,118.00){\makebox(0,0)[rc]{Reserved}} 
+\put(7.33,113.00){\makebox(0,0)[rc]{+12 VDC}} 
+\put(7.67,108.00){\makebox(0,0)[rc]{GND}} 
+\put(7.33,103.33){\makebox(0,0)[rc]{-MEMW}} 
+\put(7.33,97.67){\makebox(0,0)[rc]{-MEMR}} 
+\put(7.33,92.67){\makebox(0,0)[rc]{-IOW}} 
+\put(7.00,87.67){\makebox(0,0)[rc]{-IOR}} 
+\put(7.33,82.33){\makebox(0,0)[rc]{-DACK3}} 
+\put(7.33,77.33){\makebox(0,0)[rc]{DRQ3}} 
+\put(7.00,72.33){\makebox(0,0)[rc]{-DACK0}} 
+\put(7.00,67.67){\makebox(0,0)[rc]{CLOCK}} 
+\put(7.33,62.33){\makebox(0,0)[rc]{IRQ7}} 
+\put(7.33,57.33){\makebox(0,0)[rc]{IRQ6}} 
+\put(7.00,52.33){\makebox(0,0)[rc]{IRQ5}} 
+\put(7.00,47.67){\makebox(0,0)[rc]{IRQ4}} 
+\put(7.33,42.33){\makebox(0,0)[rc]{IRQ3}} 
+\put(7.33,37.33){\makebox(0,0)[rc]{DACK2}} 
+\put(7.33,32.67){\makebox(0,0)[rc]{T/C}} 
+\put(7.67,2.67){\makebox(0,0)[rc]{GND}} 
+\put(7.67,7.67){\makebox(0,0)[rc]{OSC}} 
+\put(7.33,13.00){\makebox(0,0)[rc]{+5 VDC}} 
+\put(7.67,17.67){\makebox(0,0)[rc]{ALE}} 
+\put(7.33,22.67){\makebox(0,0)[rc]{T/C}} 
+\put(7.33,28.00){\makebox(0,0)[rc]{-DACK2}} 
+\put(62.33,80.33){\makebox(0,0)[cc]{Component Side}} 
+\end{picture}
+\caption{Diagrama de una ranura de expansi\'on de la PC IBM (bus AT).}
+\label{Figura:rearPC}
+\end{figure}
+
+\begin{description}
+\item[A0 - A19] Es\-tas terminales corresponden a las di\-rec\-cio\-nes de me\-mo\-ria y E/S %%@
+(en\-tra\-da/sa\-li\-da).
+\item[D0 - D7] Estas terminales conforman el bus de datos bidireccional. Durante el ciclo de %%@
+escritura del 8088 el procesador coloca datos en el bus de datos antes del borde hacia arriba de %%@
+la se\~nal $\overline{\mbox{IOW}}$ o $\overline{\mbox{MEMW}}$, la cual pondr\'a los %%@
+datos en el puerto de salida o memoria. Durante el ciclo de lectura, el puerto de entrada o la %%@
+memoria deben poner los datos antes del borde ascendente de la se\~nal %%@
+$\overline{\mbox{IOR}}$ o $\overline{\mbox{MEMR}}$, las cuales ponen los datos en el %%@
+8088.
+\item[$\overline{\mbox{MEMR}}$, $\overline{\mbox{MEMW}}$, %%@
+$\overline{\mbox{IOR}}$, $\overline{\mbox{IOW}}$] Estas se\~nales son activas en bajo %%@
+y controlan las operaciones de lectura y escritura antes mencionadas. Son generadas por el %%@
+8088/8086 o bien por el controlador de DMA.
+\item[ALE] Esta se\~nal es el Address Latch Enable e indica el comienzo de un ciclo de bus del %%@
+8088. 
+\item[AEN] Esta se\~nal es el Address Enable y es enviada por el controlador de DMA para %%@
+indicar que un ciclo de DMA esta activo. 
+\item[OSC, CLOCK] OSC es un reloj del sistema de alta velocidad con un periodo de 70 ns %%@
+(14.31818 MHz) y un ciclo del 50\%. La se\~nal de CLOCK dura un tercio de la frecuencia del %%@
+oscilador (4.77 Mhz), es decir, tiene un periodo de 210 ns y un ciclo del 33\%.
+\item[IRQ2 - IRQ7] Los dispositivos de entrada/salida usan estas seis l\'{\i}neas de entrada %%@
+para generar las peticiones de interrupci\'on hacia el 8088. La prioridad es mayor en IRQ2 y %%@
+desciende hasta IRQ7. Cabe se\~nalar que la l\'{\i}nea $\overline{\mbox{INTA}}$ %%@
+(Interrupt Acknowledge) no esta disponible en el bus del sistema, por lo que el reconocimiento %%@
+de interrupci\'on es realizado generalmente por un puerto de E/S usando una instrucci\'on OUT %%@
+que es ejecutada por la rutina de servicio de interrupci\'on.
+\item[I/O CH RDY] Esta es la se\~nal {\it I/O channel ready\/} (canal de E/S listo). Esta es %%@
+una se\~nal de entrada que es usada para generar estados de espera, lo que extiende la longitud %%@
+de los ciclos de bus del procesador, en el caso de tener que trabajar con dispositivos lentos de %%@
+entrada/salida o de memoria.
+\item[$\overline{\mbox{I/O CH CK}}$] La se\~nal {\it I/O channel check\/} sirve para %%@
+informar al procesador que hay un error de paridad en una memoria o dispositivo de E/S.
+\item[RESET DRV] La se\~nal {\it reset drive\/} es usada para reiniciar o inicializar el %%@
+sistema despu\'es del encendido o en caso de que el suministro de energ\'{\i}a caiga por %%@
+debajo de los niveles de operaci\'on v\'alidos. Esta se\~nal esta sincronizada con el borde de %%@
+bajada de OSC.
+\item[DRQ1 - DRQ3] Las se\~nales de entrada {\it DMA request} (petici\'on de DMA) son %%@
+canales as\'{\i}ncronos que son usados para realizar peticiones de acceso directo a memoria o %%@
+para refrescar memorias din\'amicas (DACK0).
+\item[T/C] La l\'{\i}nea {\it terminal count} env\'{\i}a un pulso cuando el conteo final %%@
+para el canal de DMA es alcanzado.
+\end{description}
+
+%----------------------------------------------------------------------------
+
+\subsection{Consideraciones especiales sobre poder.}
+\label{Subsection:consideraciones}
+
+Existen tres limitantes principales en lo que se refiere al suministro de energia a una tarjeta %%@
+de expansi\'on \cite{Bus}:
+
+\begin{enumerate}
+\item {\bf Limitantes de poder:} La fuente t\'{\i}pica de una PC proporciona una corriente %%@
+de 4 A a las tarjetas en los {\it slots\/} o ranuras de expansi\'on, por lo que si todas las %%@
+ranuras tienen tarjetas, entonces la corriente se reduce a 1 A o menos.
+\item {\bf Desacoplamiento de poder:} Es necesario colocar capacitores para desacoplar la %%@
+entrada de la fuente de poder de +5 V, y as\'{\i} mismo se deben usar capacitores en el %%@
+dise\~no. Es recomendado usar capacitores cer\'amicos o de tantalio en el rango de 10 a 100 nF %%@
+para aplicaciones con poco consumo y alta frecuencia, y en caso de dise\~nos que hagan un gran %%@
+consumo de corriente, usar capacitores cer\'amicos o de tantalio de 10 a 50 $\mu$F. En todos %%@
+los casos los capacitores son colocados usualmente entre las terminales de tierra y voltaje de %%@
+dispositivos con gran consumo de corriente (CI's TTL, bus drivers, transceivers, CI's LSI o de %%@
+gran escala de integraci\'on como microprocesadores, etc.). Adem\'as las l\'{\i}neas de tierra %%@
+y voltaje en la tarjeta de expansi\'on deben colocarse paralelamente.
+\item {\bf Carga y capacidad del bus:} Para evitar problemas ocasionados por sobrecargar al %%@
+bus se recomienda que:
+\begin{itemize}
+\item No se coloquen circuitos LSI NMOS directamente al bus del sistema, ya que no pueden %%@
+tolerar bajas de poder en mismo. 
+\item No se coloquen m\'as de dos LSI TTL conectados a una se\~nal del bus.
+\item No  se coloquen se\~nales del bus a distancias largas dentro de la tarjeta, ya que esto %%@
+ocasionar\'{\i}a capacitancias indeseadas que podr\'{\i}an retrasar o alterar tales %%@
+se\~nales.
+\end{itemize}
+\end{enumerate}
+
+%----------------------------------------------------------------------------
+
+\section{Extensi\'on de procesador num\'erico.}
+\label{Section:copronum}
+
+El circuito integrado Intel 8087 es el coprocesador num\'erico utilizado con los %%@
+microprocesadores 8088/8086. Este circuito brinda muchas ventajas en cuanto a desempe\~no a los %%@
+sistemas que lo utilizan.
+
+%----------------------------------------------------------------------------
+
+\subsection{Ventajas.}
+\label{Subsection:ventajas}
+
+El coprocesador num\'erico Intel 8087 proporciona un aumento en la velocidad para la %%@
+realizaci\'on de operaciones num\'ericas. El manual de Intel (\cite{Intel:Micro}) se\~nala %%@
+que dicho aumento es del orden de 100 veces. Godfrey (\cite{Godfrey}) presenta la tabla %%@
+comparativa (Tabla~\ref{8087:speed}) que ilustra el aumento de velocidad relativa al 8086 de %%@
+varias operaciones usando el 8087.
+
+La Tabla \ref{8087:time} (\cite{Intel:Micro}) presenta los tiempos de ejecuci\'on de diversas %%@
+instrucciones num\'ericas. Se comparan los tiempos de un par 8086/8087 y un 8086 con %%@
+emulaci\'on de 8087 por software. Los tiempos de ejecuci\'on se presentan en microsegundos y %%@
+son aproximados.
+
+\begin{center}
+\begin{table}[!htb]
+\begin{tabular}{l c} \hline
+Tipo de instrucci\'on & \parbox{5cm}{\vspace{3pt}Aumento relativo de velocidad respecto al %%@
+8086\vspace{3pt}} \\ \hline
+Multiplicaci\'on de simple precisi\'on & 84 \\
+Multiplicaci\'on de doble precisi\'on & 78 \\
+Suma & 94 \\
+Divisi\'on de simple precisi\'on & 82 \\
+Comparaci\'on & 144 \\
+Carga de simple precisi\'on & 189 \\
+Almacenamiento de simple precisi\'on & 67 \\
+Ra\'{\i}z cuadrada\footnote{con datos simulados} & 544 \\
+Tangente\footnote{con datos simulados} & 144 \\
+Exponenciaci\'on\footnote{con datos simulados} & 171 \\ \hline
+\end{tabular}
+\caption{Aumento de velocidad usando un 8087.}
+\label{8087:speed}
+\end{table}
+\end{center}
+
+\begin{center}
+\begin{table}[!htb]
+\begin{tabular}{l | c | c} \hline
+Inst. de punto flotante & 8086/8087 (8Mhz) & Emulaci\'on \\ \hline
+Sumar/Restar & 10.6 & 1000 \\ 
+Multiplicar (Precisi\'on sencilla) & 11.9 & 1000 \\ 
+Multiplicar (Precisi\'on extendida) & 16.9 & 1312 \\
+Dividir & 24.4 & 2000 \\
+Comparar & -5.6 & 812 \\
+Carga (Doble precisi\'on) & -6.3 & 1062 \\
+Almacenar (Doble precisi\'on) & 13.1 & 750 \\
+Ra\'{\i}z cuadrada & 22.5 & 12250 \\
+Tangente & 56.3 & 8125 \\
+Exponenciaci\'on & 62.5 & 10687 \\ \hline
+\end{tabular}
+\caption{Comparaci\'on entre 8086/8087 (izq.) y 8086 emulando a 8087 (der.).}
+\label{8087:time}
+\end{table}
+\end{center}
+
+Adem\'as de representar un beneficio en cuanto a velocidad, el uso del 8087, y de coprocesadores %%@
+num\'ericos en general, tambi\'en representa un beneficio en capacidad. En el caso del 8087, su %%@
+rango din\'amico interno es de $10^{4932}$ \footnote{Se refiere al {\bf real temporal}, el %%@
+cu\'al consiste de 64 bits de mantisa, 15 bits de exponente {\it corrido} y 1 bit de signo. Se %%@
+dice que el exponente es corrido dado que a un exponente dado se le debe sumar el n\'umero %%@
+representado por los bits de exponente (0011111111111111 = 3FFFH) al exponente original %%@
+\cite{Hall}, pp. 382-384.}, gracias a sus registros internos de 80 bits. El 8087 proporciona %%@
+los tipos de datos mostrados en la Tabla~\ref{tabla:tipodatos}.
+
+\begin{table}[!htb]
+\centering
+\begin{tabular}{|l|c|c|} \hline
+Formatos de Datos & Rango & Precisi\'on \\ \hline
+Palabra entera & $10^{4}$ & 16 bits \\
+Entero corto & $10^{9}$ & 32 bits \\
+Entero largo & $10^{18}$ & 64 bits \\
+BCD empaquetado & $10^{18}$ & 18 d\'{\i}gitos \\
+Real corto & $10^{\pm 38}$ & 24 bits \\
+Real largo & $10^{\pm 308}$ & 53 bits \\
+Real temporal & $10^{\pm 4932}$ & 64 bits \\ \hline
+\end{tabular}
+\caption{Tipos de datos del 8087.}
+\label{tabla:tipodatos}
+\end{table}
+
+%----------------------------------------------------------------------------
+
+\subsection{Arquitectura Interna.}
+\label{Subsection:arqint8087}
+
+El 8087 tiene 8 registros internos (ST0 - ST7) de 80 bits de capacidad, adem\'as de 1 registro %%@
+de palabra de estado, un registro de palabra de control, un registro para etiquetar y cierto %%@
+espacio para apuntadores a excepciones.
+
+El 8087 esta internamente compuesto por dos unidades: de Control (CU) y de Ejecuci\'on %%@
+Num\'erica (NEU). La primera (CU) mantiene la sincronizaci\'on entre el 8087 y el 8088/8086 %%@
+anfitri\'on. La Unidad de Control ``monitorea'' la se\~nal de estado ($\overline{S0}$ - %%@
+$\overline{S2}$, S6) del 8088 para determinar si una instrucci\'on del 8087 es cargada por la %%@
+CPU. La CU del 8087 mantiene una cola de instrucciones id\'entica a la cola ubicada en la CPU %%@
+anfitriona. La longitud de la cola es determinada autom\'aticamente por la CU del 8087 %%@
+despu\'es del {\it reset\/}, por medio de un chequeo en la l\'{\i}nea %%@
+$\overline{\mbox{BHE}}$/S7. La sincronizaci\'on en la carga y decodificaci\'on de %%@
+instrucciones la realiza la CU monitoreando las l\'{\i}neas de estado de la cola (QS0, QS1). 
+
+\begin{figure}[!htb]
+\vskip 5mm
+\special{center                 
+           8087a.gif,            
+           \the\hsize 85mm}     
+\vskip 80mm                     
+\caption{Diagrama funcional de bloques del 80x87.}
+\label{8087:bloques}
+\end{figure}
+
+La NEU tiene una ``ruta de datos'' de 84 bits de longitud, divididos de la siguiente forma: 68 %%@
+bits fraccionarios, 15 bits de exponente y un bit de signo. Cuando la NEU comienza la %%@
+ejecuci\'on de la instrucci\'on, se activa la se\~nal de BUSY del 8087, la cual puede ser usada %%@
+junto con la instrucci\'on WAIT de la CPU para hacer una resincronizaci\'on de la CPU %%@
+anfitriona y el 8087 al completar este la ejecuci\'on de esta instrucci\'on (ver Secci\'on %%@
+\ref{Subsection:confop8087}). En la Figura~\ref{8087:bloques} se presenta el diagrama de %%@
+bloques del 8087.
+
+%----------------------------------------------------------------------------
+
+\subsection{Manejo de Excepciones.}
+\label{Subsection:excep8087}
+
+Se le llama {\it excepci\'on\/} a una condici\'on de error que se produce al momento de ser %%@
+ejecutada una instrucci\'on en el coprocesador 8087.
+
+Las excepciones detectadas por el 8087 son 6 y se clasifican seg\'un su causa en:
+
+\begin{enumerate}
+\item Operaci\'on inv\'alida - incluye: desbordamiento de pila, {\it stack underflow\/}, %%@
+forma num\'erica indeterminada, o NAN (es decir, un valor que no representa a un n\'umero).
+\item {\it Overflow\/} - ocasionado por un n\'umero de m\'as bits que el tama\~no del %%@
+formato especificado.
+\item Divisor cero.
+\item {\it Underflow\/} - ocasionado cuando el resultado de una operaci\'on no es cero, pero %%@
+es demasiado peque\~no para caber en el tama\~no especificado.
+\item Operando denormalizado - esta excepci\'on ocurre cuando al menos uno de los operandos %%@
+esta {\it denormalizado\/}, es decir, que el operando tiene un exponente peque\~no pero no es %%@
+cero.
+\item Resultado inexacto - se ocasiona cuando el resultado no se puede representar exactamente %%@
+en el formato especificado, lo que afecta el redondeo  del resultado seg\'un el modo, y la %%@
+colocaci\'on de la bandera para esta excepci\'on.
+\end{enumerate}
+
+Las excepciones causan una interrupci\'on en caso de que \'estas est\'en habilitadas, y el bit %%@
+de la correspondiente excepci\'on en la palabra de control esta desenmascarado. Si no lo %%@
+est\'an, el 8087 continua la ejecuci\'on sin importar si la CPU anfitriona limpia la %%@
+excepci\'on. Se puede enmascarar una excepci\'on en particular, en cuyo caso el 8087 coloca la %%@
+excepci\'on en el registro de estado y procede a ejecutar una funci\'on de manejo de %%@
+interrupciones interno, con lo que se puede continuar el procesamiento.
+
+%----------------------------------------------------------------------------
+
+\subsection{Configuraci\'on y operaci\'on.}
+\label{Subsection:confop8087}
+
+El 8087 ejecuta instrucciones como coprocesador de una CPU en modo m\'aximo, conect\'andose en %%@
+paralelo a la CPU \cite{Intel:Micro}, como se ilustra en la Figura \ref{fig:conexion}.
+
+\vspace{5mm}
+
+\begin{figure}[!htb]
+\vskip 10mm
+\special{center
+         88-87.gif,
+         \the\hsize 78mm}
+\vskip 80mm
+\caption{Configuraci\'on de un sistema 8088/8087 u 8086/8087.}
+\label{fig:conexion}
+\end{figure}
+
+Las l\'{\i}neas de estado $S_{0}$-$S_{2}$ y $QS_{0}$-$QS_{1}$ habilitan al 8087 para que %%@
+mo\-ni\-to\-ree y decodifique instrucciones en sincronizaci\'on con el 8088. Una vez iniciado, %%@
+el 8087 puede procesar en paralelo e independientemente de la CPU anfitriona. La se\~nal BUSY %%@
+del 8087 sirve para sincronizar la CPU y el coprocesador, inform\'andole a aqu\'el que el 8087 %%@
+est\'a ejecutando una instrucci\'on. La terminal WAIT del 8088 verifica aquella se\~nal para %%@
+asegurarse de que el 8087 est\'a listo para ejecutar instrucciones subsecuentes. El 8087 puede %%@
+interrumpir a la CPU cuando detecta una excepci\'on. La l\'{\i}nea de petici\'on de %%@
+interrupci\'on del 8087 se rutea al 8088/8086 mediante un PIC 8259 (``Controlador de %%@
+Interrupciones Programable''). El coprocesador utiliza las l\'{\i}neas %%@
+$\overline{\mbox{RQ}}/\overline{\mbox{GT0}}$ del 8088 para obtener el control del bus %%@
+local para transferencia de datos~\cite{Intel:Micro}.
+
+La estructura, operaci\'on y temporizado del bus del 8087 son id\'enticos a las de los %%@
+procesadores 8086/8088 en modo m\'aximo. Las direcciones son multiplexadas con los datos en las %%@
+l\'{\i}neas AD0-AD15, mientras que las l\'{\i}neas A16-A19 son multiplexadas con las %%@
+l\'{\i}neas de estado S3-S6. De estas l\'{\i}neas de estado, S3, S4 y S6 est\'a siempre en %%@
+ALTO y la l\'{\i}nea S5 est\'a siempre en BAJO durante los ciclos donde el 8087 maneja el bus. %%@
+S6 es monitoreada cuando el 8087 se encuentra monitoreando los ciclos de bus de la CPU (modo %%@
+pasivo), con el objeto de diferenciar la actividad del 8088 de la de entrada/salida local del %%@
+coprocesador, o de cualquier otro maestro del bus local. Finalmente, S7 tiene siempre el mismo %%@
+valor que $\overline{\mbox{BHE}}$.
+
+El tipo de ciclo de bus es determinado por el controlador de bus 8288 usando las l\'{\i}neas %%@
+$\overline{\mbox{S0}}$-$\overline{\mbox{S2}}$ seg\'un la Tabla \ref{lineas} %%@
+(\cite{Intel:Micro}).
+
+\begin{table}[!htb]
+\centering
+\begin{tabular}{|c|c|c|l|} \hline
+$\overline{\mbox{S2}}$ & $\overline{\mbox{S1}}$ & $\overline{\mbox{S0}}$ & \\ %%@
+\hline
+0 & $\times$ & $\times$ & No usado \\
+1 & 0 & 0 & No usado \\
+1 & 0 & 1 & Lectura de datos de memoria \\
+1 & 1 & 0 & Escritura de datos a memoria \\
+1 & 1 & 1 & Pasivo (no hay ciclo de bus) \\ \hline
+\end{tabular}
+\caption{L\'{\i}neas de estado que determinan el  tipo de ciclo de bus.}
+\label{lineas}
+\end{table}
+
+Las instrucciones del 8087 aparecen como instrucciones ESCAPE a la CPU. Dichas instrucciones son %%@
+decodificadas y ejecutadas por la CPU y el 8087 al mismo tiempo. Si la instrucci\'on leida no es %%@
+una del 8087, este act\'ua como si hubiera sido una instrucci\'on NOP. La ejecuci\'on de una %%@
+instrucci\'on del conjunto de instrucciones del 8087 se realiza cuando la CPU anfitriona ejecuta %%@
+la instrucci\'on ESCAPE. Cabe se\~nalar que toda instrucci\'on del 8087 tiene el c\'odigo %%@
+11011 en los bits mas significativos de su primer byte de c\'odigo. 
+
+Intel se\~nala que la instrucci\'on puede o no identificar a un operando de memoria, pero que %%@
+la CPU ``distingue'' entre instrucciones de ESCAPE que hacen referencia a memoria e %%@
+instrucciones que no hacen tal cosa. Si la instrucci\'on se refiere a un operando de memoria, la %%@
+CPU calcula la direcci\'on del operando usando alguno de los modos de direccionamiento y luego %%@
+realiza una simulaci\'on de lectura de la palabra en tal localidad, mediante un ciclo de lectura %%@
+normal, salvo que la CPU ignora los datos, los cuales son le\'{\i}dos del bus de datos por el %%@
+8087; y si la instrucci\'on ESCAPE no tiene una referencia a memoria, la CPU procede a cargar la %%@
+siguiente instrucci\'on.
+
+Los modos de referencia de memoria del 8087 son tres:
+
+\begin{enumerate}
+\item No hay referencia a memoria.
+\item Carga de operando de memoria al 8087.
+\item Almacenamiento de operando del 8087 a memoria
+\end{enumerate}
+
+En caso de que el 8087 necesite leer o escribir en memoria un dato de m\'as de una palabra %%@
+(hasta 80 bits), el 8088 env\'{\i}a la direcci\'on de la primera palabra de datos en el bus de %%@
+direcciones, y la se\~nal de control adecuada, seg\'un se trate de una operaci\'on de lectura o %%@
+escritura. El 8087 lee el dato del bus de datos o lo escribe a memoria, y toma la direcci\'on %%@
+f\'{\i}sica (20 bits) que envi\'o el 8088, con el fin de tomar el control del bus para %%@
+realizar la transferencia del resto de las palabras entre \'el y la memoria. Esto lo hace %%@
+poniendo en la terminal $\overline{\mbox{RQ}}/\overline{\mbox{GT0}}$ del 8088 un pulso %%@
+BAJO, con lo que el 8088 env\'{\i}a un pulso BAJO a la terminal %%@
+$\overline{\mbox{RQ}}/\overline{\mbox{GT0}}$ del 8087 y pone sus buses en estado de %%@
+alta impedancia. El 8087 incrementa entonces la direcci\'on de 20 bits que tom\'o durante la %%@
+primera transferencia, y la coloca en el bus de direcciones, posibilitando la lectura o %%@
+escritura de la siguiente palabra. Este proceso es continuado hasta que el 8087 termina de leer %%@
+o de escribir las palabras de los datos. Una vez concluida esta operaci\'on, el 8087 %%@
+env\'{\i}a un pulso bajo a la terminal $\overline{\mbox{RQ}}/\overline{\mbox{GT0}}$ %%@
+del 8088 para que este pueda tomar el control de los buses nuevamente \cite{Hall}.
+
+El 8087 debe asegurarse de que el 8088 no ejecute la siguiente instrucci\'on antes de haber %%@
+acabado \'el mismo de ejecutar la instrucci\'on en curso. Esto se puede presentar (A) cuando el %%@
+8088 necesita datos producidos por el 8087 para ejecutar la siguiente instrucci\'on, o (B) %%@
+cuando se ejecutan varias ins\-truc\-cio\-nes del 8087 en secuencia. 
+
+En el primer caso, lo que se hace es conectar la terminal de salida BUSY del 8087 a la terminal %%@
+$\overline{\mbox{TEST}}$ del 8088 y colocar una instrucci\'on WAIT en el programa. Esta %%@
+ocasiona que el 8088 verifique la terminal $\overline{\mbox{TEST}}$ y entre en un ciclo %%@
+(``loop'') interno en el que se verifica repetidamente $\overline{\mbox{TEST}}$ hasta que %%@
+esta se hace ALTO, lo que indica que el 8087 ha completado la ejecuci\'on de la instrucci\'on. 
+
+En el segundo caso, el 8087 solo puede ejecutar una instrucci\'on a la vez, as\'{\i} que se %%@
+debe asegurar que el 8087 a completado la ejecuci\'on de una instrucci\'on antes de leer la %%@
+siguiente de memoria. Esto se realiza utilizando las terminales BUSY del 8087 y %%@
+$\overline{\mbox{TEST}}$ del 8088 y la instrucci\'on FWAIT (WAIT) del 8088, que se coloca %%@
+despu\'es de cada instrucci\'on del 8087 para asegurar que el 8088 quede en un ciclo interno %%@
+verificando $\overline{\mbox{TEST}}$ una vez que esta ha sido puesta en BAJO por la %%@
+terminal BUSY del 8087 (al igual que en el primer caso). 
+
+La Figura \ref{fig:flujo1} muestra un diagrama de flujo simplificado de 
+la operaci\'on del 8087 y el 8088 (se omiten de dicho diagrama los casos de excepci\'on). 
+
+\begin{figure}[!hbt]
+\vskip 20mm
+\special{center
+         flujo1.gif,
+         \the\hsize 105mm}
+\vskip 180mm
+\caption{Diagrama de flujo de la operaci\'on del 8088 y 8087 sincronizados.}
+\label{fig:flujo1}
+\end{figure}
+
+%----------------------------------------------------------------------------

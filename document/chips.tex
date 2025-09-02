@@ -1,0 +1,511 @@
+\chapter[Especificaciones de los principales circuitos usados.]{Especificaciones de los %%@
+principales circuitos usados.}
+\label{Apendice:chips}
+
+%----------------------------------------------------------------------------
+
+\fancyhead[RE]{\slshape SCIP - Ap. \thechapter~ - Especificaciones de los principales %%@
+circuitos usados.}
+\fancyhead[LO]{\slshape Rodolfo Gonz\'alez Gonz\'alez.}
+\fancyhead[LE,RO]{\thepage}
+
+%----------------------------------------------------------------------------
+
+\section{Introducci\'on.}
+\label{Section:introchips}
+
+En este ap\'endice se presentan las especificaciones de los principales circuitos integrados %%@
+utilizados en el proyecto de tesis. Al final del ap\'endice se presentan las secciones %%@
+principales de las fichas t\'ecnicas\footnote{Data Sheets.} de estos circuitos, tomadas de %%@
+\cite{Intel:Micro} y \cite{Intel:Perif}. Para mayor informaci\'on sobre estos circuitos, %%@
+cons\'ultense los manuales citados.
+
+%----------------------------------------------------------------------------
+
+\section{Intel 8088.}
+\label{Section:8088}
+
+%----------------------------------------------------------------------------
+
+\subsection{Introducci\'on.} 
+\label{Subsection:intro8088}
+
+En esta secci\'on se presenta una breve descripci\'on de las especificaciones del procesador %%@
+Intel 8088. 
+
+%----------------------------------------------------------------------------
+
+\subsection{Mi\-cro\-pro\-ce\-sa\-dor de 8 bits HMOS (8088/8088-2).}
+\label{Subsection:micro8088}
+
+Este microprocesador ofrece las siguientes caracter\'{\i}sticas:
+
+\begin{itemize}
+\item Interfaz de bus de 8 bits.
+\item Arquitectura interna de 16 bits.
+\item Capacidad de direccionamiento directo de 1 megabyte de memoria.
+\item Compatibilidad de software directa con el CPU 8086.
+\item Con\-jun\-to de re\-gis\-tros de 14 pa\-la\-bras de 16 bits con o\-pe\-ra\-cio\-nes %%@
+si\-m\'e\-tri\-cas.
+\item Modos de direccionamiento de 24 operandos.
+\item Operaciones de tama\~no byte, word y bloque.
+\item Aritm\'etica con y sin signo de 8 y 16 bits, en binario o decimal, incluyendo %%@
+multiplicaci\'on y divisi\'on.
+\item Dos velocidades de reloj: 5 Mhz para el 8088 y 8 Mhz para el 8088-2
+\item Disponible en EXPRESS
+\begin{itemize}
+\item Rango de temperatura estandar.
+\item Rango de temperatura extendido.
+\end{itemize}
+\end{itemize}
+
+El procesador Intel 8088 es un microprocesador de alto desempe\~no desarrollado en N-canal, %%@
+reducci\'on de carga, tecnolog\'{\i}a de compuerta de silic\'on (HMOS), y empacado en un CERDIP %%@
+de 40 terminales. El procesador tiene atributos tanto de microprocesadores de 8 como de 16 bits. %%@
+Es directamente compatible con el software del 8086 y el hadware y perif\'ericos del 8080/8085.
+
+La Tabla \ref{Tabla:rangos8088} presenta los valores m\'aximos y m\'{\i}nimos de temperatura y %%@
+voltaje.
+
+% Table created by WinTeX 95: 2 Columns x 6 Rows.
+\begin{table}[!htb]\centering
+\begin{tabular}{|l|l|}
+%Row: 1
+\cline{1-2}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to44.40ex{\hfil Temperatura Ambiente\hfil}} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to30.80ex{\hfil 0\degree C a + 70C\hfil}} \\
+
+%Row: 2
+\cline{1-2}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to44.40ex{\hfil Temperatura del Empaque (Pl\-%%@
+astico)\hfil}} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to30.80ex{\hfil 0\degree C a +95\degree C\hfil}} \\
+
+%Row: 3
+\cline{1-2}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to44.40ex{\hfil Temperatura del Empaque %%@
+(CERDIP)\hfil}} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to30.80ex{\hfil 0\degree C a +70\degree C\hfil}} \\
+
+%Row: 4
+\cline{1-2}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to44.40ex{\hfil Temperatura de %%@
+almacenamiento\hfil}} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to30.80ex{\hfil -65\degree C a +150\degree C\hfil}} \\
+
+%Row: 5
+\cline{1-2}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to44.40ex{\hfil Voltaje en cualquier terminal %%@
+respecto a GND\hfil}} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to30.80ex{\hfil -1.0 a +7V\hfil}} \\
+
+%Row: 6
+\cline{1-2}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to44.40ex{\hfil Disipaci\'on de poder\hfil}} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to30.80ex{\hfil 2.5 Watts\hfil}} \\
+
+\cline{1-2}
+\end{tabular}
+\caption{Rangos M\'aximos Absolutos.}
+\label{Tabla:rangos8088}
+\end{table}
+
+%----------------------------------------------------------------------------
+
+\section{Intel 8087.}
+\label{Section:8087}
+
+%----------------------------------------------------------------------------
+
+\subsection{Introducci\'on.}
+\label{Subsection:intro8087}
+
+En esta secci\'on se da una breve descripci\'on de las especificaciones del coprocesador %%@
+matem\'atico Intel 8087.
+
+%----------------------------------------------------------------------------
+
+\subsection{Coprocesador de Datos Num\'ericos 8087/8087-2/8087-1.} 
+\label{Subsection:copro8087}
+
+Este coprocesador presenta las siguientes caracter\'{\i}sticas:
+
+\begin{enumerate}
+\item Coprocesador de datos num\'ericos de alto desempe\~no.
+\item A\~nade instrucciones de aritm\'etica, trigonometr\'{\i}a, exponenciaci\'on y %%@
+logar\'{\i}tmos al conjunto de instrucciones est\'andar del 8088/8086 para todos los tipos de %%@
+datos.
+\item El CPU junto con el 8087 soportan 7 tipos de datos: enteros de 16, 32 y 64 bits, flotantes %%@
+de 32, 64 y 80 bits y operandos de 18 d\'{\i}gitos BCD.
+\item Compatible con el est\'andar de punto flotante IEEE 754.
+\item Disponibilidad en 5 Mhz (8087), 8 Mhz (8087-2) y 10 Mhz (8087-1).
+\item A\~nade una pila de registros individualmente direccionables de 8x80 bits a la %%@
+arquitectura del 8086/8088 y 80186/80188.
+\item Proporciona siete funciones de manejo de excepciones.
+\item Sistema de interfaz compatible con MULTIBUS.
+\end{enumerate}
+
+El coprocesador de datos num\'ericos 8087 proporciona las instrucciones y los tipos de datos %%@
+necesarios para aplicaciones num\'ericas de alto rendimiento, proporcionando un mejor %%@
+desempe\~no en 100 veces que la CPU sola. El 8087 esta desarrollado en N-canal, con reducci\'on %%@
+de carga, tecnolog\'{\i}a de compuerta de silic\'on (HMOS III), y esta contenido en un empaque %%@
+de 40 terminales. Son a\~nadidas 68 instrucciones de procesamiento num\'erico al conjunto de %%@
+instrucciones del 80886/8088/80186/80188, as\'{\i} como ocho registros de 80 bits son %%@
+a\~nadidos al conjunto de registros. El 8087 es compatible con el Estandar de Punto Flotante IEEE %%@
+754.
+
+La Tabla \ref{Tabla:rangos8087} presenta los valores m\'aximos y m\'{\i}nimos de temperatura y %%@
+voltaje.
+
+% Table created by WinTeX 95: 2 Columns x 4 Rows.
+\begin{table}\centering
+\begin{tabular}{|l|l|}
+%Row: 1
+\cline{1-2}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to39.80ex{\hfil Temperatura ambiente\hfil}} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to16.00ex{\hfil 0\degree C a 70\degree C\hfil}} \\
+
+%Row: 2
+\cline{1-2}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to39.80ex{\hfil Temperatura de %%@
+almacenamiento\hfil}} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to16.00ex{\hfil -65\degree C a +150\degree C\hfil}} \\
+
+%Row: 3
+\cline{1-2}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to39.80ex{\hfil Voltaje en cualquier pin respecto a %%@
+GND\hfil}} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to16.00ex{\hfil -1.0V a +7V\hfil}} \\
+
+%Row: 4
+\cline{1-2}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to39.80ex{\hfil Disipaci\'on de poder\hfil}} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to16.00ex{\hfil 3.0 Watts\hfil}} \\
+
+\cline{1-2}
+\end{tabular}
+\caption{Rangos M\'aximos Absolutos.}
+\label{Tabla:rangos8087}
+\end{table}
+
+%----------------------------------------------------------------------------
+
+\section{Intel 8288.}
+\label{Section:8288}
+
+%----------------------------------------------------------------------------
+
+\subsection{Introducci\'on.}
+\label{Subsection:intro8288}
+
+En esta secci\'on se da una breve descripci\'on de las especificaciones del controlador de bus %%@
+8288.
+
+%----------------------------------------------------------------------------
+
+\subsection{Controlador de Bus CHMOS 82C88.}
+\label{Subsection:cbus8288}
+
+Este controlador proporciona las siguientes caracter\'{\i}sticas:
+
+\begin{enumerate}
+\item Compatibilidad de terminales con el 8288 bipolar.
+\item Proporciona soporte para el 8088/86, 80C88/86.
+\item Operaci\'on a bajo poder:
+\begin{itemize}
+\item Iccs = 100$\mu$A
+\item Icc = 10 mA
+\end{itemize}
+\item Proporciona comandos avanzados para buses multi-master.
+\item Manejadores de salida de comandos de 3 estados.
+\item Alta capacidad de transmisi\'on.
+\item Configurable para ser usado con un bus de entrada/salida.
+\item Requiere una sola fuente de suministro de 5V.
+\item Operaci\'on a 8 Mhz (8288-2).
+\end{enumerate}
+
+El Intel 82C88-2 es una versi\'on de alto rendimiento del controlador de bus bipolar 8288. El %%@
+8288-2 proporciona generaci\'on de de comando y control de temporizaci\'on, para los sistemas %%@
+con arquitectura 8086. El dise\~no de circuitos est\'aticos CHMOS asegura una operaci\'on de %%@
+bajo poder. La capacidad de manejo del 8288 hace innecesarios a otros manejadores.
+
+La Tabla \ref{Tabla:statusword8288} presenta el significado de las l\'{\i}neas de estado del %%@
+procesador con respecto a las funciones del 8288.
+
+% Table created by WinTeX 95: 3 Columns x 9 Rows.
+\begin{table}[!hbt]\centering
+\begin{tabular}{|l|l|l|}
+%Row: 1
+\cline{1-3}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to23.20ex{\hfil %%@
+$\overline{\mbox{S2}}$,$\overline{\mbox{S1}}$,$\overline{\mbox{S0}}$\hfil}} &  
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to23.60ex{\hfil Estado del procesador\hfil}} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to20.60ex{\hfil Comando del 82C88-2\hfil}} \\
+
+%Row: 2
+\cline{1-3}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to23.20ex{\hfil 0 0 0\hfil}} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to23.60ex{Interrupt Acknowledge\hfil}} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to20.60ex{\hfil %%@
+$\overline{\mbox{INTA}}$\hfil}} \\
+
+%Row: 3
+\cline{1-3}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to23.20ex{\hfil 0 0 1\hfil}} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to23.60ex{Read I/O Port\hfil}} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to20.60ex{\hfil %%@
+$\overline{\mbox{IORC}}$\hfil}} \\
+
+%Row: 4
+\cline{1-3}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to23.20ex{\hfil 0 1 0\hfil}} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to23.60ex{Write I/O Port\hfil}} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to20.60ex{\hfil %%@
+$\overline{\mbox{IOWC}}$,$\overline{\mbox{AIOW}}$\hfil}} \\ 
+
+%Row: 5
+\cline{1-3}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to23.20ex{\hfil 0 1 1\hfil}} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to23.60ex{Halt\hfil}} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to20.60ex{\hfil Ninguna\hfil}} \\
+
+%Row: 6
+\cline{1-3}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to23.20ex{\hfil 1 0 0\hfil}} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to23.60ex{Code Access\hfil}} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to20.60ex{\hfil %%@
+$\overline{\mbox{MRDC}}$\hfil}} \\
+
+%Row: 7
+\cline{1-3}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to23.20ex{\hfil 1 0 1\hfil}} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to23.60ex{Read Memori\hfil}} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to20.60ex{\hfil %%@
+$\overline{\mbox{MRDC}}$\hfil}} \\
+
+%Row: 8
+\cline{1-3}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to23.20ex{\hfil 1 1 0\hfil}} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to23.60ex{Write Memory\hfil}} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to20.60ex{\hfil $\overline{\mbox{MWTC}}$, %%@
+$\overline{\mbox{AMWC}}$\hfil}} \\ 
+
+%Row: 9
+\cline{1-3}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to23.20ex{\hfil 1 1 1\hfil}} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to23.60ex{Pasivo\hfil}} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to20.60ex{\hfil Ninguna\hfil}} \\
+
+\cline{1-3}
+\end{tabular}
+\caption{Comandos del 8288.}
+\label{Tabla:statusword8288}
+\end{table}
+
+La Tabla \ref{Tabla:rangos8288} presenta los valores m\'aximos y m\'{\i}nimos de temperatura y %%@
+voltaje.
+
+% Table created by WinTeX 95: 2 Columns x 6 Rows.
+\begin{table}\centering
+\begin{tabular}{|l|l|}
+%Row: 1
+\cline{1-2}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to49.60ex{\hfil Temperatura\hfil}} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to19.60ex{\hfil 0\degree C a 70\degree C\hfil}} \\
+
+%Row: 2
+\cline{1-2}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to49.60ex{\hfil Temperatura de %%@
+almacenamiento\hfil}} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to19.60ex{\hfil -55\degree C a +150\degree C\hfil}} \\
+
+%Row: 3
+\cline{1-2}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to49.60ex{\hfil Voltaje suministrado con respecto a %%@
+GND\hfil}} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to19.60ex{\hfil -0.5V a +7.0V\hfil}} \\
+
+%Row: 4
+\cline{1-2}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to49.60ex{\hfil Todos los voltajes de entrada con %%@
+respecto a GND\hfil}} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to19.60ex{\hfil -0.5V a Vcc + 0.5V\hfil}} \\
+
+%Row: 5
+\cline{1-2}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to49.60ex{\hfil Todos los voltajes de salida con %%@
+respetco a GND\hfil}} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to19.60ex{\hfil -0.5 a Vcc +0.5V\hfil}} \\
+
+%Row: 6
+\cline{1-2}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to49.60ex{\hfil Disipaci\'on de poder\hfil}} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to19.60ex{\hfil 0.7W\hfil}} \\
+
+\cline{1-2}
+\end{tabular}
+\caption{Rangos M\'aximos Absolutos.}
+\label{Tabla:rangos8288}
+\end{table}
+
+%----------------------------------------------------------------------------
+
+\section{Intel 8259.}
+\label{Section:8259}
+
+%----------------------------------------------------------------------------
+
+\subsection{Introducci\'on.}
+\label{Subsection:intro8259}
+
+En esta secci\'on se da una breve descripci\'on de las especificaciones del controlador de bus %%@
+8259.
+
+%----------------------------------------------------------------------------
+
+\subsection{Controlador de Perif\'ericos Programable 8259A.}
+\label{Subsection:pic9259}
+
+Este controlador proporciona las siguientes caracter\'{\i}sticas:
+
+\begin{enumerate}
+\item Compatible con el 8086 y 8088.
+\item Compatible con el MCS-80 y MCS-85.
+\item Controlador con 8 niveles de prioridad.
+\item Expandible a 64 niveles.
+\item Modos de interrupci\'on programables.
+\item Capacidad de petici\'on enmascarada individual.
+\item Terminal de alimentaci\'on \'unica de +5V (no requiere reloj).
+\item Disponible en DIP de 28 terminales.
+\end{enumerate}
+
+El Controlador Programable de Interrupciones Intel 8259A maneja hasta 8 interrupciones con %%@
+prioridad vectorizadas para la CPU. Se puede conectar en cascada hasta tener 64 niveles de %%@
+prioridad vectorizada de interrupci\'on sin circuiter\'{\i}a adicional. Est\'a empacado en un %%@
+DIP de 28 terminales, usa tecnolog\'{\i}a NMOS y requiere un \'unico suministro de %%@
+alimentaci\'on de +5V. La circuiter\'{\i}a es est\'atica, y no requiere entrada de reloj.
+
+El 8259A esta dise\~nado para minimizar el software y la sobrecarga en tiempo real al manejar %%@
+interrupciones con prioridad multinivel. Tiene varios modos, permitiendo la optimizaci\'on para %%@
+una gran variedad de requerimientos del sistema.
+
+El 8259A es completamente compatible con el Intel 8259. El software escrito originalmente para el %%@
+8259 operar\'a al 8259A en todos los modos equivalentes.
+
+%----------------------------------------------------------------------------
+
+\section{Intel 8284.}
+\label{Section:8284}
+
+%----------------------------------------------------------------------------
+
+\subsection{Introducci\'on.}
+\label{Subsection:intro8284}
+
+En esta secci\'on se da una breve descripci\'on de las especificaciones del generador de reloj %%@
+8284.
+
+%----------------------------------------------------------------------------
+
+\subsection{Generador de reloj y manejador, para CPU's 8086, 8284.}
+\label{Subsection:clock8284}
+
+Este generador proporciona las siguientes caracter\'{\i}sticas:
+
+\begin{enumerate}
+\item Genera el reloj del sistema para el 8086/8088.
+\item Usa un cristal o una se\~nal TTL o fuente de frecuencia.
+\item Alimentaci\'on \'unica de +5V.
+\item Empaque de 18 terminales.
+\item Genera la salida de {\it reset\/} de una entrada con Schmitt Trigger.
+\item Proporciona la se\~nal ``Local Ready'' y sincronizaci\'on de la se\~nal {\it ready\/} %%@
+en MULTIBUS.
+\item Capacidad para sincronizar el reloj con otros 8284.
+\end{enumerate}
+
+El 8284 es un generador bipolar de reloj y manejador dise\~nado para proveer se\~nales de reloj %%@
+para el CPU 8086 y  8088 y sus perif\'ericos. Tambi\'en contiene l\'ogica de READY para la %%@
+operaci\'on con dos sistemas MULTIBUS y proporciona al 8086/8088 la sincronizaci\'on y %%@
+temporizaci\'on READY requerida. La l\'ogica de {\it reset\/} (reinicializaci\'on) con %%@
+hister\'esis y sincronizaci\'on tambi\'en se proporciona.
+
+%----------------------------------------------------------------------------
+
+\section{Intel 8255A.}
+\label{Section:8255}
+
+%----------------------------------------------------------------------------
+
+\subsection{Introducci\'on.}
+\label{Subsection:intro8255}
+
+En esta secci\'on se da una breve descripci\'on de las especificaciones del controlador %%@
+programable de perif\'ericos 8255.
+
+%----------------------------------------------------------------------------
+
+\subsection{Controlador programable de perif\'ericos 8255.}
+\label{Subsection:ppc8255}
+
+Este controlador brinda las siguientes caracter\'{\i}sticas:
+
+\begin{enumerate}
+\item Compatible con MCS-85.
+\item 24 terminales programables de entrada y salida.
+\item Completamente compatible con TTL.
+\item Completamente compatible con los microprocesadores de la familia Intel.
+\item Caracter\'{\i}sticas de temporzaci\'on mejoradas.
+\item Capacidad de activaci\'on/desactivaci\'on de bits directa.
+\item Reduce la cuenta del empaque del sistema.
+\item Capacidad mejorada de manejo de CD.
+\item Empaque de 40 terminales DIP.
+\end{enumerate}
+
+El Intel 8255A es un dispositivo de entrada y salida programable de prop\'osito general %%@
+dise\~nado para su uso con microprocesadores Intel. Tiene 24 terminales de entrada/salida (E/S) %%@
+las cuales pueden ser individualmente programadas en dos grupos de 12 y usadas en 3 modos de %%@
+operaci\'on. En el primer modo (Modo 0) cada grupo de 12 terminales de E/S pueden ser programados %%@
+en conjuntos de 4 para funcionar como entrada o salida. En Modo 1, el segundo modo, cada grupo %%@
+puede ser programado para tener 8 l\'{\i}neas de entrada o salida; de las 4 terminales %%@
+sobrantes, 3 terminales son usadas para {\it handshaking\/} y se\~nales de control de %%@
+interrupci\'on. El tercer modo de operaci\degree'on (Modo 2) es un modo de bus bidireccional el cual %%@
+usa 8 l\'{\i}neas para un bus bidireccional, y 5 l\'{\i}neas, tomadas prestadas de otros %%@
+grupo, para {\it handshaking\/}.
+
+%----------------------------------------------------------------------------
+
+\cleardoublepage
+
+~
+
+\cleardoublepage
+
+~
+
+\cleardoublepage
+
+~
+
+\cleardoublepage
+
+~
+
+\cleardoublepage
+
+~
+
+\cleardoublepage
+
+~
+
+\cleardoublepage
+
+~
+
+\cleardoublepage
+
+~
+
+\cleardoublepage
+
+%----------------------------------------------------------------------------

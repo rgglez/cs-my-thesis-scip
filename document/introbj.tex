@@ -1,0 +1,79 @@
+\vspace*{20pt}
+\begin{flushleft}
+{\LARGE\bf Introducci\'on y Objetivos.}
+\end{flushleft}
+\vskip 50pt
+\label{Chapter:introbj}
+
+%----------------------------------------------------------------------------
+
+\subsubsection{Introducci\'on.}
+\label{Subsubsection:intro}
+
+El {\bf Sistema de Coprocesamiento de Informaci\'on para %%@
+PC\footnote{Computadora Personal, por sus siglas en %%@
+ingl\'es.}} (SCIP) consiste en una tarjeta de expansi\'on de %%@
+8 bits para un bus AT de una PC-IBM o compatible cuya tarea %%@
+es realizar el procesamiento de informaci\'on al mismo tiempo %%@
+que la CPU de la computadora anfitriona ejecuta otra tarea, %%@
+llam\'andose a esto coprocesamiento. El sistema consiste %%@
+b\'a\-si\-ca\-men\-te de un  procesador 8088, un %%@
+coprocesador a\-rit\-m\'e\-ti\-co 8087, me\-mo\-ria EPROM %%@
+con ru\-ti\-nas b\'a\-si\-cas, chips de me\-mo\-ria RAM %%@
+es\-t\'a\-ti\-ca de tra\-ba\-jo y una EPROM pa\-ra ru\-%%@
+ti\-nas del u\-sua\-rio, aunado a la l\'ogica adicional de %%@
+soporte de estos componentes.
+
+La funci\'on de la tarjeta coprocesadora es la de realizar el %%@
+coprocesamiento
+de informaci\'on de manera que el procesador principal de la %%@
+computadora delegue determinadas funciones en esta tarjeta. %%@
+El sistema planteado es multiprop\'ositos, y puede ser %%@
+programado por el usuario.
+
+El procesador principal ver\'a al procesador de la tarjeta de %%@
+expansi\'on como un puerto de entrada/salida.
+
+El proyecto surge ante la necesidad de realizar un %%@
+procesamiento r\'apido de 
+datos anal\'ogicos adquiridos por medio de alg\'un %%@
+dispositivo de conversi\'on anal\'ogico-digital, pero fue %%@
+extendido a un sistema de coprocesamiento de prop\'osito %%@
+general. El sistema de coprocesamiento es \'util ya que %%@
+permite que el procesador principal de la PC delegue %%@
+determinadas operaciones a la tarjeta coprocesadora. En el %%@
+sistema presentado no se desarrolla la fase de adquisici\'on %%@
+de datos, ya que esto no entr\'o dentro de los objetivos del %%@
+presente trabajo.
+
+%----------------------------------------------------------------------------
+
+\subsubsection{Objetivos Generales del Proyecto.}
+\label{Subsubsection:objetivosgenerales}
+
+Se plantea como objetivo general el desarrollo de una tarjeta %%@
+de expansi\'on para una PC-IBM o compatible que realice %%@
+coprocesamiento de informaci\'on.
+
+\subsubsection{Objetivos Espec\'{\i}ficos del Proyecto.}
+\label{Subsubsection:objetivosespecificos}
+
+Se plantearon los siguientes objetivos espec\'{\i}ficos:
+
+\begin{enumerate}
+\item El dise\~no y desarrollo de una tarjeta de %%@
+expansi\'on para computadoras PC-IBM y compatibles con bus AT %%@
+que realice la ejecuci\'on de un programa al mismo tiempo que %%@
+la CPU de la computadora anfitriona ejecuta otro programa.
+\item La utilizaci\'on del procesador Intel 8088 y su %%@
+l\'ogica de soporte para la realizaci\'on del procesamiento, %%@
+incluyendo memorias RAM y ROM.
+\item La utilizaci\'on del Controlador de Perif\'ericos %%@
+Programable 8255 para efectuar la comunicaci\'on %%@
+bidireccional entre la tarjeta SCIP y la computadora %%@
+anfitriona.
+\item El desarrollo de programas b\'asicos que permitan %%@
+comunicar a la tarjeta con la computadora.
+\end{enumerate}
+
+%----------------------------------------------------------------------------

@@ -1,0 +1,89 @@
+\contentsline {chapter}{Introducci\'on y Objetivos.}{9}{}%
+\contentsline {subsubsection}{Introducci\'on.}{9}{}%
+\contentsline {subsubsection}{Objetivos Generales del Proyecto.}{10}{}%
+\contentsline {subsubsection}{Objetivos Espec\'{\i }ficos del Proyecto.}{10}{}%
+\contentsline {chapter}{\numberline {1}Microprocesadores.}{11}{}%
+\contentsline {section}{\numberline {1.1}Introducci\'on.}{11}{}%
+\contentsline {section}{\numberline {1.2}Generalidades.}{11}{}%
+\contentsline {subsection}{\numberline {1.2.1}Evoluci\'on del Microprocesador.}{11}{}%
+\contentsline {subsection}{\numberline {1.2.2}Controladores Dedicados.}{13}{}%
+\contentsline {subsection}{\numberline {1.2.3}CPU's de Prop\'osito General.}{13}{}%
+\contentsline {section}{\numberline {1.3}Introducci\'on a los mi\-cro\-pro\-ce\-sa\-do\-res Intel 8088 y 80x86.}{14}{}%
+\contentsline {subsection}{\numberline {1.3.1}Coprocesadores matem\'aticos.}{15}{}%
+\contentsline {subsection}{\numberline {1.3.2}Ar\-qui\-tec\-tu\-ra in\-ter\-na de los\\mi\-cro\-pro\-ce\-sa\-do\-res Intel 8088 y 8086.}{15}{}%
+\contentsline {subsection}{\numberline {1.3.3}Inicializaci\'on y reinicializaci\'on del procesador.}{19}{}%
+\contentsline {subsection}{\numberline {1.3.4}Descripci\'on de las terminales del 8088 y 8086.}{21}{}%
+\contentsline {subsubsection}{Modo M\'{\i }nimo.}{26}{}%
+\contentsline {subsubsection}{Modo M\'aximo.}{26}{}%
+\contentsline {chapter}{\numberline {2}Arquitectura basada en 8088.}{27}{}%
+\contentsline {section}{\numberline {2.1}Introducci\'on.}{27}{}%
+\contentsline {section}{\numberline {2.2}Or\-ga\-ni\-za\-ci\'on de la Me\-mo\-ria pa\-ra\\el 8088/8086.}{27}{}%
+\contentsline {section}{\numberline {2.3}Operaci\'on del bus.}{28}{}%
+\contentsline {subsection}{\numberline {2.3.1}Ciclo de lectura.}{29}{}%
+\contentsline {subsection}{\numberline {2.3.2}Ciclo de escritura.}{30}{}%
+\contentsline {section}{\numberline {2.4}Interrupciones.}{31}{}%
+\contentsline {subsection}{\numberline {2.4.1}Interrupciones por hardware.}{32}{}%
+\contentsline {subsubsection}{Interrupciones no enmascarables.}{32}{}%
+\contentsline {subsubsection}{Interrupci\'on enmascarable.}{32}{}%
+\contentsline {subsection}{\numberline {2.4.2}Respuesta ante una interrupci\'on.}{33}{}%
+\contentsline {section}{\numberline {2.5}Puertos de Entrada/Salida.}{34}{}%
+\contentsline {section}{\numberline {2.6}Bus del Sistema de la IBM PC.}{37}{}%
+\contentsline {subsection}{\numberline {2.6.1}Consideraciones especiales sobre poder.}{39}{}%
+\contentsline {section}{\numberline {2.7}Extensi\'on de procesador num\'erico.}{40}{}%
+\contentsline {subsection}{\numberline {2.7.1}Ventajas.}{40}{}%
+\contentsline {subsection}{\numberline {2.7.2}Arquitectura Interna.}{42}{}%
+\contentsline {subsection}{\numberline {2.7.3}Manejo de Excepciones.}{43}{}%
+\contentsline {subsection}{\numberline {2.7.4}Configuraci\'on y operaci\'on.}{44}{}%
+\contentsline {chapter}{\numberline {3}Dise\~no y Descripci\'on del Sistema.}{49}{}%
+\contentsline {section}{\numberline {3.1}Introducci\'on.}{49}{}%
+\contentsline {section}{\numberline {3.2}M\'odulo de procesamiento.}{50}{}%
+\contentsline {section}{\numberline {3.3}M\'odulo de memoria, puertos y decodificaci\'on interna.}{53}{}%
+\contentsline {subsection}{\numberline {3.3.1}Memoria interna de SCIP.}{53}{}%
+\contentsline {subsection}{\numberline {3.3.2}Puertos internos.}{56}{}%
+\contentsline {section}{\numberline {3.4}M\'odulo de comunicaci\'on.}{57}{}%
+\contentsline {subsection}{\numberline {3.4.1}T\'ecnicas de decodificaci\'on para selecci\'on de dispositivos.}{57}{}%
+\contentsline {subsection}{\numberline {3.4.2}Des\-crip\-ci\-\'on del cir\-cui\-to de de\-co\-di\-fi\-ca\-ci\-\'on\\ de SCIP.}{59}{}%
+\contentsline {subsection}{\numberline {3.4.3}Des\-crip\-ci\-\'on del cir\-cui\-to de comunicaci\'on\\de SCIP.}{60}{}%
+\contentsline {section}{\numberline {3.5}Protocolo de comunicaci\'on entre la \\tarjeta SCIP y la computadora anfitriona}{63}{}%
+\contentsline {section}{\numberline {3.6}Consideraciones importantes sobre la programaci\'on.}{64}{}%
+\contentsline {chapter}{\numberline {4}Pruebas del Sistema y sus Resultados.}{67}{}%
+\contentsline {section}{\numberline {4.1}Introducci\'on.}{67}{}%
+\contentsline {section}{\numberline {4.2}Pruebas del sistema.}{67}{}%
+\contentsline {subsubsection}{Comunicaci\'on unidireccional de SCIP a la PC anfitriona.}{67}{}%
+\contentsline {subsubsection}{Comunicaci\'on bidireccional sincronizada por software.}{69}{}%
+\contentsline {section}{\numberline {4.3}Resultados de las pruebas.}{73}{}%
+\contentsline {chapter}{Conclusiones y Perspectivas.}{75}{}%
+\contentsline {subsubsection}{Conclusiones.}{75}{}%
+\contentsline {subsubsection}{Perspectivas}{75}{}%
+\contentsline {chapter}{Bibliograf\'{\i }a.}{77}{}%
+\contentsline {chapter}{\numberline {A}Manual del Usuario.}{79}{}%
+\contentsline {section}{\numberline {A.1}Introducci\'on.}{79}{}%
+\contentsline {section}{\numberline {A.2}Ma\-ne\-jo e ins\-ta\-la\-ci\-\'on del hard\-wa\-re de SCIP.}{79}{}%
+\contentsline {subsection}{\numberline {A.2.1}Introducci\'on al hadware de SCIP.}{79}{}%
+\contentsline {subsection}{\numberline {A.2.2}Precauciones.}{82}{}%
+\contentsline {subsection}{\numberline {A.2.3}Instalaci\'on.}{82}{}%
+\contentsline {subsection}{\numberline {A.2.4}Manejo del Hadware.}{83}{}%
+\contentsline {section}{\numberline {A.3}Programaci\'on de SCIP.}{84}{}%
+\contentsline {subsection}{\numberline {A.3.1}Localizaci\'on del programa en memoria.}{84}{}%
+\contentsline {subsection}{\numberline {A.3.2}Programaci\'on de las memorias EPROM.}{86}{}%
+\contentsline {chapter}{\numberline {B}Especificaciones de los principales circuitos usados.}{87}{}%
+\contentsline {section}{\numberline {B.1}Introducci\'on.}{87}{}%
+\contentsline {section}{\numberline {B.2}Intel 8088.}{87}{}%
+\contentsline {subsection}{\numberline {B.2.1}Introducci\'on.}{87}{}%
+\contentsline {subsection}{\numberline {B.2.2}Mi\-cro\-pro\-ce\-sa\-dor de 8 bits HMOS (8088/8088-2).}{87}{}%
+\contentsline {section}{\numberline {B.3}Intel 8087.}{89}{}%
+\contentsline {subsection}{\numberline {B.3.1}Introducci\'on.}{89}{}%
+\contentsline {subsection}{\numberline {B.3.2}Coprocesador de Datos Num\'ericos 8087/8087-2/8087-1.}{89}{}%
+\contentsline {section}{\numberline {B.4}Intel 8288.}{90}{}%
+\contentsline {subsection}{\numberline {B.4.1}Introducci\'on.}{90}{}%
+\contentsline {subsection}{\numberline {B.4.2}Controlador de Bus CHMOS 82C88.}{90}{}%
+\contentsline {section}{\numberline {B.5}Intel 8259.}{92}{}%
+\contentsline {subsection}{\numberline {B.5.1}Introducci\'on.}{92}{}%
+\contentsline {subsection}{\numberline {B.5.2}Controlador de Perif\'ericos Programable 8259A.}{92}{}%
+\contentsline {section}{\numberline {B.6}Intel 8284.}{93}{}%
+\contentsline {subsection}{\numberline {B.6.1}Introducci\'on.}{93}{}%
+\contentsline {subsection}{\numberline {B.6.2}Generador de reloj y manejador, para CPU's 8086, 8284.}{93}{}%
+\contentsline {section}{\numberline {B.7}Intel 8255A.}{93}{}%
+\contentsline {subsection}{\numberline {B.7.1}Introducci\'on.}{93}{}%
+\contentsline {subsection}{\numberline {B.7.2}Controlador programable de perif\'ericos 8255.}{94}{}%
+\contentsline {chapter}{\numberline {C}Diagramas.}{111}{}%

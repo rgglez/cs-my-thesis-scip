@@ -1,0 +1,139 @@
+\section{Acceso Directo a Memoria (DMA).}
+\label{Subsection:DMA}
+
+El Acceso Directo a Memoria ({\em DMA: Direct Memory Access\/}) permite que dispositivos externos transfieran informaci\'on directamente desde o hacia la memoria del sistema, sin la intervenci\'on del procesador. El dispositivo de hardware dedicado al control del acceso directo a memoria se denomina {\em controlador de DMA\/}. Un controlador de DMA ``toma prestados'' temporalmente los buses (de datos, direcciones y control) del microprocesador y transfiere los bytes de datos directamente del puerto (o memoria) a localidades de memoria, o viceversa. Un controlador de DMA puede usarse para transferir datos de memoria a un puerto (o viceversa), o incluso de memoria a memoria \cite{Hall} (como en el caso del Intel 8237).
+
+En el caso de los sistemas basados en el microprocesador Intel 8088/8086 se utiliza el controlador de DMA Intel 8237 (la hoja t\'ecnica de este se presenta en el Ap\'endice~\ref{Apendice:8237}). El Controlador de Acceso Directo a Memoria Multimodo Intel 8237 esta dise\~nado para usarse junto con un registro de direcciones de 8 bits externo. Contiene cuatro canales independientes y puede expandirse a cualquier n\'umero de canales conectando en cascada controladores adicionales \cite{Intel:Micro}. Tiene tres modos b\'asicos de servicio de DMA programables por el usuario \cite{Godfrey}:
+
+\begin{enumerate}
+\item I/O a memoria.
+\item Memoria a I/O.
+\item Memoria a memoria.
+\end{enumerate}
+
+El 8237 opera a 3 Mhz. El diagrama de sus terminales m\'as importantes se presenta en la Figura~\ref{fig:8237pins}.
+
+\begin{figure}[!htb]
+\vskip 5mm
+\special{center
+         8237.gif,                
+         \the\hsize 78mm}
+\vskip 78mm
+\caption{Diagrama parcial de terminales del 8237 ({\tiny Fuente: OrCAD}).} 
+\label{fig:8237pins}
+\end{figure}
+
+\begin{table}[htb]
+\centering
+\begin{tabular}{|l|c|c|} \hline
+Nombre & Tama\~no & Cantidad \\ \hline
+Registros de Direcci\'on Base & 16 bits & 4 \\ 
+Registros Base de Conteo de Palabras & 16 bits & 4 \\ 
+Registros de Direcci\'on Actual & 16 bits & 4 \\
+Registros de Conteo de Palabras Actual & 16 bits & 4 \\
+Registro Temporal de Direcci\'on & 16 bits & 1 \\
+Registro Temporal de Conteo de Palabras & 16 bits & 1 \\ 
+Registro de Estado & 8 bits & 1 \\
+Registro de Comando & 8 bits & 1 \\
+Registro Temporal & 8 bits & 1 \\
+Registros de Modo & 6 bits & 4 \\
+Registro de M\'ascara & 4 bits & 1 \\
+Registro de Petici\'on & 4 bits & 1 \\ \hline
+\end{tabular}
+\caption{Registros internos del 8237.}
+\label{Tabla:8237regs}
+\end{table}
+
+El 8237 contiene 344 bits de memoria interna en registros, que se listan en la Tabla \ref{Tabla:8237regs}. Contiene as\'{\i} mismo tres bloques b\'asicos de control l\'ogico~\cite{Intel:Micro}:
+
+\begin{itemize}
+\item {\bf Bloque de Control de Tiempo} - Genera el control de tiempo interno y las se\~nales de control externas.
+\item {\bf Bloque de Comando de Control de Programa} - Decodifica los comandos dados por el microprocesador antes de servir una petici\'on de DMA.
+\item {\bf Bloque Codificador de Prioridad} - Resuelve la prioridad de contenci\'on entre canales de DMA que pidan servicio de manera simult\'anea.
+\end{itemize}
+
+%----------------------------------------------------------------------------
+
+\subsection{Descripci\'on de la operaci\'on de DMA.}
+\label{Subsection:operacionDMA}
+
+El diagrama en bloques de la operaci\'on del controlador de DMA se presenta en la Figura~\ref{fig:DMAopbloques}~\cite{Intel:Micro}.
+
+\begin{figure}[!htb]
+\vskip 5mm
+\special{center
+         dmablock.gif,                
+         \the\hsize 78mm}
+\vskip 78mm
+\caption{Diagrama en bloques de la operaci\'on de DMA.} 
+\label{fig:DMAopbloques}
+\end{figure}
+
+El 8237 esta dise\~nado para operar en dos ciclos, llamados ``ciclo Inactivo'' ({\em Idle\/}) y ``ciclo Activo'', compuestos cada uno de varios estados. Estos estados pueden ser hasta 7 separados, compuesto cada uno a su vez de un periodo completo de reloj (CLK).
+
+El estado $S_{1}$ es el ``estado inactivo''. Se entra en el cuando el 8237 no tiene peticiones v\'alidas de DMA; sin embargo, aunque el controlador est\'e inactivo, podr\'{\i}a existir una condici\'on (llamada {\it Program Condition\/}) programada por el procesador. El estado $S_{0}$ es el primer estado del servicio de DMA. En este, el 8237 ha solicitado una espera ({\em hold-request}), pero el procesador no ha retornado un reconocimiento; el controlador podr\'{\i}a estar programado a\'un hasta que reciba una se\~nal HLDA ({\it Hold Acknowledge\/}) de la CPU. La se\~nal de HLDA proveniente del microprocesador le indica al controlador el inicio del servicio de DMA, efectuada en los ciclos $S_{1}$ a $S_{4}$. En caso de que se requiera m\'as tiempo para completar una transferencia, se insertan estados $S_{w}$ entre los estados $S_{2}$ a $S_{4}$, usando la l\'{\i}nea {\em Ready} del controlador. Las se\~nales $\overline{\mbox{IOR}}$, $\overline{\mbox{MEMW}}$, $\overline{\mbox{IOW}}$ y $\overline{\mbox{MEMR}}$ est\'an activas cuando se efectua la transferencia de datos de un dispositivo de entrada/salida a memoria o viceversa. Las operaciones de transferencia de memoria a memoria requieren del doble de estados para completarse. En este caso los estados se identifican mediante dos n\'umeros: $S_{11}$-$S_{14}$ y $S_{21}$-$S_{24}$. Los primeros cuatro estados ($S_{11}$-$S_{14}$) se usan para la operaci\'on de lectura de memoria, y los \'ultimos cuatro estados ($S_{21}$-$S_{24}$) se usan para la escritura a memoria \cite{Intel:Micro}.
+
+Cuando la transferencia de datos termina el controlador de DMA desactiva su se\~nal de {\em hold-request\/} y permite al microprocesador tomar el control de los buses nuevamente~\cite{Hall}.
+
+%----------------------------------------------------------------------------
+
+\subsubsection{Ciclo Inactivo.}
+\label{Subsubsection:cicloidle}
+
+Cuando no existe una petici\'on de servicio de DMA el 8237 efectua estados $S_{1}$, muestreando las se\~nales DREQ, que son cuatro canales as\'{\i}ncronos usados por los circuitos perif\'ericos para obtener servicio de DMA. Este muestreo se efect\'ua cada ciclo de reloj. El 8237 tambi\'en muestrea la se\~nal {\em chip select\/} $\overline{\mbox{CS}}$ esperando una petici\'on del microprocesador para leer o escribir a los registros internos del 8237 \cite{Intel:Micro}. Cuando $\overline{\mbox{CS}}$ est\'a en BAJO y simultaneamente HLDA est\'a en BAJO, el 8237 entra en una condici\'on conocida como ``{\em Program Condition\/}'' (Condici\'on de Programa), en la cu\'al la CPU puede establecer, cambiar o inspeccionar la definici\'on interna leyendo o escribiendo a los registros. Las l\'{\i}neas de direcci\'on A0-A3 seleccionan los registros del 8237 donde ser\'an le\'{\i}dos o escritos los datos. Las l\'{\i}neas $\overline{\mbox{IOR}}$ y $\overline{\mbox{IOW}}$ se usan para seleccionar y regular las lecturas o escrituras. Se usa un flip-flop interno para generar un bit adicional de direcci\'on (debido al tama\~no y n\'umero de bits de los registros internos) para determinar el byte superior o inferior de los registros de Direcci\'on o Contador de Palabras de 16 bits~\cite{Intel:Micro}. Este flip-flop es reiniciado ({\em reseteado\/}) me\-dian\-te {\em Master Clear\/} o {\em Master Reset\/}, o por un comando  de software~\cite{Intel:Micro}.
+
+Se pueden usar comandos de software especiales durante la Condici\'on de Programa, los cu\'ales son decodificados como conjuntos de direcciones con las se\~nales $\overline{\mbox{CS}}$ y $\overline{\mbox{IOW}}$.
+
+%----------------------------------------------------------------------------
+
+\subsubsection{Ciclo Activo.}
+\label{Subsubsection:cicloactivo}
+
+Cuando el 8237 est\'a en ciclo inactivo y un canal no enmascarado solicita un servicio de DMA, el dispositivo manda una se\~nal HRQ al microprocesador y entra en el ciclo activo, en el que el servicio de DMA se realiza en uno de cuatro modos~\cite{Intel:Micro}:
+
+\begin{enumerate}
+\item {\bf Modo de transferencia sencilla} - Es usado cuando el dispositivo est\'a programado para realizar solo una transferencia.
+
+\item {\bf Modo de transferencia en bloque} - El dispositivo es activado por las se\~nales DREQ para continuar realizando transferencias durante el servicio de DMA hasta que se genera la se\~nal de {\it Terminal Count\/} (TC), que es causado por un sobreflujo en el conteo  de palabras (es decir, m\'as de FFFFh palabras transferidas), o una se\~nal externa de Fin de Proceso ($\overline{\mbox{EOP}}$).
+
+\item {\bf Modo de transferencia en demanda} - En este modo el dispositivo es programado para continuar las transferencias hasta un TC o un $\overline{\mbox{EOP}}$ externo es ``encontrado'', o hasta que DREQ se desactiva.
+
+\item {\bf Modo de cascada} - Este modo se utiliza para conectar en cascada varios 8237.
+\end{enumerate}
+
+Cada uno de los modos anteriores puede efectuar tres tipos distintos de transferencia:
+
+\begin{enumerate}
+\item {\bf Lectura} - Trans\-fie\-re da\-tos de me\-mo\-ria a un dis\-po\-si\-ti\-vo de en\-tra\-da/sa\-li\-da. Ac\-ti\-va $\overline{\mbox{MEMR}}$ e $\overline{\mbox{IOW}}$.
+\item {\bf Escritura} - Transfiere datos de un dispositivo de entrada/salida a memoria. Activa $\overline{\mbox{MEMW}}$ e $\overline{\mbox{IOR}}$.
+\item {\bf Verificaci\'on} - Esta es una pseudotransferencia, donde el 8237 opera como en Lectura o Escritura, pero las l\'{\i}neas de control de I/O y de memoria permanecen inactivas. As\'{\i} mismo es ignorada la entrada READY.
+\end{enumerate}
+
+%----------------------------------------------------------------------------
+
+\subsubsection{Transferencias de Memoria a Memoria.}
+\label{Subsubsection:mem-a-mem}
+
+La transferencia de memoria a memoria se utiliza para mover bloques de datos de un espacio de memoria a otro m\'as eficientemente. Esta forma de transferencia se puede llevar a cabo por los canales 0 y 1, seleccion\'andolos mediante la programaci\'on de un bit en el registro {\em Command} del 8237. La transferencia se inicia activando DREQ0. El 8237 pide un servicio de DMA de la manera normal. Cuando HLDA es colocado en ALTO, el 8237 usa transferencias de cuatro estados en modo de transferencia de bloques para leer bloques de datos de memoria. El registro {\em Current Address\/} (Direcci\'on Actual) del canal 0 contiene la direcci\'on usada, y se disminuye o incrementa de la forma usual. El byte de datos leido de memoria es almacenado en el registro interno Temporal del 8237. Luego, el canal 1 ejecuta una trans\-fe\-ren\-cia de cuatro estados en modo de bloque para mover el dato del registro temporal a memoria, usando la direcci\'on contenida en su registro de Direcci\'on Actual, disminuy\'endolo o aument\'andolo normalmente. El contenido del registro Contador de Palabras del canal 1 se disminuye, hasta que llega a FFFFh, lo que ocasiona un TC, que a su vez activa la se\~nal Fin de Operaci\'on ($\overline{\mbox{EOP}}$), para que termine el servicio~\cite{Intel:Micro}.
+
+%----------------------------------------------------------------------------
+
+\subsubsection{Autoinicializaci\'on.}
+\label{Subsubsection:autoinit}
+
+Se puede programar un bit en el registro de Modo para que un canal pueda ser canal de Autoinicializaci\'on. En la Autoinicializaci\'on los valores o\-ri\-gi\-na\-les de los registros Direcci\'on Actual y Parabra Actual son restaurados autom\'aticamente con el contenido de los registros Direcci\'on Base y Palabra Base del canal, despu\'es de un $\overline{\mbox{EOP}}$. Estos registros permanecen inalterados durante el servicio de DMA, habiendo sido colocados por el microprocesador simult\'aneamente. El bit de m\'ascara no es alterado cuando el canal se autoinicializa~\cite{Intel:Micro}.
+
+%----------------------------------------------------------------------------
+
+\subsubsection{Prioridad de los canales de DMA.}
+\label{Subsubsection:prioridadDMA}
+
+Los dos tipos de prioridades de DMA del 8237 son:
+
+\begin{enumerate}
+\item {\bf Prioridad Fija} - En este caso se fijan los canales en orden de prioridad con base en el valor descendente de su n\'umero. De este modo, el canal con m\'as baja prioridad es el 3, y el canal con m\'as alta prioridad es el 0.
+
+\item {\bf Prioridad Rotante} - Este tipo de prioridad consiste en que el canal utilizado m\'as recientemente se convierte en el canal con prioridad m\'as baja, rotando las prioridades de los otros canales. Este tipo de prioridad previene que un dispositivo acapare al sistema.
+\end{enumerate}
+
+Se puede elegir mediante programaci\'on por software entre estos dos tipos de prioridades~\cite{Intel:Micro}.

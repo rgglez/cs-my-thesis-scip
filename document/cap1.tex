@@ -1,0 +1,540 @@
+\chapter[Microprocesadores.]{Microprocesadores.}
+\label{Capitulo:Microprocesadores}
+
+%----------------------------------------------------------------------------
+
+\fancyhead[RE]{\slshape SCIP - Cap. \thechapter~ - Microprocesadores.}
+\fancyhead[LO]{\slshape Rodolfo Gonz\'alez Gonz\'alez.}
+\fancyhead[LE,RO]{\thepage}
+
+%----------------------------------------------------------------------------
+
+\section{Introducci\'on.}
+\label{Seccion:IntroCap1}
+
+En este cap\'{\i}tulo se hace una breve rese\~na hist\'orica de los microprocesadores y %%@
+coprocesadores y se presenta una introducci\'on a los microprocesadores Intel 8088 y 8086.
+
+%----------------------------------------------------------------------------
+
+\section{Generalidades.}
+\label{Seccion:Generalidades}
+
+%----------------------------------------------------------------------------
+
+\subsection{Evoluci\'on del Microprocesador.}
+\label{Subseccion:Evolucion}
+
+El microprocesador es la parte fundamental de una microcomputadora. Un microprocesador es la %%@
+{\em Unidad de Procesamiento Central} ({\it CPU\/} por sus siglas en ingl\'es), que controla %%@
+la operaci\'on de la computadora. Toma una instrucci\'on codificada en binario de la memoria, %%@
+decodifica las instrucciones en series de acciones simples, y maneja dichas acciones. La CPU %%@
+contiene una {\em Unidad Aritm\'etica y L\'ogica} (ALU) que realiza diversas operaciones a\-%%@
+rit\-m\'e\-ti\-cas y l\'ogicas sobre palabras binarias. La CPU tambi\'en contiene un {\em %%@
+apuntador a instrucciones\/} (IP o {\it instruction pointer\/}) usado para cargar la %%@
+direcci\'on de la siguiente instrucci\'on o dato de la memoria, registros de prop\'osito %%@
+general, y circuiter\'{\i}a para controlar las se\~nales del bus \cite{Hall}.
+
+Hist\'oricamente, el primer microprocesador fue el Intel 4004, aparecido en Noviembre de 1971. %%@
+Este era un microprocesador de 4 bits ideado para ser utilizado en una calculadora \cite{Hall}. %%@
+Este procesador funcionaba a una frecuencia de 108Khz \cite{Micro:Hist}.
+
+Posteriormente, Intel producir\'{\i}a el microprocesador 8008, usado como controlador de %%@
+terminales. El sucesor de este fue el Intel 8080, aparecido en 1974, que ten\'{\i}a un bus de %%@
+datos de 8 bits, y un bus de direcciones de 16 bits, teniendo internamente 7 registros de 8 %%@
+bits. Con este microprocesador aparecieron los puertos de entrada y salida \cite{Micro:Hist}.
+
+\begin{table}[!htb]
+\centering
+\begin{tabular}{|l|} \hline
+{\tiny Intel 4004, 4040} \\ \hline
+{\tiny Intel 8008, 8080, 8085} \\ \hline
+{\tiny Intel 8048, 8051, 8052} \\ \hline
+{\tiny Intel 80x86, Pentium, AMD K5/K6, Cyrix M1, Nx586} \\ \hline
+{\tiny Intel 80960} \\ \hline
+{\tiny Intel 80860} \\ \hline
+{\tiny Intel i432} \\ \hline
+{\tiny Motorola MC14500B} \\ \hline
+{\tiny Motorola 680x, 6809, Hitachi 6309} \\ \hline
+{\tiny Motorola 680x0} \\ \hline
+{\tiny Motorola 88000} \\ \hline
+{\tiny Motorola DSP96002/DSP56000} \\ \hline
+{\tiny AMD 29000} \\ \hline
+{\tiny Zilog Z-80, Z-280} \\ \hline
+{\tiny Zilog Z-8000, Z80000} \\ \hline
+{\tiny Fairchild F8} \\ \hline
+{\tiny Fairchild 9440} \\ \hline
+\end{tabular} 
+\caption{Algunos microprocesadores.} 
+\label{Micros1}
+\end{table}
+
+Un avance sobre el Intel 8080 fue el 8085 (1976), el cual tiene dos instrucciones para %%@
+deshabilitar o habilitar tres terminales de interrupci\'on, y la terminal de entrada y salida %%@
+serial. Estas instrucciones son RIM y SIM \cite{CEKIT}. Tambi\'en ten\'{\i}a el generador de %%@
+reloj y el controlador de bus integrados. Otras compa\~nias fabricaron pronto microprocesadores %%@
+de 8 bits, dando inicio la era de las microcomputadoras; entre estos se encuentran el Motorola %%@
+MC6800, el MOS Technology 6502 (usado como CPU en la microcomputadora Apple II \cite{Hall}) y %%@
+el Zilog Z80 (utilizado como CPU en la microcomputadora Radio Shack TRS-80 \cite{Hall}).
+
+\begin{table}[!htb]
+\centering
+\begin{tabular}{|l|} \hline
+{\tiny Fairchild/Intergraph Clipper} \\ \hline
+{\tiny National Semiconductor SC/MP (and COP)} \\ \hline 
+{\tiny National Semiconductor 320xx, Swordfish} \\ \hline
+{\tiny TI 9900} \\ \hline
+{\tiny TI TMS320Cx0} \\ \hline
+{\tiny MIPS R2000, R3000, R4000, R5000, R8000, R10000} \\ \hline
+{\tiny MOS Technologies 650x, Western Design Center 65816} \\ \hline
+{\tiny Microchip Technology PIC 16x} \\ \hline
+{\tiny RCA 1802} \\ \hline
+{\tiny Ferranti F100-L} \\ \hline
+{\tiny Western Digital MCP-1600} \\ \hline
+{\tiny Signetics 2650} \\ \hline
+{\tiny Siemens 80C166} \\ \hline
+{\tiny MISC M17} \\ \hline
+{\tiny Rekursiv} \\ \hline
+{\tiny AT\&T CRISP/Hobbit} \\ \hline
+\end{tabular} 
+\caption{Algunos microprocesadores ({\it continuaci\'on\/}).} 
+\label{Micros2}
+\end{table}
+
+\begin{table}[!hbt]
+\centering
+\begin{tabular}{|l|} \hline
+{\tiny PDP-8/Intersil 6100} \\ \hline
+{\tiny PDP-11} \\ \hline
+{\tiny Data General NOVA/MN601, Eclipse} \\ \hline
+{\tiny IBM/Motorola POWER/PowerPC} \\ \hline
+{\tiny IBM 801, ROMP} \\ \hline
+{\tiny IBM System/360/370/390} \\ \hline
+{\tiny TRON} \\ \hline
+{\tiny Hitachi SuperH} \\ \hline 
+{\tiny SPARC} \\ \hline
+{\tiny HP PA-RISC} \\ \hline
+{\tiny ARM} \\ \hline
+{\tiny Patriot Scientific ShBoom} \\ \hline
+{\tiny DEC VAX} \\ \hline
+{\tiny DEC Alpha} \\ \hline
+{\tiny CDC 6600/7600} \\ \hline
+{\tiny Berkeley RISC} \\ \hline
+\end{tabular}
+\caption{Arquitecturas.} 
+\label{Arquitecturas}
+\end{table}
+
+Posteriormente han aparecido muchos m\'as microprocesadores, algunos de los cu\'ales se %%@
+presentan en las Tablas~\ref{Micros1} y \ref{Micros2} \cite{Micro:Hist}, y sus usos se han %%@
+ido extendiendo en otros campos, no solo como CPU's de microcomputadoras. Hall \cite{Hall} %%@
+define dos direcciones de evoluci\'on en los microprocesadores (ver Subsecciones %%@
+\ref{Subseccion:controladores} y \ref{Subseccion:propogen}). As\'{\i} mismo han aparecido %%@
+diversas arquitecturas de procesadores, algunas de las cuales se presentan en la Tabla %%@
+\ref{Arquitecturas} \cite{Micro:Hist}.
+
+%----------------------------------------------------------------------------
+
+\subsection{Controladores Dedicados.}
+\label{Subseccion:controladores}
+
+Este tipo de dispositivos tienen aplicaci\'on en los m\'as diversos campos, desde el control de %%@
+hornos de microondas hasta sistemas de rehabilitaci\'on para personas discapacitadas. Entre los %%@
+primeros microcontroladores aparecidos en el mercado est\'an el Texas Instruments TMS-1000 y el %%@
+Intel 8048. Actualmente existen microcontroladores como los Intel 8051, 8096 y los Motorola %%@
+MC6801 y MC6811 \cite{Hall}.
+
+%----------------------------------------------------------------------------
+
+\subsection{CPU's de Prop\'osito General.}
+\label{Subseccion:propogen}
+
+Es\-te es el cam\-po de a\-pli\-ca\-ci\'on m\'as ex\-ten\-so de los mi\-cro\-pro\-ce\-%%@
+sa\-do\-res, los cu\'a\-les son u\-sa\-dos en mi\-cro\-com\-pu\-ta\-do\-ras m\'as po\-%%@
+de\-ro\-sas que la ma\-yo\-r\'{\i}a de las mi\-ni\-com\-pu\-ta\-do\-ras an\-te\-rio\-res %%@
+a su a\-pa\-ri\-ci\'on. 
+
+%----------------------------------------------------------------------------
+
+\section{Introducci\'on a los mi\-cro\-pro\-ce\-sa\-do\-res Intel 8088 y 80x86.}
+\label{Seccion:8088y8086}
+
+Los microprocesadores Intel fueron elegidos por IBM para sus microcomputadoras por razones de %%@
+mercadotecnia y bajo costo comparativamente a otros dispositivos, as\'{\i} como por razones de %%@
+derechos industriales \cite{Micro:Hist}. La primera computadora personal de la IBM %%@
+aparecer\'{\i}a el 12 de agosto de 1981, usando el chip Intel 8088 \cite{SADYR}. Esta %%@
+m\'aquina marc\'o el despegue mercantil de las computadoras multiprop\'osito para el hogar y la %%@
+oficina ({\it Computadoras Personales, o PC's\/}). Las {\it PC's} comenzaron a explorar la %%@
+arquitectura abierta, con la posibilidad de a\~nadir {\em tarjetas de expansi\'on } en la %%@
+tarjeta principal de la computadora, en ranuras ({\it slots\/}) provistas para tal fin en el %%@
+{\em bus de expansi\'on\/}. Actualmente estas tarjetas abarcan una amplia gama de %%@
+aplicaciones, que va desde tarjetas de video, MODEM's\footnote{Dispositivos Moduladores-%%@
+Demoduladores que permiten la comunicaci\'on telef\'onica mediante la computadora.} y tarjetas %%@
+controladoras de diversos dispositivos perif\'ericos, hasta tarjetas de digitalizaci\'on o %%@
+especializadas en prop\'ositos cient\'{\i}ficos.
+
+%----------------------------------------------------------------------------
+
+\subsection{Coprocesadores matem\'aticos.}
+\label{Subseccion:coprocesadores}
+
+Frecuentemente se asocian a los chips Intel 80x86 circuitos integrados, llamados coprocesadores, %%@
+cuyo prop\'osito es llevar a cabo operaciones es\-pe\-cia\-li\-za\-das a alta velocidad, %%@
+liberando a la CPU principal de determinada tarea \cite{Godfrey}. El caso m\'as com\'un es el %%@
+de los coprocesadores de punto flotante, encargados de realizar operaciones de punto flotante a %%@
+alta velocidad. Hist\'oricamente uno de los primeros coprocesadores matem\'aticos fue el AMD %%@
+9511. 
+
+\begin{table}[!htb] 
+\centering
+\begin{tabular}{|l|l|} \hline
+{\bf Microprocesador} & {\bf Coprocesador} \\ \hline
+8088                  & 8087               \\ \hline
+8086                  & 8087               \\ \hline
+80286                 & 80287              \\ \hline
+80386                 & 80387              \\ \hline
+\end{tabular} 
+\caption{Microprocesadores y Coprocesadores en el caso de computadoras basadas en Intel %%@
+8088/80x86.} 
+\label{tabla:micro-y-copro}
+\end{table}
+
+Los coprocesadores matem\'aticos utilizados dependen del microprocesador principal de la %%@
+computadora. Estas dependencias se presentan en la Tabla~\ref{tabla:micro-y-copro} %%@
+\cite{Godfrey}.
+
+El uso de los coprocesadores no se limita a las operaciones de punto flotante. Existen %%@
+coprocesadores con aplicaci\'on en adaptadores gr\'aficos ({\it coprocesadores %%@
+gr\'aficos\/}), como los coprocesadores gr\'aficos 34010 o 34020 de Texas Instruments %%@
+\cite{PC-Mag:V4N2}.
+
+Las es\-pe\-ci\-fi\-ca\-cio\-nes del co\-pro\-ce\-sa\-dor ma\-te\-m\'a\-ti\-co 8087 se %%@
+pre\-sen\-tan bre\-ve\-men\-te en el A\-p\'en\-di\-ce~\ref{Apendice:chips} y m\'as am\-%%@
+plia\-men\-te en \cite{Intel:Micro}, mientras que en la Secci\'on~\ref{Section:copronum} se %%@
+presenta una breve des\-crip\-ci\'on del mismo.
+
+%----------------------------------------------------------------------------
+
+\subsection{Ar\-qui\-tec\-tu\-ra in\-ter\-na de los\\mi\-cro\-pro\-ce\-sa\-do\-res %%@
+Intel 8088 y 8086.}
+\label{Subseccion:arquitectura}
+
+Las microcomputadoras IBM han estado basadas en los microprocesadores Intel 8088 y 80x86. Se les %%@
+llama {\em compatibles con IBM} a las microcomputadoras con organizaci\'on y arquitecturas %%@
+compatibles con las de dicha empresa. En el Ap\'endice \ref{Apendice:chips} se presenta una %%@
+breve descripci\'on del 8088 y su hoja t\'ecnica tomada de \cite{Intel:Micro}.
+
+\begin{figure}[!htb]
+\vskip 5mm
+\special{center
+         1-1.gif,                
+         \the\hsize 78mm}
+\vskip 90mm
+\caption{Sistema 8086/8088 b\'asico en modo m\'{\i}nimo.} 
+\label{modomin}
+\end{figure}
+
+\begin{figure}[!hbt]
+\vskip 5mm
+\special{center
+         1-8.gif,                
+         \the\hsize 78mm}
+\vskip 90mm
+\caption{Configuraci\'on ``Modo M\'aximo'' del 8088.} 
+\label{modomax}
+\end{figure}
+
+Las primeras microcomputadoras de IBM utilizaban el microprocesador Intel 8088 y las {\em %%@
+tarjetas madres} o {\em motherboards} de ambas (8088 y 8086) son similares \cite{Godfrey}. El %%@
+esquema de conexi\'on en modo m\'{\i}nimo se presenta en la Figura~\ref{modomin} y para el %%@
+caso del modo m\'aximo se presenta en la Figura~\ref{modomax} \cite{Hall}. 
+
+Esencialmente el microprocesador 8088 y el 8086 son iguales en lo re\-fe\-ren\-te a sus %%@
+terminales. Ambos son microprocesadores con registros de 16 bits.
+
+El Intel 8088 es un microprocesador de tecnolog\'{\i}a HMOS, en un circuito integrado de 40 %%@
+terminales. Su conjunto de instrucciones es compatible con el 8086. La tarjeta principal de una %%@
+computadora basada en 8088 u 8086 tiene un conector para el coprocesador matem\'atico 8087. En %%@
+la PC original hay 5 ranuras de expansi\'on, n\'umero que crece en la XT a 8 (cabe se\~nalar %%@
+que en las microcomputadoras actuales el n\'umero de ranuras de expansi\'on puede variar de un %%@
+modelo a otro). El control de interrupciones lo lleva a cabo el Intel 8259A, un controlador de %%@
+interrupciones programable. El Intel 8255A es la interfaz al teclado \cite{Godfrey}. El Intel %%@
+8272A es el circuito integrado utilizado como controlador de las unidades de discos flexibles. %%@
+El Intel 8037A es el controlador de acceso directo a memoria (DMA) usado para manejar las %%@
+transferencias en bloque de entrada y salida de datos, y el Intel 8253, que es un contador y %%@
+temporizador usado como contador de eventos \cite{Godfrey}. El circuito encargado de generar %%@
+los pulsos de reloj para el microprocesador y otros dispositivos es el 8284A.
+
+\begin{figure}[!htb]
+\vskip 5mm
+\special{center
+         1-2.gif,                
+         \the\hsize 78mm}
+\vskip 100mm
+\caption{Diagrama de bloques del 8088 y 8086} 
+\label{Bloques}
+\end{figure}
+
+La arquitectura interna del 8086/8088 en diagrama de bloques se puede ver en la %%@
+Figura~\ref{Bloques} \cite{Hall}.
+
+El 8086 y el 8088 est\'an divididos en dos partes funcionales independientes, las cu\'ales son %%@
+la {\em unidad de interfaz de bus} (BIU) y la {\em unidad de ejecuci\'on} (EU).
+
+Estos procesadores se basan en el dise\~no del 8080/8085. Tienen un conjunto de registros %%@
+similares, pero de 16 bits. La BIU alimenta del flujo de instrucciones a la EU, a trav\'es de %%@
+una cola precargada de 6 u 8 bytes, de manera que la toma de instrucciones y la ejecuci\'on son %%@
+en cierta forma concurrentes. Las instrucciones del 8088/8086 var\'{\i}an de longitud de entre %%@
+1 y 4 bytes.
+
+\begin{figure}[!htb]
+\vskip 5mm
+\special{center
+         1-3.gif,                
+         \the\hsize 78mm}
+\vskip 100mm
+\caption{Formato del registro de banderas del Intel 8088.} 
+\label{Fig:flags}
+\end{figure}
+
+\begin{table}[!hbt]
+\begin{center}
+\begin{tabular}{|c|c|c|l|} \hline
+Bandera & Nombre & Bit & Funci\'on \\ \hline
+CF & {\em Carry Flag} & 0 & \parbox{5.5cm}{\vspace{3pt}Vale 1 si una operaci\'on de %%@
+adici\'on o substracci\'on produjo acarreo o pr\'estamo.\vspace{3pt}} \\ \hline
+PF & {\em Parity Flag} & 2 & \parbox{5.5cm}{\vspace{3pt}Vale 1 si el resultado de una %%@
+operaci\'on de datos tiene un n\'umero par de bits con valor 1.\vspace{3pt}} \\ \hline
+AF & {\em Auxiliary Carry Flag} & 4 & \parbox{5.5cm}{\vspace{3pt}Se ac\-ti\-va si se ge\-%%@
+ne\-r\'o de un a\-ca\-rreo ge\-ne\-ra\-do del cuar\-to bit de un by\-te.\vspace{3pt}} \\ %%@
+\hline
+ZF & {\em Zero Flag} & 6 & \parbox{5.5cm}{\vspace{3pt}Se activa si el resultado de una %%@
+operaci\'on es cero.\vspace{3pt}} \\ \hline
+SF & {\em Sign Flag} & 7 & \parbox{5.5cm}{\vspace{3pt}Se activa si el resultado de una %%@
+operaci\'on con n\'umeros signados es negativo.\vspace{3pt}} \\ \hline
+OF & {\em Overflow Flag} & 11 & \parbox{5.5cm}{\vspace{3pt}Se activa cuando el resultado %%@
+de una operaci\'on es mayor que el m\'aximo valor que se puede representar con el n\'umero de %%@
+bits del operando destino.\vspace{3pt}} \\ \hline \hline
+TF & {\em Trap Flag} & 8 & \parbox{5.5cm}{\vspace{3pt}Cuan\-do se ac\-ti\-va, el mi\-%%@
+cro\-pro\-ce\-sa\-dor e\-je\-cu\-ta so\-lo una ins\-truc\-ci\-\'on a la %%@
+vez.\vspace{3pt}} \\ \hline
+IF & {\em Interrupt Flag} & 9 & \parbox{5.5cm}{\vspace{3pt}Solo cuando este bit esta %%@
+activo el 8088 atiende las interrupciones.\vspace{3pt}} \\ \hline
+DF & {\em Direction Flag} & 10 & \parbox{5.5cm}{\vspace{3pt}Cuando es activado causa que %%@
+el contenido de los registros de \'indice disminuya despu\'es de cada operaci\'on de una cadena %%@
+de caracteres.\vspace{3pt}} \\ \hline
+\end{tabular}
+\caption{Funciones de las banderas del registro de banderas del Intel 8088.}
+\label{Tabla:flagfun}
+\end{center}
+\end{table}
+
+El procesador tiene 4 registros de prop\'osito general (llamados AX, BX, CX, DX), tambi\'en %%@
+accesados como registros de 8 bits (AH|AL, BH|BL, CH|CL, DH|DL), y 4 registros \'{\i}ndice de %%@
+16 bits (SI, DI, SP ,BP), adem\'as de 4 registros de segmento (DS, CS, ES, SS), que permiten %%@
+accesar al CPU hasta 1Mb de memoria. As\'{\i} mismo tiene un {\em registro de banderas\/} %%@
+(ver Figura \ref{Fig:flags}), de 16 bits, siendo los 8 inferiores compatibles con el 8085. Solo %%@
+9 bits son utilizados, 6 de las cuales indican condiciones producidas por la ejecuci\'on de una %%@
+instrucci\'on, y 3 controlan alguna operaci\'on de la unidad de ejecuci\'on. Las banderas que %%@
+componen a este registro se presentan en la Tabla \ref{Tabla:flagfun}.
+
+El 8088 tiene puertos de entrada y salida de 64K 8-bits (o 32K 16-bits) y vectores de %%@
+interrupci\'on fijos.
+
+El direccionamiento de memoria con los microprocesadores 8088/8086 se realiza sumando el %%@
+contenido de los registros de segmento, una vez que se han corrido a la izquierda 4 bits, a la %%@
+direcci\'on del desplazamiento \cite{Micro:Hist}.
+
+%----------------------------------------------------------------------------
+
+\subsection{Inicializaci\'on y reinicializaci\'on del procesador.}
+\label{Subsection:inicreset}
+
+La inicializaci\'on o arranque del microprocesador 8088 es realizado mediante la puesta a un %%@
+nivel l\'ogico ALTO de la terminal RESET. Esta terminal debe estar en ALTO al menos cuatro %%@
+ciclos de reloj. El procesador terminar\'a sus operaciones en el borde de subida del RESET. En %%@
+la transici\'on de bajada de la se\~nal de RESET el procesador activa una secuencia de reinicio %%@
+interno de aproximadamente siete ciclos de reloj de duraci\'on. Despu\'es de esto, el %%@
+procesador opera normalmente, comenzando con la instrucci\'on localizada en la direcci\'on %%@
+absoluta FFFF0h. La entrada RESET es sincronizada internamente con el reloj del procesador. %%@
+Durante la inicializaci\'on, la transici\'on de ALTO a BAJO de la se\~nal RESET debe ocurrir no %%@
+antes de 50 $\mu$s despu\'es del encendido, para permitir la completa inicializaci\'on del %%@
+8088.
+
+Una Interrupci\'on no Enmascarable, o NMI (ver Subsubsecci\'on~\ref{Subsubsection:NMI}), %%@
+ocurrida antes del segundo ciclo de reloj despu\'es del fin del RESET no ser\'a atendida. Si la %%@
+NMI es ge\-ne\-ra\-da despu\'es de ese ciclo, y durante la secuencia interna de %%@
+inicializaci\'on, el procesador ejecutar\'{\i}a una instrucci\'on antes de ejecutar la %%@
+interrupci\'on. Una petici\'on de contenci\'on o toma ({\it hold\/}) inmediatamente despu\'es %%@
+del RESET ser\'a atendida antes de la primera carga de instrucci\'on.
+
+Durante el RESET todas las salidas de 3 estados van al tercer estado (OFF) \cite{Intel:Micro}. 
+
+%----------------------------------------------------------------------------
+
+\subsection{Descripci\'on de las terminales del 8088 y 8086.}
+\label{Subseccion:terminales}
+
+\begin{figure}[!htb]
+\vskip 5mm
+\special{center
+         8088max.gif,
+         \the\hsize 78mm}
+\vskip 100mm
+\caption{Diagrama de terminales del 8088 en Modo M\'aximo ({\tiny Fuente: OrCad}).} 
+\label{8088max}
+\end{figure}
+
+El diagrama de terminales del 8088 en modo m\'{\i}nimo se presenta en la %%@
+Figura~\ref{8088min}, mientras que en la Figura~\ref{8088max} se presenta el diagrama del %%@
+modo m\'aximo. N\'otese que estos diagramas no corresponden a todas las 40 terminales de los %%@
+chips, sino solo a los m\'as relevantes para la operaci\'on en cada modo. 
+
+\begin{figure}[!htb]
+\vskip 5mm
+\special{center
+         8088min.gif,
+         \the\hsize 78mm}
+\vskip 100mm
+\caption{Diagrama de terminales del 8088 en Modo M\'{\i}nimo ({\tiny Fuente: OrCad}).} 
+\label{8088min}
+\end{figure}
+
+La Tabla \ref{Tabla:8088pines} presenta una breve descripci\'on de las terminales del 8088 en %%@
+relaci\'on con el modo en que se opere (m\'{\i}nimo o m\'aximo). 
+
+\begin{table}[!htb]
+\centering
+\begin{tabular}{|c|c|c|} \hline
+Terminal No. & Modo M\'{\i}nimo & Modo M\'aximo \\ \hline
+
+9 - 6 & AD7 - AD0 & AD7-AD0 \\ \hline
+
+2-8, 39 & A15-A8 & A15-A8 \\ \hline
+
+35-38 & \parbox{3cm}{\vspace{3pt}A19/S6, A18/S5, A17/S4, A16/S3\vspace{3pt}} & %%@
+\parbox{3cm}{\vspace{3pt}A19/S6, A18/S5, A17/S4, A16/S3\vspace{3pt}} \\ \hline
+
+32 & $\overline{\mbox{RD}}$ & $\overline{\mbox{RD}}$ \\ \hline
+
+22 & READY & READY \\ \hline
+
+18 & INTR & INTR \\ \hline
+
+23 & $\overline{\mbox{TEST}}$ & $\overline{\mbox{TEST}}$ \\ \hline
+
+17 & NMI & NMI \\ \hline
+
+21 & RESET & RESET \\ \hline
+
+19 & CLK & CLK \\ \hline
+
+40 & $V_{cc}$ & $V_{cc}$ \\ \hline
+
+1, 20 & GND & GND \\ \hline
+
+33 & $\mbox{MN}/\overline{\mbox{MX}}$ & $\mbox{MN}/\overline{\mbox{MX}}$ \\ %%@
+\hline
+
+28 & $\mbox{IO}/\overline{\mbox{M}}$ & $\overline{\mbox{S0}}$ \\ \hline
+
+29 & $\overline{\mbox{WR}}$ & $\overline{\mbox{LOCK}}$ \\ \hline
+
+24 & $\overline{\mbox{INTA}}$ & QS1 \\ \hline
+
+25 & ALE & QS0 \\ \hline
+
+27 & $\mbox{DT}/\overline{\mbox{R}}$ & $\overline{\mbox{S1}}$ \\ \hline
+
+26 & $\overline{\mbox{DEN}}$ & $\overline{\mbox{S2}}$ \\ \hline
+
+31, 30 & HOLD, HOLDA & $\overline{\mbox{RQ}}/\overline{\mbox{GT1}}$,  %%@
+$\overline{\mbox{RQ}}/\overline{\mbox{GT0}}$ \\ \hline
+
+34 & $\overline{\mbox{SS0}}$ & - \\ \hline
+\end{tabular}
+\caption{Terminales del Intel 8088.}
+\label{Tabla:8088pines}
+\end{table}
+
+Los requerimientos para soportar sistemas 8088 m\'{\i}nimo y m\'aximo son diferentes, por lo %%@
+que no se pueden llevar a cabo con 40 terminales. Debido a esto, el 8088 est\'a equipado con una %%@
+terminal de selecci\'on ($MN/\overline{MX}$, terminal n\'umero 33) la cual define la %%@
+configuraci\'on del sistema. La definici\'on de determinado subconjunto de cambios en las %%@
+terminales depende del estado de la terminal $MN/\overline{MX}$. Cuando $MN/\overline{MX}$ %%@
+est\'a a GND (tierra), el 8088 define las terminales 24 a 31 y 34 en modo m\'aximo. En este %%@
+modo se requiere que las se\~nales de control del bus sean generadas por el circuito integrado %%@
+8288. Cuando la terminal $MN/\overline{MX}$ esta a $V_{cc}$, el 8088 genera las se\~nales de %%@
+control de bus por s\'{\i} mismo de las terminales 24 a 31 y 34.
+
+\begin{figure}[!hbt]
+\vskip 15mm
+\special{center
+         1-6.gif,                
+         \the\hsize 78mm}
+\vskip 110mm
+\caption{Configuraci\'on de bus multiplexado.} 
+\label{multiplexado}
+\end{figure}
+
+Tanto el modo m\'{\i}nimo como el modo m\'aximo del 8088 pueden ser usados con bus %%@
+multiplexado o demultiplexado. La configuraci\'on de bus multiplexado %%@
+(Figura~\ref{multiplexado}) brinda al usuario con un sistema de chips m\'{\i}nimo, sin perder %%@
+poder de procesamiento \cite{Intel:Micro}.
+
+El modo demultiplexado requiere un {\em latch}\footnote{Circuito que permite almacenar bits, %%@
+usualmente tambi\'en se les llama {\it registros\/}.} para direccionamiento de 64K, o dos %%@
+{\em latches} para direccionar 1Mb completo. Se puede usar un tercer {\em latch} para %%@
+establecer un {\em buffer}\footnote{Memoria intermedia.} si la carga del bus de direcciones %%@
+lo requiere; un {\em transceiver}\footnote{Dispositivo que permite comunicar o asilar dos %%@
+l\'{\i}neas de transmisi\'on de datos, o buses.} puede ser usado tambi\'en en este caso (ver %%@
+Figura~\ref{demultiplexado}). Las se\~nales $\overline{DEN}$ y $DT/\overline{R}$ del %%@
+microprocesador son utilizadas para controlar el {\em transceiver} y la se\~nal $ALE$ es %%@
+utilizada para habilitar el {\em latch\/} para que pueda retener las direcciones %%@
+\cite{Intel:Micro}.
+
+\begin{figure}[!hbt]
+\vskip 15mm
+\special{center
+         1-7.gif,                
+         \the\hsize 78mm}
+\vskip 115mm
+\caption{Configuraci\'on de bus demultiplexado (arriba) y de Sistema con buffers completos %%@
+usando el controlador de bus (abajo).}
+\label{demultiplexado}
+\end{figure}
+
+El modo m\'aximo emplea, como se dice antes, el controlador de bus 8288. El 8288  decodifica las %%@
+l\'{\i}neas de estado $\overline{S0}$, $\overline{S1}$ y $\overline{S2}$, y genera %%@
+todas las se\~nales de control de bus. El 8288 proporciona un mejor control del bus %%@
+\cite{Intel:Micro} y adem\'as libera terminales del 8088 para aumentar las capacidades de %%@
+\'este, tales como permitir la conexi\'on de coprocesadores (como el 8087) al bus local, y %%@
+configuraciones de bus remoto. 
+
+El 8088 requiere que el reloj CLK sea controlado por un generador de reloj externo controlado %%@
+por un cristal (el generador de reloj y manejador 8284) para sincronizar sus operaciones %%@
+internas. Las frecuencias del reloj para el 8088 pueden ser de 5 Mhz para el 8088 y de 8 Mhz %%@
+para el 8088-2.
+
+%----------------------------------------------------------------------------
+
+\subsubsection{Modo M\'{\i}nimo.}
+\label{Subsubsection:modominimo}
+
+En modo m\'{\i}nimo (ver Figura~\ref{modomin}), las terminales al bus est\'an multiplexados, %%@
+para poder colocar al 8088 en un circuito integrado de 40 terminales. Utiliza las terminales del %%@
+n\'umero 9 al 16 para el bus de datos (8 bits) y direcciones y del 2 al 8 y del 35 al 39 para el %%@
+bus de direcciones \'unicamente. Esto da los 8 bits de datos y 20 de direcciones. 
+
+Cabe aclarar que el 8088 es operado en modo m\'{\i}nimo cuando es el \'unico microprocesador %%@
+en los buses del sistema.
+
+%----------------------------------------------------------------------------
+
+\subsubsection{Modo M\'aximo.}
+\label{Subsubseccion:modomaximo}
+
+El modo m\'aximo es activado colocando la terminal $MN/\overline{MX}$ en bajo, como se %%@
+menciona en la Subsecci\'on~\ref{Subseccion:terminales}. 
+
+%----------------------------------------------------------------------------

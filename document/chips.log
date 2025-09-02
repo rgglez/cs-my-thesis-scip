@@ -1,0 +1,18 @@
+This is emTeX (tex386), Version 3.14159 [4b] (preloaded format=latex 98.9.24)  25 SEP 1998 18:20
+**&latex chips
+(chips.tex
+LaTeX2e <1997/12/01> patch level 1
+! Undefined control sequence.
+l.1 \chapter
+            [Especificaciones de los principales circuitos usados.]{E...
+? x
+ 
+Here is how much of TeX's memory you used:
+ 3 strings out of 55947
+ 23 string characters out of 211607
+ 42800 words of memory out of 262143
+ 2950 multiletter control sequences out of 10000
+ 3640 words of font info for 14 fonts, out of 81920 for 254
+ 14 hyphenation exceptions out of 607
+ 4i,0n,1p,108b,7s stack positions out of 300i,100n,60p,5000b,1000s
+No pages of output.

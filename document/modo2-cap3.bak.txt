@@ -1,0 +1,486 @@
+\vspace{12pt}
+
+\begin{figure}[!htb]\centering
+%TexCad Options
+%\grade{\off}
+%\emlines{\off}
+%\beziermacro{\on}
+%\reduce{\on}
+%\snapping{\off}
+%\quality{2.00}
+%\graddiff{0.01}
+%\snapasp{1}
+%\zoom{1.00}
+\unitlength 1.00mm
+\linethickness{0.4pt}
+\begin{picture}(76.00,62.67)
+\put(47.67,58.67){\makebox(0,0)[rc]{PC3}}
+\put(47.33,51.00){\makebox(0,0)[rc]{PA7-PA0}}
+\put(47.33,43.00){\makebox(0,0)[rc]{PC7}}
+\put(47.33,36.00){\makebox(0,0)[rc]{PC6}}
+\put(47.33,29.00){\makebox(0,0)[rc]{PC4}}
+\put(47.33,21.67){\makebox(0,0)[rc]{PC5}}
+\put(46.67,14.33){\makebox(0,0)[rc]{PC2-0}}
+\put(26.33,3.00){\framebox(23.33,59.67)[cc]{}}
+%\vector(49.67,59.00)(71.00,59.00)
+\put(71.00,59.00){\vector(1,0){0.2}}
+\put(49.67,59.00){\line(1,0){21.33}}
+%\end
+%\vector(49.67,43.33)(71.00,43.33)
+\put(71.00,43.33){\vector(1,0){0.2}}
+\put(49.67,43.33){\line(1,0){21.33}}
+%\end
+%\vector(71.00,36.00)(49.67,36.00)
+\put(49.67,36.00){\vector(-1,0){0.2}}
+\put(71.00,36.00){\line(-1,0){21.33}}
+%\end
+%\vector(70.67,29.33)(50.00,29.33)
+\put(50.00,29.33){\vector(-1,0){0.2}}
+\put(70.67,29.33){\line(-1,0){20.67}}
+%\end
+%\vector(49.67,22.00)(70.67,22.00)
+\put(70.67,22.00){\vector(1,0){0.2}}
+\put(49.67,22.00){\line(1,0){21.00}}
+%\end
+%\vector(61.00,15.00)(49.67,15.00)
+\put(49.67,15.00){\vector(-1,0){0.2}}
+\put(61.00,15.00){\line(-1,0){11.33}}
+%\end
+%\vector(60.67,15.00)(70.67,15.00)
+\put(70.67,15.00){\vector(1,0){0.2}}
+\put(60.67,15.00){\line(1,0){10.00}}
+%\end
+%\emline(61.33,16.67)(58.33,13.33)
+\multiput(61.33,16.67)(-0.12,-0.13){26}{\line(0,-1){0.13}}
+%\end
+\put(63.67,16.67){\makebox(0,0)[cc]{3}}
+\put(25.00,6.67){\circle{2.67}}
+\put(25.00,15.00){\circle{2.98}}
+%\vector(7.33,15.00)(23.67,15.00)
+\put(23.67,15.00){\vector(1,0){0.2}}
+\put(7.33,15.00){\line(1,0){16.34}}
+%\end
+%\vector(7.33,6.67)(23.67,6.67)
+\put(23.67,6.67){\vector(1,0){0.2}}
+\put(7.33,6.67){\line(1,0){16.34}}
+%\end
+%\emline(54.33,54.67)(71.00,54.67)
+\put(54.33,54.67){\line(1,0){16.67}}
+%\end
+%\emline(71.00,49.00)(54.67,49.00)
+\put(71.00,49.00){\line(-1,0){16.33}}
+%\end
+%\emline(54.67,49.00)(54.67,47.33)
+\put(54.67,49.00){\line(0,-1){1.67}}
+%\end
+%\emline(54.67,47.33)(49.67,51.67)
+\multiput(54.67,47.33)(-0.14,0.12){37}{\line(-1,0){0.14}}
+%\end
+%\emline(49.67,51.67)(54.33,56.67)
+\multiput(49.67,51.67)(0.12,0.13){39}{\line(0,1){0.13}}
+%\end
+%\emline(54.33,56.67)(54.33,54.67)
+\put(54.33,56.67){\line(0,-1){2.00}}
+%\end
+%\emline(71.00,48.67)(71.00,47.00)
+\put(71.00,48.67){\line(0,-1){1.67}}
+%\end
+%\emline(71.00,47.00)(76.00,51.33)
+\multiput(71.00,47.00)(0.14,0.12){37}{\line(1,0){0.14}}
+%\end
+%\emline(76.00,51.33)(71.33,56.33)
+\multiput(76.00,51.33)(-0.12,0.13){39}{\line(0,1){0.13}}
+%\end
+%\emline(71.33,56.33)(71.33,54.33)
+\put(71.33,56.33){\line(0,-1){2.00}}
+%\end
+\put(75.00,58.67){\makebox(0,0)[lc]{INTRa}}
+\put(63.67,51.67){\makebox(0,0)[cc]{8}}
+\put(74.33,43.00){\makebox(0,0)[lc]{OBFa.L}}
+\put(74.33,36.00){\makebox(0,0)[lc]{ACKa.L}}
+\put(74.00,29.33){\makebox(0,0)[lc]{STBa.L}}
+\put(74.33,21.67){\makebox(0,0)[lc]{IBFa}}
+\put(74.67,15.00){\makebox(0,0)[cc]{I/O}}
+\put(3.33,15.00){\makebox(0,0)[rc]{RD.L}}
+\put(3.00,6.67){\makebox(0,0)[rc]{WR.L}}
+\end{picture}
+\caption{Configuraci\'on en Modo 2 del 8255.} 
+\label{Figura:8255modo2}
+\end{figure}
+
+\vspace{12pt}
+
+El 8255 es programado en Modo 2 (Strobed Bidirectional Bus I/O, ver Figura~\ref{Figura:8255modo2}). Esta configuraci\'on funcional provee una manera de comunicaci\'on con un dispositivo perif\'erico o estructura un un solo bus de 8 bits tanto para transmitir como para recibir datos \cite{Intel:Perif}. Es decir, con esta configuraci\'on el puerto A del 8255 opera como un bus bidireccional. Las se\~nales de sincronizaci\'on, que utilizan parte del Puerto C, son las siguientes:
+
+\begin{description}
+\item[PC3] Esta terminal se utilizar\'ia para generar una IRQ\footnote{Petici\'on de Interrupci\'on.} pero en la pr\'actica no se requiere su conexi\'on (a menos que alguna aplicaci\'on futura de SCIP lo requiera).
+
+\item[PC4] Esta terminal se usa como una se\~nal Strobe ($\overline{\mbox{STBa}}$) para indicar que se pueden escribir datos al 8255. Un BAJO en esta terminal indica que se cargue un dato en el latch de entrada \cite{Intel:Perif}. Esta terminal es controlada por el puerto $\overline{\mbox{WRITEDATA}}$ (vease U1 en la hoja de diagramas 2, y la Subsecci\'on \ref{Subsection:decodif}).
+
+\item[PC5] Esta terminal es usada como se\~nal de ``buffer de entrada lleno'' (IBF). Un ALTO en esta terminal indica que el dato ha sido cargado en el latch de entrada; en escencia es un reconocimoento. IBF es colocada en alto al ser la terminal STB colocada en bajo, y es colocada en bajo por el borde hacia arriba de la entrada RD \cite{Intel:Perif}, es decir, cuando se ha leido el dato que esta en el latch (y ya se puede volver a escribir en \'el).
+
+\item[PC6] Esta terminal determina un reconocimiento ($\overline{\mbox{ACK}}$, acknowledge) de datos. Es decir, si se presenta un BAJO en esta terminal le indica al 8255 que se ha aceptado el dato del puerto A o B. Es una respuesta del perif\'erico (en este caso, de la computadora anfitriona), que indica que se ha recibido el dato enviado por SCIP. Esta terminal es controlada por el puerto $\overline{\mbox{DATAREAD}}$ (vease U1 en la hoja de diagramas 2, y la Subsecci\'on \ref{Subsection:decodif}).
+
+\item[PC7] Finalmente, esta terminal genera la se\~nal $\overline{\mbox{OBF}}$ (Output Buffer Full F/F), la cu\'al es una salida que va a BAJO para indicar que la tarjeta SCIP ha escrito datos al puerto especificado. Es activada por la entrada $\overline{\mbox{WR}}$ y desactivada por la entrada $\overline{\mbox{ACK}}$ cuando esta pasa a bajo. Esta terminal esta conectada a un buffer 74LS125 (U2 de la hoja de diagramas 2).
+\end{description}
+
+El Modo 2 se caracteriza porque:
+
+\begin{itemize}
+\item Se usa solo el Grupo A\footnote{Cabe aclarar que ya que se pueden combinar los modos de operaci\'on del 8255, el Puerto B (y de hecho, el Grupo B), se pueden poner en una configuraci\'on de Modo 0 o 1.}.
+\item Se tiene un solo puerto (el Puerto A, que esta integrado por las terminales 1 a 4 y 37 a 40), y cinco bits de control en el Puerto C (como se especifica arriba).
+\item Tanto las entradas como las salidas tienen latches.
+\item El puerto de 5 bits de control es usado para control y estatus del puerto bidireccional A, tal y como se dice antes.
+\end{itemize}
+
+En la Figura \ref{Figura:8255modo2} se presenta la configuraci\'on del PPI en modo 2. La Figura \ref{Figura:CW8255} presenta la palabra de control correspondiente al Modo 2 \cite{Intel:Perif}.
+
+\vspace{12pt}
+
+\begin{figure}[!htb]
+%TexCad Options
+%\grade{\off}
+%\emlines{\off}
+%\beziermacro{\on}
+%\reduce{\on}
+%\snapping{\off}
+%\quality{2.00}
+%\graddiff{0.01}
+%\snapasp{1}
+%\zoom{1.00}
+\unitlength 1.00mm
+\linethickness{0.4pt}
+\begin{picture}(99.33,55.00)
+\put(5.00,40.00){\framebox(10.33,10.00)[cc]{1}}
+\put(15.33,40.00){\framebox(9.67,10.00)[cc]{1}}
+\put(25.00,40.00){\framebox(10.33,10.00)[cc]{X}}
+\put(35.33,40.00){\framebox(9.67,10.00)[cc]{X}}
+\put(45.00,40.00){\framebox(10.00,10.00)[cc]{X}}
+\put(55.00,40.00){\framebox(10.00,10.00)[cc]{1/0}}
+\put(65.00,40.00){\framebox(10.00,10.00)[cc]{1/0}}
+\put(75.00,40.00){\framebox(10.00,10.00)[cc]{1/0}}
+\put(10.00,55.00){\makebox(0,0)[cc]{D7}}
+\put(20.00,55.00){\makebox(0,0)[cc]{D6}}
+\put(30.33,55.00){\makebox(0,0)[cc]{D5}}
+\put(40.00,55.00){\makebox(0,0)[cc]{D4}}
+\put(50.00,55.00){\makebox(0,0)[cc]{D3}}
+\put(60.00,55.00){\makebox(0,0)[cc]{D2}}
+\put(70.00,55.00){\makebox(0,0)[cc]{D1}}
+\put(80.00,55.00){\makebox(0,0)[cc]{D0}}
+%\emline(80.00,40.00)(80.00,30.00)
+\put(80.00,40.00){\line(0,-1){10.00}}
+%\end
+%\emline(80.00,30.00)(80.00,30.00)
+\put(80.00,30.00){\line(0,1){0.00}}
+%\end
+%\vector(80.00,30.00)(94.33,30.00)
+\put(94.33,30.00){\vector(1,0){0.2}}
+\put(80.00,30.00){\line(1,0){14.33}}
+%\end
+\put(99.00,30.00){\makebox(0,0)[lc]{PC 2-0}}
+%\emline(70.00,40.00)(70.00,20.00)
+\put(70.00,40.00){\line(0,-1){20.00}}
+%\end
+%\vector(70.00,20.00)(94.33,20.00)
+\put(94.33,20.00){\vector(1,0){0.2}}
+\put(70.00,20.00){\line(1,0){24.33}}
+%\end
+%\emline(60.00,40.00)(60.00,10.00)
+\put(60.00,40.00){\line(0,-1){30.00}}
+%\end
+%\vector(60.00,10.00)(95.00,10.00)
+\put(95.00,10.00){\vector(1,0){0.2}}
+\put(60.00,10.00){\line(1,0){35.00}}
+%\end
+\put(99.33,20.00){\makebox(0,0)[lc]{Puerto B}}
+\put(99.00,10.00){\makebox(0,0)[lc]{Modo del Grupo B}}
+\put(99.00,25.00){\makebox(0,0)[cc]{(1=entrada, 0=salida)}}
+\put(99.00,15.33){\makebox(0,0)[cc]{(1=entrada, 0=salida)}}
+\put(99.00,5.00){\makebox(0,0)[cc]{(0=Modo 0, 1=Modo 1)}}
+\end{picture}
+\vspace{4pt}
+\caption{Palabra de Control para el Modo 2 del 8255.}
+\label{Figura:CW8255}
+\end{figure}
+
+\vspace{12pt}
+
+Los bits D1 y D2 de la palabra de control permiten configurar al Grupo B en modo 0 \'x
+o 1 y al Puerto B como puerto de entrada o de salida. En el caso de SCIP el puerto B es programado en Modo 0 de entrada (ver Figura \ref{Figura:modos2-0}), lo que proporciona una forma de que la PC transfiera comandos o bytes de estado a la tarjeta de expansi\'on sin necesidad de usar se\~nales de coordinaci\'on, sino simplemente escribiendo a un puerto 8 bits (ver Ap\'endice \ref{Apendice:8255}). 
+
+En la Tabla \ref{Tabla:program8255} se muestra la operaci\'on b\'asica del 8255 \cite{Intel:Perif}:
+
+\vspace{12pt}
+
+% Table created by WinTeX 95: 6 Columns x 13 Rows.
+\begin{table}[!htb]\centering
+\begin{tabular}{|l|l|l|l|l|l|}
+%Row: 1
+\cline{1-6}
+\vbox to1.50ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil A1\hfil}\vfil} & 
+\vbox to1.50ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil A0\hfil}\vfil} & 
+\vbox to1.50ex{\vspace{1pt}\vfil\hbox to4.60ex{\hfil RD\hfil}\vfil} & 
+\vbox to1.50ex{\vspace{1pt}\vfil\hbox to5.00ex{\hfil WR\hfil}\vfil} & 
+\vbox to1.50ex{\vspace{1pt}\vfil\hbox to4.00ex{\hfil CS\hfil}\vfil} & 
+\vbox to1.50ex{\vspace{1pt}\vfil\hbox to31.20ex{\hfil Op. de Entrada (Lectura)\hfil}\vfil} \\
+
+%Row: 2
+\cline{1-6}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil 0\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil 0\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.60ex{\hfil 0\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to5.00ex{\hfil 1\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.00ex{\hfil 0\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to31.20ex{\hfil Puerto A $\Longrightarrow$ Bus de Datos\hfil}\vfil} \\
+
+%Row: 3
+\cline{1-6}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil 0\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil 1\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.60ex{\hfil 0\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to5.00ex{\hfil 1\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.00ex{\hfil 0\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to31.20ex{\hfil Puerto B $\Longrightarrow$ Bus de Datos\hfil}\vfil} \\
+
+%Row: 4
+\cline{1-6}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil 1\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil 0\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.60ex{\hfil 0\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to5.00ex{\hfil 1\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.00ex{\hfil 0\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to31.20ex{\hfil Puerto C $\Longrightarrow$ Bus de Datos\hfil}\vfil} \\
+
+%Row: 5
+\cline{1-6}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil \hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil \hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.60ex{\hfil \hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to5.00ex{\hfil \hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.00ex{\hfil \hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to31.20ex{\hfil Op. de Salida (Escritura)\hfil}\vfil} \\
+
+%Row: 6
+\cline{1-6}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil 0\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil 0\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.60ex{\hfil 1\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to5.00ex{\hfil 0\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.00ex{\hfil 0\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to31.20ex{\hfil Bus de Datos $\Longrightarrow$ Puerto A\hfil}\vfil} \\
+
+%Row: 7
+\cline{1-6}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil 0\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil 1\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.60ex{\hfil 1\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to5.00ex{\hfil 0\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.00ex{\hfil 0\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to31.20ex{\hfil Bus de Datos $\Longrightarrow$ Puerto B\hfil}\vfil} \\
+
+%Row: 8
+\cline{1-6}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil 1\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil 0\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.60ex{\hfil 1\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to5.00ex{\hfil 0\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.00ex{\hfil 0\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to31.20ex{\hfil Bus de Datos $\Longrightarrow$ Puerto C\hfil}\vfil} \\
+
+%Row: 9
+\cline{1-6}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil 1\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil 1\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.60ex{\hfil 1\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to5.00ex{\hfil 0\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.00ex{\hfil 0\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to31.20ex{\hfil Bus de Datos $\Longrightarrow$ Control\hfil}\vfil} \\
+
+%Row: 10
+\cline{1-6}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil \hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil \hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.60ex{\hfil \hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to5.00ex{\hfil \hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.00ex{\hfil \hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to31.20ex{\hfil Deshabilitaci\'on\hfil}\vfil} \\
+
+%Row: 11
+\cline{1-6}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil X\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil X\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.60ex{\hfil X\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to5.00ex{\hfil X\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.00ex{\hfil 1\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to31.20ex{\hfil Bus de Datos $\Longrightarrow$ 3er. Estado\hfil}\vfil} \\
+
+%Row: 12
+\cline{1-6}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil 1\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil 1\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.60ex{\hfil 0\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to5.00ex{\hfil 1\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.00ex{\hfil 0\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to31.20ex{\hfil Condici\'on Ilegal\hfil}\vfil} \\
+
+%Row: 13
+\cline{1-6}
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil X\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.20ex{\hfil X\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.60ex{\hfil 1\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to5.00ex{\hfil 1\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to4.00ex{\hfil 0\hfil}\vfil} & 
+\vbox to1.70ex{\vspace{1pt}\vfil\hbox to31.20ex{\hfil Bus de Datos $\Longrightarrow$ 3er. Estado\hfil}\vfil} \\
+
+\cline{1-6}
+\end{tabular}
+\caption{Modo B\'asico de Operaci\'on del 8255.}
+\label{Tabla:program8255}
+\end{table}
+
+Cuando se escribe un dato al 8255 a trav\'es del bus de datos, y $A1 = A0 = 1$, entonces se transfiere una palabra de control al 8255, program\'andolo (ver Tabla \ref{Tabla:program8255}). El siguiente c\'odigo programa al 8255 de SCIP:
+
+\begin{verbatim}
+; Programacion del PPI 8255
+
+MOV  DX,3C7h        ; Direccion del puerto de control 
+                                   ; (A0=1, A1=1)
+MOV  AL,0C2h        ; Grupo B = Modo 0, Puerto B = Entrada, 
+                                   ; PC2,0 = Salida
+OUT   DX,AL            ; 11000010
+\end{verbatim}
+
+Este c\'odigo programa al 8255 para trabajar en Modo 2, con el Grupo B en Modo 0 y el Puerto B como puerto de entrada. Ademas, las terminales PC0 - PC2 son programadas como salidas; la Figura \ref{Figura:modos2-0} presenta esta combinaci\'on. Los modos del 8255 pueden ser cambiados via software, haciendo tambi\'en los cambios necesarios en el hardware\footnote{Estos cambios se podr\'{\i}an hacer mediante jumpers en un dise\~no llevado a cabo en un circuito impreso.}.
+
+\begin{figure}[!htb]\centering
+%TexCad Options
+%\grade{\off}
+%\emlines{\off}
+%\beziermacro{\on}
+%\reduce{\on}
+%\snapping{\off}
+%\quality{2.00}
+%\graddiff{0.01}
+%\snapasp{1}
+%\zoom{1.00}
+\unitlength 1.00mm
+\linethickness{0.4pt}
+\begin{picture}(76.00,62.67)
+\put(47.67,58.67){\makebox(0,0)[rc]{PC3}}
+\put(47.33,51.00){\makebox(0,0)[rc]{PA7-PA0}}
+\put(47.33,43.00){\makebox(0,0)[rc]{PC7}}
+\put(47.33,36.00){\makebox(0,0)[rc]{PC6}}
+\put(47.33,29.00){\makebox(0,0)[rc]{PC4}}
+\put(47.33,21.67){\makebox(0,0)[rc]{PC5}}
+\put(46.67,14.33){\makebox(0,0)[rc]{PC2-0}}
+\put(47.67,6.33){\makebox(0,0)[rc]{PB7-PB0}}
+\put(26.33,3.00){\framebox(23.33,59.67)[cc]{}}
+%\vector(49.67,59.00)(71.00,59.00)
+\put(71.00,59.00){\vector(1,0){0.2}}
+\put(49.67,59.00){\line(1,0){21.33}}
+%\end
+%\vector(49.67,43.33)(71.00,43.33)
+\put(71.00,43.33){\vector(1,0){0.2}}
+\put(49.67,43.33){\line(1,0){21.33}}
+%\end
+%\vector(71.00,36.00)(49.67,36.00)
+\put(49.67,36.00){\vector(-1,0){0.2}}
+\put(71.00,36.00){\line(-1,0){21.33}}
+%\end
+%\vector(70.67,29.33)(50.00,29.33)
+\put(50.00,29.33){\vector(-1,0){0.2}}
+\put(70.67,29.33){\line(-1,0){20.67}}
+%\end
+%\vector(49.67,22.00)(70.67,22.00)
+\put(70.67,22.00){\vector(1,0){0.2}}
+\put(49.67,22.00){\line(1,0){21.00}}
+%\end
+%\vector(61.00,15.00)(49.67,15.00)
+\put(49.67,15.00){\vector(-1,0){0.2}}
+\put(61.00,15.00){\line(-1,0){11.33}}
+%\end
+%\vector(60.67,15.00)(70.67,15.00)
+\put(70.67,15.00){\vector(1,0){0.2}}
+\put(60.67,15.00){\line(1,0){10.00}}
+%\end
+%\emline(61.33,16.67)(58.33,13.33)
+\multiput(61.33,16.67)(-0.12,-0.13){26}{\line(0,-1){0.13}}
+%\end
+\put(63.67,16.67){\makebox(0,0)[cc]{3}}
+\put(25.00,6.67){\circle{2.67}}
+\put(25.00,15.00){\circle{2.98}}
+%\vector(7.33,15.00)(23.67,15.00)
+\put(23.67,15.00){\vector(1,0){0.2}}
+\put(7.33,15.00){\line(1,0){16.34}}
+%\end
+%\vector(7.33,6.67)(23.67,6.67)
+\put(23.67,6.67){\vector(1,0){0.2}}
+\put(7.33,6.67){\line(1,0){16.34}}
+%\end
+%\emline(54.33,10.00)(71.00,10.00)
+\put(54.33,10.00){\line(1,0){16.67}}
+%\end
+%\emline(71.00,10.00)(71.00,4.33)
+\put(71.00,10.00){\line(0,-1){5.67}}
+%\end
+%\emline(71.00,4.33)(54.67,4.33)
+\put(71.00,4.33){\line(-1,0){16.33}}
+%\end
+%\emline(54.67,4.33)(54.67,2.67)
+\put(54.67,4.33){\line(0,-1){1.66}}
+%\end
+%\emline(54.67,2.67)(49.67,7.00)
+\multiput(54.67,2.67)(-0.14,0.12){37}{\line(-1,0){0.14}}
+%\end
+%\emline(49.67,7.00)(54.33,12.00)
+\multiput(49.67,7.00)(0.12,0.13){39}{\line(0,1){0.13}}
+%\end
+%\emline(54.33,12.00)(54.33,10.00)
+\put(54.33,12.00){\line(0,-1){2.00}}
+%\end
+%\emline(54.33,54.67)(71.00,54.67)
+\put(54.33,54.67){\line(1,0){16.67}}
+%\end
+%\emline(71.00,49.00)(54.67,49.00)
+\put(71.00,49.00){\line(-1,0){16.33}}
+%\end
+%\emline(54.67,49.00)(54.67,47.33)
+\put(54.67,49.00){\line(0,-1){1.67}}
+%\end
+%\emline(54.67,47.33)(49.67,51.67)
+\multiput(54.67,47.33)(-0.14,0.12){37}{\line(-1,0){0.14}}
+%\end
+%\emline(49.67,51.67)(54.33,56.67)
+\multiput(49.67,51.67)(0.12,0.13){39}{\line(0,1){0.13}}
+%\end
+%\emline(54.33,56.67)(54.33,54.67)
+\put(54.33,56.67){\line(0,-1){2.00}}
+%\end
+%\emline(71.00,48.67)(71.00,47.00)
+\put(71.00,48.67){\line(0,-1){1.67}}
+%\end
+%\emline(71.00,47.00)(76.00,51.33)
+\multiput(71.00,47.00)(0.14,0.12){37}{\line(1,0){0.14}}
+%\end
+%\emline(76.00,51.33)(71.33,56.33)
+\multiput(76.00,51.33)(-0.12,0.13){39}{\line(0,1){0.13}}
+%\end
+%\emline(71.33,56.33)(71.33,54.33)
+\put(71.33,56.33){\line(0,-1){2.00}}
+%\end
+\put(75.00,58.67){\makebox(0,0)[lc]{INTRa}}
+\put(63.67,51.67){\makebox(0,0)[cc]{8}}
+\put(63.33,7.67){\makebox(0,0)[cc]{8}}
+\put(74.33,43.00){\makebox(0,0)[lc]{OBFa.L}}
+\put(74.33,36.00){\makebox(0,0)[lc]{ACKa.L}}
+\put(74.00,29.33){\makebox(0,0)[lc]{STBa.L}}
+\put(74.33,21.67){\makebox(0,0)[lc]{IBFa}}
+\put(74.67,15.00){\makebox(0,0)[cc]{I/O}}
+\put(3.33,15.00){\makebox(0,0)[rc]{RD.L}}
+\put(3.00,6.67){\makebox(0,0)[rc]{WR.L}}
+\end{picture}
+\caption{Configuraci\'on usada para el 8255.}
+\label{Figura:modos2-0}
+\end{figure}
+
+De esta forma el 8255 sirve para comunicar a la tarjeta con la computadora, viendo a esta como a un perif\'erico de SCIP.

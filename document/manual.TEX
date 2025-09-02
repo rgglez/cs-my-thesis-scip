@@ -1,0 +1,313 @@
+\chapter[Manual del Usuario.]{Manual del Usuario.}
+\label{Apendice:manual}
+
+%----------------------------------------------------------------------------
+
+\fancyhead[RE]{\slshape SCIP - Ap. \thechapter~ - Manual del Usuario.}
+\fancyhead[LO]{\slshape Rodolfo Gonz\'alez Gonz\'alez.}
+\fancyhead[LE,RO]{\thepage}
+
+%----------------------------------------------------------------------------
+
+\section{Introducci\'on.}
+\label{Section:introduction}
+
+En este manual del usuario de SCIP se presentan los procedimientos para:
+
+\begin{enumerate}
+\item Ma\-ne\-jo e ins\-ta\-la\-ci\-\'on del hard\-wa\-re de SCIP.
+\item Realizaci\'on de software para SCIP.
+\end{enumerate}
+
+%----------------------------------------------------------------------------
+
+\section{Ma\-ne\-jo e ins\-ta\-la\-ci\-\'on del hard\-wa\-re de SCIP.}
+\label{Section:manualhdw}
+
+En esta secci\'on se detallan los procedimientos para la instalaci\'on y manejo de la tarjeta %%@
+SCIP.
+
+%----------------------------------------------------------------------------
+
+\subsection{Introducci\'on al hadware de SCIP.}
+\label{Subsection:introhwd}
+
+SCIP es un sistema de hadware que consiste de una tarjeta de expansi\'on para bus ISA AT que %%@
+puede ser utilizada en computadoras basadas en el Intel 286 o superior. El prototipo de esta %%@
+tarjeta esta ensamblado en una placa para wire-wrap de 16 bits JDR-PR10 de JDR Microdevices.
+
+\begin{figure}[!htb]
+\vskip 5mm
+\special{center
+         foto1.gif,                
+         \the\hsize 78mm}
+\vskip 78mm
+\caption{Lado de componentes de SCIP.} 
+\label{Figura:fotoSCIP1}
+\end{figure}
+
+\begin{figure}[!hbt]
+\vskip 5mm
+\special{center
+         foto2.gif,                
+         \the\hsize 78mm}
+\vskip 78mm
+\caption{Lado de alambramiento del prototipo de SCIP.} 
+\label{Figura:fotoSCIP2}
+\end{figure}
+
+En  la Figura \ref{Figura:fotoSCIP1} se puede ver una vista del lado de componentes de SCIP, %%@
+mientras que en la Figura \ref{Figura:fotoSCIP2} se aprecia el lado de alambramiento del %%@
+sistema.
+
+\begin{figure}[!htb]\centering
+%TexCad Options
+%\grade{\off}
+%\emlines{\off}
+%\beziermacro{\on}
+%\reduce{\on}
+%\snapping{\off}
+%\quality{2.00}
+%\graddiff{0.01}
+%\snapasp{1}
+%\zoom{1.00}
+\unitlength 1mm
+\linethickness{0.4pt}
+\begin{picture}(150.33,70.00)
+\put(4.67,10.00){\framebox(145.67,60.00)[cc]{ }}
+\put(96.33,3.00){\framebox(52.67,7.00)[cc]{ }}
+\put(71.67,3.00){\framebox(21.00,7.00)[cc]{ }}
+\put(70.67,12.00){\framebox(73.33,25.33)[cc]{1}}
+\put(7.33,42.00){\framebox(40.00,25.67)[cc]{2}}
+\put(50.00,42.00){\framebox(22.33,25.67)[cc]{3}}
+\put(7.33,12.00){\framebox(12.00,26.67)[cc]{4}}
+\put(22.00,12.00){\framebox(25.33,26.67)[cc]{5}}
+\put(50.00,12.00){\framebox(18.67,26.33)[cc]{6}}
+\put(75.67,42.00){\framebox(12.33,25.67)[cc]{ROM1}}
+\put(90.67,42.00){\framebox(13.00,25.67)[cc]{ROM2}}
+\put(106.33,42.00){\framebox(37.67,25.67)[cc]{7}}
+\end{picture}
+\caption{Diagrama en bloques de SCIP: (1) Secci\'on preconstruida de decodificaci\'on, (2) %%@
+M\'odulo de Procesamiento y Control de BUS, (3) M\'o\-du\-lo de de\-co\-di\-fi\-ca\-ci\-%%@
+\'on in\-ter\-na y bu\-ffers, (4) M\'odulo de temporizaci\'on, (5) M\'odulo de %%@
+comunicaci\'on, (6) M\'odulo de l\'ogica de selecci\'on, (7) M\'odulo de memorias RAM, (ROM1) %%@
+Memoria EPROM 1, (ROM2) Memoria EPROM 2.} 
+\label{Figura:partes}
+\end{figure}
+
+En la Figura \ref{Figura:partes} se muestra un esquema de las partes constituyentes de SCIP. La %%@
+descripci\'on de estas partes es la siguiente\footnote{Los n\'umeros se refieren a los que %%@
+identifican cada bloque en la figura.}:
+
+\begin{description}
+\item[1] - {\bf Secci\'on preconstruida de decodificaci\'on}. De esta secci\'on solo se %%@
+utilizaron los transceivers para el bus de direcciones.
+\item[2] - {\bf M\'odulo de Procesamiento y Control de BUS}. Esta secci\'on contiene al %%@
+procesador 8088 y el coprocesador 8087, as\'{\i} como el controlador del bus 8288, y se encarga %%@
+del procesamiento.
+\item[3] - {\bf M\'odulo de decodificaci\'on interna y buffers}. Esta secci\'on contiene la %%@
+l\'ogica de decodificaci\'on de puertos y memoria interna as\'{\i} como buffers y transceivers %%@
+para las memorias.
+\item[4] - {\bf M\'odulo de temporizaci\'on}. Esta secci\'on contiene la l\'ogica de %%@
+temporizaci\'on y reinicializaci\'on de la tarjeta.
+\item[5] - {\bf M\'odulo de comunicaci\'on}. Esta secci\'on contiene al Controlador %%@
+Programable de Perif\'ericos 8255 as\'{\i} como buffers y transceivers para la comunicaci\'on %%@
+entre el bus de expansi\'on de la computadora anfitriona y el bus de SCIP.
+\item[6] - {\bf M\'odulo de l\'ogica de selecci\'on}. Esta secci\'on se encarga de %%@
+decodificar las direcciones y se\~nales del bus de la computadora anfitriona para realizar la %%@
+selecci\'on de la tarjeta SCIP y los diversos puertos que la conforman.
+\item[7] - {\bf M\'odulo de memorias RAM}. Esta secci\'on contiene a las cuatro memorias RAM %%@
+est\'aticas de 32Kb.
+\item[ROM1] - {\bf Memoria EPROM 1}. En esta memoria esta la direcci\'on de arranque del %%@
+procesador 8088 (F000:FFF0 hex), por lo que en esta memoria se debe colocar el programa de %%@
+inicio de la tarjeta, en la direcci\'on adecuada, como se describe en la Secci\'on %%@
+\ref{Section:prograSCIP}.
+\item[ROM2] - {\bf Memoria EPROM 2}. Esta es la segunda memoria EPROM, y puede contener el %%@
+programa de usuario, en caso de que la ROM1 solo contenga la rutina de inicializaci\'on.
+\end{description}
+
+%----------------------------------------------------------------------------
+
+\subsection{Precauciones.}
+\label{Subsection:precauciones}
+
+Dado que se utilizan circuitos MOS y CMOS en la tarjeta SCIP, los cuales son altamente sensibles %%@
+a descargas de electricidad est\'atica, se recomienda manejar la tarjeta con precauci\'on.
+
+\begin{itemize}
+\item La computadora debe estar apagada al conectar o desconectar la tarjeta de expansi\'on.
+\item No retire la tarjeta de su empaque antiest\'atico hasta que se vaya a utilizar.
+\item Procure evitar tocar las terminales de las bases e wire-wrap de la tarjeta prototipo, %%@
+as\'{\i} como los componentes.
+\item Descarguese de electricidad est\'atica tocando una parte no pintada del chasis de la %%@
+computadora donde vaya a instalar la tarjeta, o cualquier otra pieza met\'alica que este %%@
+aterrizada.
+\end{itemize}
+
+%----------------------------------------------------------------------------
+
+\subsection{Instalaci\'on.}
+\label{Subsection:instalacion}
+
+Para instalar la tarjeta SCIP en la computadora anfitriona, siga estos pasos:
+
+\begin{enumerate}
+\item Desconecte la computadora de la corriente.
+\item Abra el gabinete de la computadora.
+\item Busque una ranura de expansi\'on ISA libre.
+\item Inserte firmemente la tarjeta SCIP en dicha ranura.
+\end{enumerate}
+
+Una vez hecho esto podr\'a encender la computadora. 
+
+\begin{figure}[!hbt]
+\vskip 5mm
+\special{center
+         montaje.gif,                
+         \the\hsize 78mm}
+\vskip 78mm
+\caption{Tarjeta de expansi\'on SCIP montada sobre una tarjeta extensora del bus (no necesaria %%@
+en la pr\'actica) en un ensamble 386, durante las pruebas del sistema.} 
+\label{Figura:montaje}
+\end{figure}
+
+En la Figura \ref{Figura:montaje} se presenta una fotograf\'{\i}a de la tarjeta de %%@
+expansi\'on montada en una computadora. En ese caso se utiliz\'o una tarjeta extensora del bus, %%@
+para que se pudiera apreciar mejor, pero en la pr\'actica no es necesario.
+
+%----------------------------------------------------------------------------
+
+\subsection{Manejo del Hadware.}
+\label{Subsection:manejo}
+
+La tarjeta SCIP solo tiene un control operable directamente. Este es el bot\'on de {\it %%@
+RESET\/} ubicado en la parte inferior izquierda de la tarjeta. Este funciona con un ``push %%@
+button'', el cual al presionarse hace que el procesador de SCIP reinicie y se vuelva a comenzar %%@
+el programa ubicado en la memoria EPROM.
+
+%----------------------------------------------------------------------------
+
+\section{Programaci\'on de SCIP.}
+\label{Section:prograSCIP}
+
+SCIP tiene dos memorias EPROM de 64Kb y 4 memorias RAM de 32Kb. El programa de inicio de SCIP %%@
+debe colocarse en la EPROM 1 (ver Subsecci\'on \ref{Subsection:introhwd}), ya que en esta %%@
+memoria se mapea la direcci\'on de arranque del procesador 8088, la cual es F000:FFF0 %%@
+hexadecimal.
+
+En el Cap\'{\i}tulo \ref{Capitulo:diseno} se presenta la descripci\'on completa de los %%@
+bloques de memoria y puertos utilizados por el sistema.
+
+Los programas de SCIP se pueden hacer en cualquier lenguaje que genere c\'odigo para el 8088, %%@
+pero se recomienda el uso de ensamblador, ya que permite la generaci\'on de c\'odigo compacto y %%@
+es m\'as versatil para el manejo de los registros de segmento y del hardware en general.
+
+%----------------------------------------------------------------------------
+
+\subsection{Localizaci\'on del programa en memoria.}
+\label{Section:locprog}
+
+Para la realizaci\'on de los programas que se colocan en SCIP es preciso se\~nalar los %%@
+siguientes aspectos, poniendo como ejemplo el siguiente fragmento que inicializa un programa en %%@
+SCIP:
+
+\begin{listing}{1}
+   ORG 0FFFF0h
+
+ START:
+   MOV AX,0F000h
+   MOV CS,AX
+   JMP PROG
+\end{listing} 
+
+\begin{itemize}
+\item Localizaci\'on del programa en memoria: El programa inicial de SCIP siempre debe comenzar %%@
+en la direcci\'on FFFF0h absoluta, es decir, en el segmento F000h y el desplazamiento FFF0h, ya %%@
+que el procesador salta a esa direcci\'on al inicializarse. Esto se realiza con la pseu\-%%@
+doins\-truc\-ci\'on {\bf ORG} de ensamblador, como se ve en la l\'{\i}nea 1 del c\'odigo %%@
+arriba mostrado.
+
+\item Inicializacion del segmento de c\'odigo: En las l\'{\i}neas 4 y 5 del c\'odigo arriba %%@
+presentado se puede ver la manera en como inicializar el segmento de c\'odigo del programa de %%@
+inicio de SCIP. Se tiene que poner un F000h en el registro CS ya que de otra forma el programa %%@
+se ``pierde''\footnote{Se present\'o \'este problema durante las pruebas del sistema, pero se %%@
+resolvi\'o con lo que se explica aqui.} al realizar el salto al cuerpo del programa de %%@
+inicializaci\'on (l\'{\i}nea 6 del listado).
+\end{itemize}
+
+As\'{\i} mismo el cuerpo del programa de inicializaci\'on debe ir de preferencia en la %%@
+direcci\'on 100h del segmento F000h, realizando esto como se muestra en la l\'{\i}nea 4 del %%@
+siguiente listado parcial:
+
+\begin{listing}{1}
+CODIGO SEGMENT 'Code'
+   ASSUME CS:CODIGO, DS:CODIGO, ES:NOTHING, SS:NOTHING
+
+   ORG 0F0100h
+
+PROG PROC NEAR  
+; el cuerpo principal se coloca aqui...
+\end{listing}
+
+Esto es porque generalmente el ensamblador rechaza direcciones de inicio de un programa ubicadas %%@
+en un desplazamiento menor que 100h, dado que los programas para producir c\'odigo binario lo %%@
+generan para m\'aquinas IBM compatibles.
+
+Un programa en ensamblador usado en SCIP tiene la siguente estructura:
+
+\begin{verbatim}
+CODIGO SEGMENT 'Code'
+   ASSUME CS:CODIGO, DS:CODIGO, ES:NOTHING, SS:NOTHING
+
+   ORG 0F0100h
+
+PROG PROC NEAR  
+
+; el cuerpo principal se coloca aqui...
+
+   ORG 0FFFF0h
+
+ START:                 
+; Inicializar CS y saltar al inicio del programa
+   MOV AX,0F000h
+   MOV CS,AX
+   JMP PROG
+PROG ENDP
+CODIGO ENDS
+   END PROG
+\end{verbatim}
+
+Una vez que finalize el programa principal, se podr\'{\i}a poner un salto hacia el inicio del %%@
+programa nuevamente, o un ciclo infinito que hiciera que la ejecuci\'on no saltar\'a a %%@
+direcci\'ones err\'oneas. Esto depender\'{\i}a de cada aplicaci\'on.
+
+Lo que conforme el programa puede ser cualquier instrucci\'on del 8088, siempre y cuando:
+
+\begin{enumerate}
+\item No se usen interrupciones de MS-DOS o del BIOS de una PC.
+\item No se usen instrucciones de entrada o salida (a pantalla, por ejemplo).
+\end{enumerate}
+
+%----------------------------------------------------------------------------
+
+\subsection{Programaci\'on de las memorias EPROM.}
+\label{Subsection:progmem}
+
+Las memorias EPROM utilizadas en el sistema son las Texas Instruments 27C512. Estas memorias %%@
+pueden ser borradas con luz ultravioleta. El tiempo de borrado generalmente no excede los 5 %%@
+minutos, aunque en caso de ser memorias viejas, pueden requerirse algunos minutos m\'as.
+
+Estas memorias se pueden programar electr\'onicamente mediante un programador de memorias. Para %%@
+las pruebas del sistema se utiliz\'o un programador AllMax, pero en cada caso se debe consultar %%@
+la documentaci\'on del programador utilizado para determinar el procedimiento de %%@
+programaci\'on. Generalmente el formato aceptado por el programador ser\'a Intel Hexadecimal o %%@
+``Binary''.
+
+Una vez programadas las memorias, \'estas deben ser colocadas en las bases correspondientes a su %%@
+n\'umero: la EPROM con la rutina inicial en la primera base (ROM1, ver Figura %%@
+\ref{Figura:partes}) y la segunda memoria en la base ROM2. La muesca en las bases de wire-wrap %%@
+del prototipo indican la posici\'on de la terminal 1 de los circuitos integrados. Adem\'as como %%@
+gu\'{\i}a para la colocaci\'on se puede ver la posici\'on de las terminales de tierra y %%@
+voltaje en la parte inferior (alambrado) de la tarjeta prototipo.
+
+%----------------------------------------------------------------------------

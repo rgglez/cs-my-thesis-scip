@@ -1,0 +1,259 @@
+\chapter[Pruebas del Sistema y sus Resultados.]{Pruebas del Sistema y sus Resultados.}
+\label{Capitulo:pruebas}
+
+%----------------------------------------------------------------------------
+
+\fancyhead[RE]{\slshape SCIP - Cap. \thechapter~ - Pruebas del Sistema y sus %%@
+Resultados.}
+\fancyhead[LO]{\slshape Rodolfo Gonz\'alez Gonz\'alez.}
+\fancyhead[LE,RO]{\thepage}
+
+%----------------------------------------------------------------------------
+
+\section{Introducci\'on.}
+\label{Section:intropruebas}
+
+En \'este cap\'{\i}tulo se presentan las pruebas efectuadas al sistema, y sus resultados. El %%@
+software de prueba desarrollado es b\'asico y solo fue creado con fines de demostraci\'on del %%@
+hardware.
+
+%----------------------------------------------------------------------------
+
+\section{Pruebas del sistema.}
+\label{Section:pruebas}
+
+Se realizaron las siguientes pruebas en el sistema, para demostrar la capacidad de ejecutar otro %%@
+programa al mismo tiempo que la PC anfitriona, y comunicar a SCIP con dicha computadora:
+
+\begin{enumerate}
+\item Comunicaci\'on unidireccional de SCIP a la PC anfitriona.
+\item Comunicaci\'on bidireccional sincronizada por software.
+\end{enumerate}
+
+Para estos programas se utilizo Turbo Assembler y Turbo C, ambos de Borland Int.
+
+%----------------------------------------------------------------------------
+
+\subsubsection{Comunicaci\'on unidireccional de SCIP a la PC anfitriona.}
+\label{Subsubsection:prueba1}
+
+Esta prueba consisti\'o en que la tarjeta SCIP enviara datos a la computadora anfitriona %%@
+mediante el 8255 programado en Modo 0 (Ver Subsecci\'on~\ref{Subsection:comunicacion}), y que %%@
+un programa en aquella computadora los recibiera y desplegara en pantalla.
+
+El siguiente c\'odigo en ensamblador del 8088 fue programado y grabado en la memoria EPROM %%@
+correspondiente al bloque 6 de memoria de SCIP (Ver Tabla \ref{Tabla:decodifmem}):
+
+\begin{listing}{1}
+.MODEL SMALL
+
+CODIGO SEGMENT 'Code'
+   ASSUME CS:CODIGO, DS:CODIGO, ES:NOTHING, SS:NOTHING
+
+   ORG 0F0100h
+
+PROG PROC NEAR    
+   XOR AX,AX
+   MOV DX,3C7h    ; Direccion del pto. de control del 8255
+   MOV AL,8Ah     ; Modo 0, A=Salida, B=Entrada, 
+                  ; PC03 = Salida, PC47 = Entrada
+   OUT DX,AL      ; Programar 8255 
+
+   MOV DX,3C4h    ; Data Bus -> Port A
+   MOV AL,55h     ; Valor a enviar a la PC anfitriona
+   
+ WRITE:           ; Ciclo infinito de escritura
+   OUT DX,AL     
+   JMP WRITE
+   
+   ORG 0FFFF0h    ; Inicio del programa F000:FFF0
+
+ START:           ; Inicializacion del CS
+   MOV AX,0F000h  
+   MOV CS,AX
+   JMP PROG       ; Salto a la rutina principal
+PROG ENDP
+CODIGO ENDS
+   END PROG
+\end{listing}
+
+En es\-te lis\-ta\-do se a\-pre\-cia el blo\-que de ini\-cia\-li\-za\-ci\-\'on des\-cri\-%%@
+to en la Secci\'on~\ref{Section:consideraciones}, en las l\'{\i}neas 23 a 28.
+
+En las l\'{\i}neas 8 a 21 del listado se muestra en c\'odigo principal del programa, el cual %%@
+realiza lo siguiente:
+
+\begin{enumerate}
+\item Programar el 8255 en Modo 0 (como se describe Subsecci\'on %%@
+\ref{Subsection:comunicacion}), en las l\'{\i}neas 9 a 14.
+\item Enviar en un ciclo infinito el valor 55h al puerto 3C4h (puerto de salida de SCIP, ver %%@
+Tabla~\ref{Tabla:program8255}), en las l\'{\i}neas 16 a 21.
+\end{enumerate}
+
+En programa que se ejecut\'o en la computadora anfitriona fue realizado en lenguaje C, y su %%@
+listado se presenta a continuaci\'on:
+
+\begin{listing}{1}
+#include <stdio.h>
+#include <dos.h>
+
+int data;
+
+void main(void) 
+{ 
+    do {
+       data = inportb(0x300);  /* Leer byte del pto. */
+       printf("%c",data);      /* Escribir byte a pantalla */
+   } while (1);
+}
+\end{listing}
+
+Lo que realiza este programa es un ciclo infinito (l\'{\i}neas 8 a 11) en donde se lee un byte %%@
+del puerto 300h (puerto de lectura de SCIP por parte de la PC anfitriona) e imprimirlo a %%@
+pantalla (l\'{\i}neas 9 y 10). Entonces en pantalla se desplegar\'a el valor enviado ('U' = %%@
+55h).
+
+%----------------------------------------------------------------------------
+
+\subsubsection{Comunicaci\'on bidireccional sincronizada por software.}
+\label{Subsubsection:prueba2}
+
+Esta prueba consisti\'o en que los caracteres tecleados por el usuario en la computadora %%@
+anfitriona fueran enviados a la tarjeta SCIP, la cual los reenviara a aquella computadora, y %%@
+fueran desplegados en pantalla, todo esto sincronizando las transferencias con caracteres de %%@
+control, como se explica a continuaci\'on.
+
+\begin{listing}{1}
+#include <stdio.h>
+#include <dos.h>
+#include <conio.h>
+
+int data;
+char c = '\0';
+
+void main(void)
+{
+   clrscr();
+
+   c = getch();             /* Leer caracter */
+   while (c != 'T') {       /* Termina cuando se lee T */
+      outportb(0x301,'T');  /* Enviar caracter de inicio */
+
+      do {                        
+         data = inportb(0x300);/* Esperar por caracter de reconoci- */
+     } while (data != 'R'); /* miento enviado por SCIP (R) */
+
+
+      outportb(0x301,c);    /* Enviar a SCIP caracter leido */
+      delay(1);       
+      data = inportb(0x300);/* Leer caracter enviado por SCIP */
+
+      printf("%c",data);    /* Imprimir a pantalla el caracter */
+      c = getch();          /* Leer nuevo caracter de teclado */
+   }
+}
+\end{listing}
+
+El programa cuyo listado se presenta arriba esta realizado en lenguaje C y se ejecuta en la PC %%@
+anfitriona. Lo que realiza es lo siguiente:
+
+\begin{enumerate}
+\item Leer un car\'acter\footnote{Un car\'acter corresponde a un byte (8 bits).} del %%@
+teclado (l\'{\i}nea 12).
+\item Si el car\'acter le\'{\i}do es una T, entonces termina el programa (l\'{\i}nea 13).
+\item Enviar a SCIP por el puerto 301h el car\'acter T que indica ``Inicio de Transmisi\'on'' %%@
+(l\'{\i}nea 14).
+\item Esperar en un ciclo a que SCIP envie en el puerto 300h el car\'acter R que indica %%@
+``Transmisi\'on Reconocida'' (l\'{\i}neas 16 a 18).
+\item Enviar a SCIP el car\'acter le\'{\i}do por el teclado (l\'{\i}nea 21). 
+\item Leer de SCIP el car\'acter que la tarjeta env\'{\i}a, que es el mismo que el programa %%@
+en la computadora anfitriona le envi\'o (l\'{\i}nea 23).
+\item Imprimir en pantalla el car\'acter le\'{\i}do (l\'{\i}nea 25).
+\item Leer nuevo car\'acter del teclado y repetir el ciclo desde el paso 2 (l\'{\i}nea 26).
+\end{enumerate}
+
+Como se dijo en la Subsecci\'on \ref{Subsection:decodif} los puertos utilizados son el 300h y %%@
+301h (entrada y salida, respectivamente). Los caracteres usados para enviar mensajes son en este %%@
+ejemplo T y R, pero pudieran haberse utilizado otros cualesquiera.
+
+El programa en ensamblador ejecutado por SCIP se presenta a con\-ti\-nua\-ci\-\'on:
+
+\begin{listing}{1}
+.MODEL SMALL
+
+CODIGO SEGMENT 'Code'
+   ASSUME CS:CODIGO, DS:CODIGO, ES:NOTHING, SS:NOTHING
+
+   ORG 0F0100h
+
+PROG PROC NEAR
+   XOR AX,AX
+   XOR BX,BX
+
+   MOV DX,3C7h  ; Direccion del pto. de control del 8255 (A0=A1=1)
+   MOV AL,8Ah   ; Modo 0, Pto. A = Salida, Pto. B = Entrada, 
+                ; PC03 = Salida, PC47 = Entrada
+   OUT DX,AL    ; Programar 8255
+
+ CICLO:
+   MOV DX,3C5h  ; Port B -> Data Bus
+
+ LEE1:          ; Esperar comando de inicio de transmision (T)
+   IN  AL,DX 
+   CMP AL,'T'
+   JNE LEE1
+
+   MOV AL,'R'   ; Enviar al anfitrion un comando de reconocimiento (R)
+   MOV DX,3C4h  ; Data Bus -> Port A
+   OUT DX,AL
+
+   MOV DX,3C5h  ; Port B -> Data Bus
+
+ LEE2:          ; Esperar primer caracter del anfitrion
+   IN  AL,DX
+   CMP AL,'T'
+   JE LEE2
+
+   MOV DX,3C4h  ; Data Bus -> Port A
+   OUT DX,AL    ; Enviar caracter recibido de regreso a anfitrion
+
+   JMP CICLO    ; Reiniciar el ciclo
+
+   ORG 0FFFF0h
+
+ START:         ; Inicializar CS y saltar al inicio del programa
+   MOV AX,0F000h
+   MOV CS,AX
+   JMP PROG
+PROG ENDP
+CODIGO ENDS
+   END PROG
+\end{listing}
+
+Este programa realiza lo siguiente, en un ciclo infinito:
+
+\begin{enumerate}
+\item En las l\'{\i}neas 12 a 15 se programa al 8255 para trabajar en Modo 0.
+\item Esperar en un ciclo leyendo al puerto 3C5h (Puerto B a Bus de Datos) a que se reciba el %%@
+car\'acter de Inicio de Transmisi\'on (T) (l\'{\i}neas 18 a 23).
+\item Enviar un car\'acter R para indicar a la computadora anfitriona que se recibi\'o el %%@
+car\'acter T (l\'{\i}neas 25 a 27).
+\item Esperar en un ciclo a que llegue el car\'acter de la computadora anfitriona %%@
+(l\'{\i}neas 29 a 34).
+\item Enviar a la computadora anfitriona el car\'acter recibido (l\'{\i}neas 36 y 37).
+\end{enumerate}
+
+En ambos casos el programa en ejecuci\'on en SCIP puede reiniciarse aplicando la se\~nal de %%@
+RESET mediante el bot\'on ubicado en la tarjeta.
+
+%----------------------------------------------------------------------------
+
+\section{Resultados de las pruebas.}
+\label{Section:resultados}
+
+Los programas de prueba desarrollados y presentados en el documento permiten que la computadora %%@
+y SCIP se comuniquen sincronizadamente, y que un programa se este ejecutando en SCIP al mismo %%@
+tiempo que otro se ejecuta en la computadora anfitriona. Los resultados fueron considerados %%@
+satisfactorios.
+
+%----------------------------------------------------------------------------
