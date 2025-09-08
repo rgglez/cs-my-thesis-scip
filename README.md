@@ -1,6 +1,8 @@
 # SCIP
 
 [![CC BY-NC-ND 4.0][cc-by-nc-nd-shield]][cc-by-nc-nd]
+![GitHub stars](https://img.shields.io/github/stars/rgglez/cs-my-thesis-scip?style=social)
+![GitHub forks](https://img.shields.io/github/forks/rgglez/cs-my-thesis-scip?style=social)
 
 My Computer Science Bachelor's Degree Thesis. A general-pourpose programable co-processor card for PC, based on the Intel 8088.
 
