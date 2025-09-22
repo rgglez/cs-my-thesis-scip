@@ -16,6 +16,18 @@ González González, R., [rgglez]. (1998). SCIP: Sistema de Coprocesamiento de I
 
 ![Citation](citation.jpg)
 
+```latex
+@book{gonzalez1998scip,
+  author    = {González González, Rodolfo},
+  title     = {SCIP: Sistema de Coprocesamiento de Información para PC},
+  year      = {1998},
+  edition   = {1},
+  publisher = {Rodolfo González González},
+  note      = {[rgglez]},
+  url       = {https://github.com/rgglez/thesis-cs-scip/blob/main/tesis.pdf}
+}
+```
+
 ## License
 
 Copyright 1998, Rodolfo González González.
